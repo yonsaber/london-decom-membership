@@ -1,11 +1,13 @@
-<% if current_user.low_income_request %>
-  <% if current_user.low_income_request.status == 'approved' %>
-    <p>Your request for Low Income has been approved. When tickets are available, you will be able to purchase a low income ticket.</p>
-  <% elsif current_user.low_income_request.status == 'rejected' %>
-    <p>Your request for Low Income has been rejected.</p>
+<% if @event.tickets_sold_for_code(current_user.membership_number) == 0 %>
+  <% if current_user.low_income_request %>
+    <% if current_user.low_income_request.status == 'approved' %>
+      <p>Your request for Low Income has been approved. When tickets are available, you will be able to purchase a low income ticket.</p>
+    <% elsif current_user.low_income_request.status == 'rejected' %>
+      <p>Your request for Low Income has been rejected.</p>
+    <% else %>
+      <p>You have applied for a Low Income Ticket. You will be notified when it has been reviewed.</p>
+    <% end %>
   <% else %>
-    <p>You have applied for a Low Income Ticket. You will be notified when it has been reviewed.</p>
+    <p>Low income applications have now closed</p>
   <% end %>
-<% else %>
-  <p>Low income applications have now closed</p>
 <% end %>
