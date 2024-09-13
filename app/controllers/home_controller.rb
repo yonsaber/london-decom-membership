@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   skip_before_action :authenticate_user!, only: %i[index confirmation_notice]
+  helper_method :resource_name, :resource, :devise_mapping, :resource_class
 
   def index
     if current_user
@@ -9,6 +10,22 @@ class HomeController < ApplicationController
       @user = User.new
       render :registration
     end
+  end
+
+  def resource_name
+    :user
+  end
+
+  def resource
+    @resource ||= User.new
+  end
+
+  def resource_class
+    User
+  end
+
+  def devise_mapping
+    @devise_mapping ||= Devise.mappings[:user]
   end
 
   def confirmation_notice; end

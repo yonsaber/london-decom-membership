@@ -1,38 +1,46 @@
-<h2>Join London Decompression</h2>
+<%= flash[:recaptcha_error] %>
 
-<p>
-  London Decompression is a members owned organisation.
-  You need to be a member of London Decompression to buy tickets to events.
-  Membership is free.
-</p>
+<ul class="nav nav-pills nav-justified mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#register" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Register</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#login" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Login</button>
+  </li>
+</ul>
 
-<p>
-  <%= link_to "Log in if you're already a member.", new_user_session_path %>
-</p>
+<div class="tab-content">
+  <div class="tab-pane" id="login" role="tabpanel">
+    <%= bootstrap_form_for(:user, :url => session_path(:user)) do |f| %>
+      <%= f.text_field :email, label: 'Email address', autofocus: true, autocomplete: 'email' %>
+      <%= f.password_field :password %>
+      <%= f.check_box :remember_me %>
+      <%= f.submit 'Sign in' %>
+      <br />
+      <%= link_to "Forgot your password?", new_password_path(:user) %>
+      <%= recaptcha_v3(action: 'login') %>
+    <% end %>
+  </div>
+  <div class="tab-pane active show" id="register" role="tabpanel">
+    <form>
+      <%= bootstrap_form_for(@user, url: registration_path(@user)) do |f| %>
+        <%= f.email_field :email, label: 'Email address', autofocus: true, autocomplete: 'email' %>
+        <%= f.text_field :name, label: 'Full Name' %>
+        <%= f.password_field :password, autocomplete: 'current-password' %>
+        <%= f.check_box :accept_principles, label: 'I have read and am prepared to take into consideration <a href="https://burningman.org/culture/philosophical-center/10-principles/" target="_blank">the principles of Burning Man</a>'.html_safe %>
+        <%= f.check_box :accept_code_of_conduct, label: 'I have read and agree to abide by the London Decompression <a href="https://londondecom.org/code-of-conduct/" target="_blank">Volunteers and Participants Code of Conduct</a>'.html_safe %>
+        <%= f.check_box :accept_health_and_safety, label: 'I have read and agree to abide by the London Decompression <a href="https://drive.google.com/file/d/1WKf7nU6sA6Ktz8TWDmv0vUEc2KVGHnDE/view?usp=share_link" target="_blank">Health and Safety Guidelines</a>'.html_safe %>
+        <%= f.check_box :accept_no_ticket, label: 'I understand that being a member of London Decompression does not automatically qualify me to receive tickets to London Decompression events.  These must be bought separately, and are only available to London Decompression members.' %>
+        <%= f.check_box :accept_emails, label: 'I agree to receive emails from London Decompression letting me know when tickets to London Decompression events are available.' %>
+        <%= f.check_box :marketing_opt_in, label: 'I agree to receive emails from third parties relating to other burner events and activities. (optional)' %>
+        <%= recaptcha_v3(action: 'signup') %>
+        <p style="text-align: center; font-weight: bold">By signing up you are joining London Decompression as a member.</p>
+        <%= f.submit 'Sign up' %>
+      <% end %>
+    </form>
+  </div>
+  <hr />
+  <p><%= link_to "Haven't received your confirmation email?", new_user_confirmation_path %></p>
+  <p>Questions? Email us at <%= link_to 'members@londondecom.org', 'mailto:members@londondecom.org' %></p>
+</div>
 
-<h3>Sign up</h3>
-<%= bootstrap_form_for(@user, url: registration_path(@user)) do |f| %>
-  <%= f.email_field :email, label: 'Email address', autofocus: true, autocomplete: 'email' %>
-  <%= f.text_field :name, label: 'Full Name' %>
-  <%= f.password_field :password, autocomplete: 'current-password' %>
-  <%= f.check_box :accept_principles, label: 'I have read and am prepared to take into consideration <a href="https://burningman.org/culture/philosophical-center/10-principles/" target="_blank">the principles of Burning Man</a>'.html_safe %>
-  <%= f.check_box :accept_code_of_conduct, label: 'I have read and agree to abide by the London Decompression <a href="https://londondecom.org/code-of-conduct/" target="_blank">Volunteers and Participants Code of Conduct</a>'.html_safe %>
-  <%= f.check_box :accept_health_and_safety, label: 'I have read and agree to abide by the London Decompression <a href="https://drive.google.com/file/d/1WKf7nU6sA6Ktz8TWDmv0vUEc2KVGHnDE/view?usp=share_link" target="_blank">Health and Safety Guidelines</a>'.html_safe %>
-  <%= f.check_box :accept_no_ticket, label: 'I understand that being a member of London Decompression does not automatically qualify me to receive tickets to London Decompression events.  These must be bought separately, and are only available to London Decompression members.' %>
-  <%= f.check_box :accept_emails, label: 'I agree to receive emails from London Decompression letting me know when tickets to London Decompression events are available.' %>
-  <%= f.check_box :marketing_opt_in, label: 'I agree to receive emails from third parties relating to other burner events and activities. (optional)' %>
-  <%= flash[:recaptcha_error] %>
-  <%= recaptcha_v3(action: 'signup') %>
-  <p><br/>
-    By signing up you are joining London Decompression as a member.
-  </p>
-  <%= f.submit 'Sign up' %>
-<% end %>
-
-<p>
-  <%= link_to "Haven't received your confirmation email?", new_user_confirmation_path %>
-</p>
-
-<p>
-  Questions? Email us at <%= link_to 'members@londondecom.org', 'mailto:members@londondecom.org' %>
-</p>
