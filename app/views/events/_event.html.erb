@@ -42,9 +42,11 @@
 
 <%= render partial: '/tickets/low_income' %>
 
-<hr />
-
-<%= render partial: 'events/info' %>
+<% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
+  <hr />
+  <%= render partial: 'volunteers/applied_list' %>
+  <%= render partial: 'volunteers/list' %>
+<% end %>
 
 <% if @event.tickets_sold_for_code(current_user.membership_number) == 0 %>
   <p>
@@ -52,13 +54,10 @@
       Bought a transferred ticket and can't see the volunteer opportunities on this page? Drop an email to <a href="mailto:members@londondecom.org">members@londondecom.org</a> and we'll sort you out!
     </strong>
   </p>
+  <hr />
 <% end %>
 
-<% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
-  <hr />
-  <%= render partial: 'volunteers/applied_list' %>
-  <%= render partial: 'volunteers/list' %>
-<% end %>
+<%= render partial: 'events/info' %>
 
 <% if current_user.ticket_type != :general || @event.available_tickets_for_code(current_user.membership_number) > 0 %>
   <script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script>
