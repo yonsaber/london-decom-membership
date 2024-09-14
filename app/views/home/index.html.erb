@@ -1,14 +1,13 @@
 <% if @event and !@event.draft? %>
   <% if @event.ended? %>
-    <center>
+    <% cache "event_ended_#{@event.id}" do %>
       <%= render partial: '/events/event_ended' %>
-    </center>
+    <% end %>
   <% else %>
     <%= render partial: '/events/event' %>
   <% end %>
 <% else %>
-  <h1>Hey <%= current_user.name %></h1>
-  <p>You are a member of London Decompression.</p>
-  <p>Thanks for being a member. Tickets and volunteering are not live yet, but we will email you as soon as they are.</p>
-  <p>In the meantime, get news from our <a href="https://londondecom.org/">website</a>.</p>
+  <% cache "no_event_#{current_user.id}" do %>
+    <%= render partial: '/events/no_event' %>
+  <% end %>
 <% end %>
