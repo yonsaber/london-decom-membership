@@ -1,6 +1,8 @@
 <h2>Members</h2>
 
-<p>There is currently <%= pluralize(User.confirmed.count, 'member') %></p>
+<p><%= link_to 'Unconfirmed accounts', unconfirmed_admin_users_path %></p>
+
+<p>There are currently <%= pluralize(User.confirmed.count, 'member') %></p>
 
 <%= form_tag nil, method: :get do %>
   <%= text_field_tag :q, params[:q] %>
@@ -10,21 +12,35 @@
 <table class="table">
   <tr>
     <th>Name</th>
-    <th>Email</th>
-    <th>Admin</th>
-    <th>Early Access</th>
-    <th>Created</th>
+    <th class="d-none d-md-table-cell">Email</th>
+    <th class="d-none d-lg-table-cell">Admin</th>
+    <th class="d-none d-lg-table-cell">Early Access</th>
+    <th class="d-none d-lg-table-cell">Created</th>
     <th>Actions</th>
   </tr>
   <% @users.each do |user| %>
-    <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
-      <td><%= user.admin? %></td>
-      <td><%= user.early_access? %></td>
-      <td><%= user.created_at.to_s %></td>
-      <td><%= link_to 'Edit', edit_admin_user_path(user) %></td>
-    </tr>
+    <% cache user do %>
+      <tr>
+        <td class="align-middle"><%= user.name %></td>
+        <td class="d-none d-md-table-cell align-middle"><%= user.email %></td>
+        <td class="d-none d-lg-table-cell align-middle text-center">
+          <% if user.admin? %>
+            <span class="badge bg-success">Yes</span>
+          <% else %>
+            <span class="badge bg-danger">No</span>
+          <% end %>
+        </td>
+        <td class="d-none d-lg-table-cell align-middle text-center">
+          <% if user.early_access? %>
+            <span class="badge bg-success">Yes</span>
+          <% else %>
+            <span class="badge bg-danger">No</span>
+          <% end %>
+        </td>
+        <td class="d-none d-lg-table-cell align-middle"><%= user.created_at.to_s %></td>
+        <td><%= link_to 'Edit', edit_admin_user_path(user), class: "btn btn-primary me-1" %></td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
 

@@ -1,31 +1,50 @@
 <%= LowIncomeRequest.where(status: 'approved').count %> requests approved so far.
 
-<table class="table">
+<table class="table table-condensed">
+  <thead>
   <tr>
+    <th class="d-table-cell d-lg-none"></th>
     <th>Name</th>
-    <th>Email</th>
-    <th>Created</th>
-    <th>Reason</th>
+    <th class="d-none d-md-table-cell">Email</th>
+    <th class="d-none d-lg-table-cell">Created</th>
+    <th class="d-none d-lg-table-cell">Reason</th>
     <th>Status</th>
   </tr>
+  </thead>
+
+  <tbody>
   <% @low_income_requests.each do |low_income_request| %>
-    <tr>
-      <td><%= low_income_request.user.name %></td>
-      <td><%= low_income_request.user.email %></td>
-      <td><%= low_income_request.created_at.to_s %></td>
-      <td><%= low_income_request.request_reason %></td>
-      <td>
-        <% if low_income_request.status == 'approved' %>
-          Approved
-        <% elsif low_income_request.status == 'rejected' %>
-          Rejected
-        <% else %>
-          <%= button_to 'Approve', approve_admin_low_income_request_path(low_income_request) %>
-          <%= button_to 'Reject', reject_admin_low_income_request_path(low_income_request) %>
-        <% end %>
-      </td>
-    </tr>
+    <% cache low_income_request do %>
+      <tr data-bs-toggle="collapse" data-bs-target="#request-<%= low_income_request.id %>" class="accordion-toggle <%= low_income_request.status %> low-income-request">
+        <td class="d-table-cell d-lg-none"><span class="caret"></span></td>
+        <td class="align-middle"><%= low_income_request.user.name %></td>
+        <td class="d-none d-md-table-cell align-middle"><%= low_income_request.user.email %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= low_income_request.created_at.to_s %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= low_income_request.request_reason %></td>
+        <td>
+          <% if low_income_request.status == 'approved' %>
+            Approved
+          <% elsif low_income_request.status == 'rejected' %>
+            Rejected
+          <% else %>
+            <%= button_to 'Approve', approve_admin_low_income_request_path(low_income_request), class: "btn btn-primary me-1 w-100" %>
+            <%= button_to 'Reject', reject_admin_low_income_request_path(low_income_request), class: "btn btn-danger w-100" %>
+          <% end %>
+        </td>
+      </tr>
+      <tr class="d-table-row d-lg-none">
+        <td colspan="12" style="padding: 0 !important">
+          <div class="accordian-body collapse" id="request-<%= low_income_request.id %>">
+            <p><%= low_income_request.user.name %></p>
+            <p>Email: <%= low_income_request.user.email %></p>
+            <p>Requested at: <%= low_income_request.created_at.to_s %></p>
+            <p>Request Reason: <%= low_income_request.request_reason %></p>
+          </div>
+        </td>
+      </tr>
+    <% end %>
   <% end %>
+  </tbody>
 </table>
 
 <%= paginate @low_income_requests, theme: 'twitter-bootstrap-4' %>

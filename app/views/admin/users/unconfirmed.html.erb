@@ -1,24 +1,35 @@
 <h2>Unconfirmed Members</h2>
 
-<p>There is currently <%= pluralize(@users.count, 'unconfirmed member') %></p>
+<p><%= link_to 'Confirmed accounts', admin_users_path %></p>
+
+<p>There are currently <%= pluralize(User.unconfirmed.count, 'unconfirmed member') %></p>
+
+<%= form_tag nil, method: :get do %>
+  <%= text_field_tag :q, params[:q] %>
+  <%= submit_tag 'Search' %>
+<% end %>
 
 <table class="table">
   <tr>
     <th>Name</th>
-    <th>Email</th>
-    <th>Unconfirmed Duration</th>
-    <th>Confirmation Info</th>
+    <th class="d-none d-lg-table-cell">Email</th>
+    <th class="d-none d-sm-table-cell">Unconfirmed Duration</th>
+    <th class="d-none d-md-table-cell">Confirmation Info</th>
     <th>Delete</th>
   </tr>
   <% @users.each do |user| %>
-    <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
-      <td><%= distance_of_time_in_words(user.created_at.to_time - Time.now) %></td>
-      <td>
-        Last confirmation sent <%= distance_of_time_in_words(user.confirmation_sent_at.to_time - Time.now) %> ago
-      </td>
-      <td><%= button_to 'Delete', admin_user_path(user), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger" %></td>
-    </tr>
+    <% cache user do %>
+      <tr>
+        <td class="align-middle"><%= user.name %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= user.email %></td>
+        <td class="d-none d-sm-table-cell align-middle"><%= distance_of_time_in_words(user.created_at.to_time - Time.now) %></td>
+        <td class="d-none d-md-table-cell align-middle">
+          Last confirmation sent <%= distance_of_time_in_words(user.confirmation_sent_at.to_time - Time.now) %> ago
+        </td>
+        <td><%= button_to 'Delete', admin_user_path(user), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger" %></td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
+
+<%= paginate @users, theme: 'twitter-bootstrap-4' %>
