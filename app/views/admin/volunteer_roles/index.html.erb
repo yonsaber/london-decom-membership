@@ -2,28 +2,53 @@
 
 <table class="table">
   <tr>
+    <th class="d-table-cell d-lg-none"></th>
     <th>Name</th>
-    <th>Brief descriptioin</th>
-    <th>Description</th>
-    <th>Priority</th>
-    <th>Hidden</th>
-    <th></th>
-    <th></th>
+    <th class="d-none d-md-table-cell">Brief description</th>
+    <th class="d-none d-lg-table-cell">Description</th>
+    <th class="d-none d-lg-table-cell">Priority</th>
+    <th class="d-none d-md-table-cell">Hidden</th>
+    <th class="d-none d-md-table-cell"></th>
+    <th class="d-none d-lg-table-cell"></th>
     <th></th>
     <th></th>
   </tr>
   <% @volunteer_roles.each do |volunteer_role| %>
-    <tr>
-      <td><%= volunteer_role.name %></td>
-      <td><%= volunteer_role.brief_description %></td>
-      <td><%= volunteer_role.description %></td>
-      <td><%= volunteer_role.priority %></td>
-      <td><%= volunteer_role.hidden %></td>
-      <td><%= link_to 'edit', edit_admin_event_volunteer_role_path(@event, volunteer_role) %></td>
-      <td><%= link_to pluralize(volunteer_role.leads.count, 'lead'), admin_event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
-      <td><%= link_to pluralize(volunteer_role.volunteers.count, 'volunteer'), event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
-      <td><%= button_to 'destroy', admin_event_volunteer_role_path(@event, volunteer_role), method: :delete, data: {confirm: 'Are you sure? This is irreversible'} %></td>
-    </tr>
+    <% cache volunteer_role do %>
+      <tr data-bs-toggle="collapse" data-bs-target="#role-<%= volunteer_role.id %>" class="accordion-toggle low-income-request">
+        <td class="d-table-cell d-lg-none align-middle"><span class="caret"></span></td>
+        <td class="align-middle"><%= volunteer_role.name %></td>
+        <td class="d-none d-md-table-cell align-middle"><%= volunteer_role.brief_description %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= volunteer_role.description %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= volunteer_role.priority %></td>
+        <td class="d-none d-md-table-cell align-middle">
+          <% if volunteer_role.hidden? %>
+            Yes
+          <% else %>
+            No
+          <% end %>
+        </td>
+        <td class="d-none d-lg-table-cell align-middle"><%= link_to pluralize(volunteer_role.leads.count, 'Lead'), admin_event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= link_to pluralize(volunteer_role.volunteers.count, 'Volunteer'), event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
+        <td><%= link_to 'Edit', edit_admin_event_volunteer_role_path(@event, volunteer_role), class: "btn btn-primary w-100" %></td>
+        <td class="justify-content-middle"><%= button_to 'Destroy', admin_event_volunteer_role_path(@event, volunteer_role), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger w-100" %></td>
+      </tr>
+      <tr class="d-table-row d-lg-none">
+        <td colspan="12" style="padding: 0 !important">
+          <div class="accordian-body collapse" id="role-<%= volunteer_role.id %>">
+            <p class="mt-2">Brief Description: <%= volunteer_role.brief_description %></p>
+            <p>Full Description: <%= volunteer_role.brief_description %></p>
+            <% if volunteer_role.priority.present? %>
+              <p><%= volunteer_role.priority %></p>
+            <% end %>
+            <p>Role Hidden: <%= volunteer_role.hidden? ? 'Yes' : 'No' %></p>
+            <p>
+              <%= link_to pluralize(volunteer_role.leads.count, 'Lead'), admin_event_volunteer_role_volunteers_path(@event, volunteer_role) %> and <%= link_to pluralize(volunteer_role.volunteers.count, 'Volunteer'), event_volunteer_role_volunteers_path(@event, volunteer_role) %>
+            </p>
+          </div>
+        </td>
+      </tr>
+    <% end %>
   <% end %>
 </table>
 

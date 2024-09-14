@@ -12,36 +12,47 @@
 
 <table class="table">
   <tr>
+    <th class="d-table-cell d-lg-none"></th>
     <th>Name</th>
-    <th>Email</th>
-    <th>Phone</th>
-    <th>Comments</th>
+    <th class="d-none d-lg-table-cell">Email</th>
+    <th class="d-none d-lg-table-cell">Phone</th>
+    <th class="d-none d-lg-table-cell">Comments</th>
     <th>State</th>
     <th>Next State</th>
     <th></th>
   </tr>
   <% @volunteers.each do |volunteer| %>
     <% cache volunteer do %>
-      <tr>
-        <td><%= volunteer.user.name %></td>
-        <td><%= volunteer.user.email %></td>
-        <td><%= volunteer.phone %></td>
-        <td><%= volunteer.additional_comments %></td>
-        <td>
+      <tr data-bs-toggle="collapse" data-bs-target="#volunteer-<%= volunteer.id %>" class="accordion-toggle <%= volunteer.state %> low-income-request">
+        <td class="d-table-cell d-lg-none align-middle"><span class="caret"></span></td>
+        <td class="align-middle"><%= volunteer.user.name %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= volunteer.user.email %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= volunteer.phone %></td>
+        <td class="d-none d-lg-table-cell align-middle"><%= volunteer.additional_comments %></td>
+        <td class="align-middle">
           <%= volunteer.state %>
         </td>
-        <td>
+        <td class="align-middle">
           <% if volunteer.next_state %>
             <%= form_for [@event, @volunteer_role, volunteer] do |form| %>
               <%= form.hidden_field :state, value: volunteer.next_state %>
-              <%= form.submit "Mark as #{volunteer.next_state}" %>
+              <%= form.submit "Mark as #{volunteer.next_state}", class: "btn btn-primary w-100"  %>
             <% end %>
           <% end %>
         </td>
-        <td>
+        <td class="align-middle">
           <%= form_for [@event, @volunteer_role, volunteer], method: :delete do |form| %>
-            <%= form.submit "remove", data: {confirm: 'Are you sure?'} %>
+            <%= form.submit "Remove", data: {confirm: 'Are you sure?'}, class: "btn btn-danger w-100"  %>
           <% end %>
+        </td>
+      </tr>
+      <tr class="d-table-row d-lg-none">
+        <td colspan="12" style="padding: 0 !important">
+          <div class="accordian-body collapse" id="volunteer-<%= volunteer.id %>">
+            <p class="mt-2">Email: <%= volunteer.user.email %></p>
+            <p>Phone: <%= volunteer.phone %></p>
+            <p>Additional Comments: <%= volunteer.additional_comments %></p>
+          </div>
         </td>
       </tr>
     <% end %>

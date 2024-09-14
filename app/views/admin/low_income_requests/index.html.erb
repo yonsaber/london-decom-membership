@@ -16,12 +16,12 @@
   <% @low_income_requests.each do |low_income_request| %>
     <% cache low_income_request do %>
       <tr data-bs-toggle="collapse" data-bs-target="#request-<%= low_income_request.id %>" class="accordion-toggle <%= low_income_request.status %> low-income-request">
-        <td class="d-table-cell d-lg-none"><span class="caret"></span></td>
+        <td class="d-table-cell d-lg-none align-middle"><span class="caret"></span></td>
         <td class="align-middle"><%= low_income_request.user.name %></td>
         <td class="d-none d-md-table-cell align-middle"><%= low_income_request.user.email %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= low_income_request.created_at.to_s %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= low_income_request.request_reason %></td>
-        <td>
+        <td class="align-middle">
           <% if low_income_request.status == 'approved' %>
             Approved
           <% elsif low_income_request.status == 'rejected' %>
@@ -35,7 +35,7 @@
       <tr class="d-table-row d-lg-none">
         <td colspan="12" style="padding: 0 !important">
           <div class="accordian-body collapse" id="request-<%= low_income_request.id %>">
-            <p><%= low_income_request.user.name %></p>
+            <p class="mt-2"><%= low_income_request.user.name %></p>
             <p>Email: <%= low_income_request.user.email %></p>
             <p>Requested at: <%= low_income_request.created_at.to_s %></p>
             <p>Request Reason: <%= low_income_request.request_reason %></p>
