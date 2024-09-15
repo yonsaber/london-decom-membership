@@ -12,8 +12,8 @@
 <div class="tab-content">
   <div class="tab-pane" id="login" role="tabpanel">
     <%= bootstrap_form_for(:user, :url => session_path(:user)) do |f| %>
-      <%= f.text_field :email, label: 'Email address', autofocus: true, autocomplete: 'email' %>
-      <%= f.password_field :password %>
+      <%= f.text_field :email, label: 'Email', autofocus: true, autocomplete: 'email', id: 'signin-email' %>
+      <%= f.password_field :password, id: 'signin-password' %>
       <%= f.check_box :remember_me %>
       <%= f.submit 'Sign in' %>
       <br />
@@ -24,9 +24,9 @@
   <div class="tab-pane active show" id="register" role="tabpanel">
     <form>
       <%= bootstrap_form_for(@user, url: registration_path(@user)) do |f| %>
-        <%= f.email_field :email, label: 'Email address', autofocus: true, autocomplete: 'email' %>
+        <%= f.email_field :email, label: 'Email address', autofocus: true, autocomplete: 'email', id: 'register-email' %>
         <%= f.text_field :name, label: 'Full Name' %>
-        <%= f.password_field :password, autocomplete: 'current-password' %>
+        <%= f.password_field :password, autocomplete: 'current-password', class_name: 'register-password', id: 'register-password' %>
         <%= f.check_box :accept_principles, label: 'I have read and am prepared to take into consideration <a href="https://burningman.org/culture/philosophical-center/10-principles/" target="_blank">the principles of Burning Man</a>'.html_safe %>
         <%= f.check_box :accept_code_of_conduct, label: 'I have read and agree to abide by the London Decompression <a href="https://londondecom.org/code-of-conduct/" target="_blank">Volunteers and Participants Code of Conduct</a>'.html_safe %>
         <%= f.check_box :accept_health_and_safety, label: 'I have read and agree to abide by the London Decompression <a href="https://drive.google.com/file/d/1WKf7nU6sA6Ktz8TWDmv0vUEc2KVGHnDE/view?usp=share_link" target="_blank">Health and Safety Guidelines</a>'.html_safe %>
