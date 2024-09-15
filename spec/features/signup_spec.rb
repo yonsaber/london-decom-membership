@@ -22,7 +22,7 @@ RSpec.feature 'Member signup', type: :feature do
 
     fill_in 'Name', with: 'James Darling'
     fill_in 'Email address', with: 'james@abscond.org'
-    fill_in 'Password', with: 'password'
+    fill_in 'register-password', with: 'password'
     check 'I have read and am prepared to take into consideration'
     check 'Volunteers and Participants Code of Conduct'
     check 'Health and Safety Guidelines'

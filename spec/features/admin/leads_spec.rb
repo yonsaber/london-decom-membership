@@ -11,7 +11,7 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'Volunteer Roles'
-    click_link '0 leads'
+    click_link '0 Leads', match: :first
     select 'New Lead (lead@example.com)', from: 'Find member to make a lead'
     click_button 'Make Lead'
     expect(page).to have_content('New Lead added as a lead to Role1')
@@ -30,7 +30,7 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'Volunteer Roles'
-    click_link '0 leads'
+    click_link '0 Leads', match: :first
     select 'New Lead (lead@example.com)', from: 'Find member to make a lead'
     click_button 'Make Lead'
     expect(page).to have_content('New Lead added as a lead to Role1')
@@ -49,8 +49,8 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'Volunteer Roles'
-    click_link '1 lead'
-    click_link 'remove'
+    click_link '1 Lead', match: :first
+    click_link 'Remove'
     expect(page).to have_content('New Lead has been removed as a lead to Role1')
     expect(role.volunteers.count).to eq(1)
     expect(role.leads.count).to eq(0)

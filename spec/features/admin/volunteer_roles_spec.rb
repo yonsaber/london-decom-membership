@@ -41,7 +41,7 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'Volunteer Roles'
-    click_link 'edit'
+    click_link 'Edit'
     fill_in 'Name', with: 'Role1 edited'
     fill_in 'Brief description', with: 'Description of role edited'
     fill_in 'Description', with: 'Description of role but with more info edited'
@@ -60,7 +60,7 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'Volunteer Roles'
-    click_button 'destroy'
+    click_button 'Destroy'
     expect(page).to_not have_content('Role1')
   end
 

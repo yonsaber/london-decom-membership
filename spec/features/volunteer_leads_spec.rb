@@ -40,7 +40,7 @@ RSpec.feature 'Volunteering leads', type: :feature do
     volunteer1 = create(:volunteer, volunteer_role: role).user
 
     visit event_volunteer_role_volunteers_path(role.event, role)
-    page.all('input[value="remove"]')[1].click
+    page.all('input[value="Remove"]')[1].click
     expect(page).to have_content("#{volunteer1.name} has been removed as a volunteer")
     expect(page).to_not have_content(volunteer1.email)
   end
