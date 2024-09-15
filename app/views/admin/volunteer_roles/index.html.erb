@@ -15,8 +15,10 @@
   </tr>
   <% @volunteer_roles.each do |volunteer_role| %>
     <% cache volunteer_role do %>
-      <tr data-bs-toggle="collapse" data-bs-target="#role-<%= volunteer_role.id %>" class="accordion-toggle low-income-request">
-        <td class="d-table-cell d-lg-none align-middle"><span class="caret"></span></td>
+      <tr class="accordion-toggle low-income-request">
+        <td class="d-table-cell d-lg-none align-middle" data-bs-toggle="collapse" data-bs-target="#role-<%= volunteer_role.id %>">
+          <span class="caret"></span>
+        </td>
         <td class="align-middle"><%= volunteer_role.name %></td>
         <td class="d-none d-md-table-cell align-middle"><%= volunteer_role.brief_description %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= volunteer_role.description %></td>

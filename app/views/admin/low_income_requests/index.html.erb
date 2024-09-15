@@ -15,8 +15,10 @@
   <tbody>
   <% @low_income_requests.each do |low_income_request| %>
     <% cache low_income_request do %>
-      <tr data-bs-toggle="collapse" data-bs-target="#request-<%= low_income_request.id %>" class="accordion-toggle <%= low_income_request.status %> low-income-request">
-        <td class="d-table-cell d-lg-none align-middle"><span class="caret"></span></td>
+      <tr class="accordion-toggle <%= low_income_request.status %> low-income-request">
+        <td class="d-table-cell d-lg-none align-middle" data-bs-toggle="collapse" data-bs-target="#request-<%= low_income_request.id %>">
+          <span class="caret"></span>
+        </td>
         <td class="align-middle"><%= low_income_request.user.name %></td>
         <td class="d-none d-md-table-cell align-middle"><%= low_income_request.user.email %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= low_income_request.created_at.to_s %></td>

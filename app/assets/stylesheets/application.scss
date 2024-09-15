@@ -117,7 +117,7 @@ body {
   border-radius: 0;
 }
 
-.low-income-request > td > span, [aria-expanded="false"] > td > span {
+.low-income-request > td > span, .low-income-request > [aria-expanded="false"] > span {
   display: inline-block;
   width: 0;
   height: 0;
@@ -129,7 +129,7 @@ body {
   border-left: 4px solid transparent;
 }
 
-[aria-expanded="true"] > td > span {
+.low-income-request > [aria-expanded="true"] > span {
   display: inline-block;
   width: 0;
   height: 0;

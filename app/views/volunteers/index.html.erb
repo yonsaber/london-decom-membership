@@ -23,8 +23,10 @@
   </tr>
   <% @volunteers.each do |volunteer| %>
     <% cache volunteer do %>
-      <tr data-bs-toggle="collapse" data-bs-target="#volunteer-<%= volunteer.id %>" class="accordion-toggle <%= volunteer.state %> low-income-request">
-        <td class="d-table-cell d-lg-none align-middle"><span class="caret"></span></td>
+      <tr class="accordion-toggle <%= volunteer.state %> low-income-request">
+        <td class="d-table-cell d-lg-none align-middle" data-bs-toggle="collapse" data-bs-target="#volunteer-<%= volunteer.id %>">
+          <span class="caret"></span>
+        </td>
         <td class="align-middle"><%= volunteer.user.name %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= volunteer.user.email %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= volunteer.phone %></td>

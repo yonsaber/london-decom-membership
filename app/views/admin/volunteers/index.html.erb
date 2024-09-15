@@ -8,7 +8,7 @@
   <% @leads.each do |lead| %>
     <li>
       <%= lead.user.name %> (<%= lead.user.email %>)
-      <%= link_to 'remove', admin_event_volunteer_role_volunteer_path(@event, lead.volunteer_role, lead), method: :delete, data: {confirm: 'Are you sure?'} %>
+      <%= link_to 'Remove', admin_event_volunteer_role_volunteer_path(@event, lead.volunteer_role, lead), method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger'%>
     </li>
   <% end %>
 </ul>
