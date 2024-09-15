@@ -4,14 +4,22 @@
 
 <h3>Current leads</h3>
 
-<ul>
+<table class="table">
+  <tr>
+    <th>Name</th>
+    <th class="d-none d-md-table-cell">Email</th>
+    <th>Actions</th>
+  </tr>
   <% @leads.each do |lead| %>
-    <li>
-      <%= lead.user.name %> (<%= lead.user.email %>)
-      <%= link_to 'Remove', admin_event_volunteer_role_volunteer_path(@event, lead.volunteer_role, lead), method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger'%>
-    </li>
+    <tr>
+      <td class="align-middle"><%= lead.user.name %></td>
+      <td class="d-none d-md-table-cell align-middle"><%= lead.user.email %></td>
+      <td>
+        <%= link_to 'Remove', admin_event_volunteer_role_volunteer_path(@event, lead.volunteer_role, lead), method: :delete, data: {confirm: 'Are you sure?'}, class: 'btn btn-danger justify-content-end'%>
+      </td>
+    </tr>
   <% end %>
-</ul>
+</table>
 
 <h3>Add a new lead</h3>
 
