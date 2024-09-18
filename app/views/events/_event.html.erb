@@ -1,30 +1,32 @@
 <h1><%= @event.name %></h1>
 
-<% if @event.prerelease? && !current_user.early_access %>
+<% if @event.prerelease? && !current_user.early_access %> <!-- Non-Early Access Users branch -->
   <% if @event.ticket_sale_start_date.nil? %>
     Tickets for our next event will be available to buy here soon, watch this space!.
   <% else %>
     Tickets for our next event will be available to buy here on <%= @event.ticket_sale_start_date.strftime("%d/%m/%Y at %I:%M:%S %p") %> (GMT).
   <% end %>
 <% elsif @event.live? || current_user.early_access %>
-  <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
+  <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>  <!-- Brought tickets branch -->
     <p>
       You have bought the
       <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket') %>
       available to you. Look below to see how you can participate.
     </p>
-  <% elsif current_user.ticket_type != :general %>
+  <% elsif current_user.ticket_type != :general %> <!-- Non-General ticket branch -->
     <%= render partial: '/events/buy_ticket' %>
-  <% else %>
+  <% else %> <!-- General ticket branch -->
     <p class="mb-1">
       <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
         You have already bought
         <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket') %>.
         You can buy
         <%= pluralize(@event.available_tickets_for_code(current_user.membership_number), 'more ticket') %>.
-      <% else %>
+      <% elsif @event.available_tickets_for_code(current_user.membership_number) > 0 %>
         You can buy
         <%= pluralize(@event.available_tickets_for_code(current_user.membership_number), 'ticket') %>.
+      <% else %>
+        Currently, there are no tickets available to purchase!
       <% end %>
     </p>
     <%= render partial: '/events/buy_ticket' %>
@@ -49,27 +51,3 @@
 <% end %>
 
 <%= render partial: '/events/info' %>
-
-<% if current_user.ticket_type != :general || @event.available_tickets_for_code(current_user.membership_number) > 0 %>
-  <script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script>
-  <script type="text/javascript">
-      var orderCompleteCallback = function() {
-        const request = $.ajax({
-          type: 'PATCH',
-          url: "/events/<%= @event.id %>/clear_discount_from_cache?eventbrite_id=<%= @event.eventbrite_id %>&code=<%= current_user.membership_number %>"
-        });
-        request.done((response) => {
-          location.reload();
-        });
-      };
-
-      window.EBWidgets.createWidget({
-        widgetType: 'checkout',
-        eventId: <%= @event.eventbrite_id %>,
-        modal: true,
-        modalTriggerElementId: 'eventbrite-buy-link',
-        onOrderComplete: orderCompleteCallback,
-        promoCode: '<%= current_user.membership_number %>'
-      });
-  </script>
-<% end %>
