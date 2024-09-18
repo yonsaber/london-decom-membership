@@ -39,9 +39,9 @@
         <td colspan="12" style="padding: 0 !important">
           <div class="accordian-body collapse" id="role-<%= volunteer_role.id %>">
             <p class="mt-2">Brief Description: <%= volunteer_role.brief_description %></p>
-            <p>Full Description: <%= volunteer_role.brief_description %></p>
+            <p>Full Description: <%= volunteer_role.description %></p>
             <% if volunteer_role.priority.present? %>
-              <p><%= volunteer_role.priority %></p>
+              <p>Priority:  <%= volunteer_role.priority %></p>
             <% end %>
             <p>Role Hidden: <%= volunteer_role.hidden? ? 'Yes' : 'No' %></p>
             <p>
