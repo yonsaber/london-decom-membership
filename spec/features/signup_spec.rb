@@ -38,6 +38,7 @@ RSpec.feature 'Member signup', type: :feature do
   end
 
   scenario 'validation errors' do
+    # NOTE: Oddly this test passes, but cannot be replicated in a browser as you have to fill in the required fields!
     visit root_path
     click_button 'Sign up'
     expect(page).to have_text("can't be blank")
