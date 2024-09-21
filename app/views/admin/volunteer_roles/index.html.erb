@@ -32,8 +32,8 @@
         </td>
         <td class="d-none d-lg-table-cell align-middle"><%= link_to pluralize(volunteer_role.leads.count, 'Lead'), admin_event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= link_to pluralize(volunteer_role.volunteers.count, 'Volunteer'), event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
-        <td><%= link_to 'Edit', edit_admin_event_volunteer_role_path(@event, volunteer_role), class: "btn btn-primary w-100" %></td>
-        <td class="justify-content-middle"><%= button_to 'Destroy', admin_event_volunteer_role_path(@event, volunteer_role), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger w-100" %></td>
+        <td class="align-middle"><%= link_to 'Edit', edit_admin_event_volunteer_role_path(@event, volunteer_role), class: "btn btn-primary w-100" %></td>
+        <td class="align-middle"><%= button_to 'Destroy', admin_event_volunteer_role_path(@event, volunteer_role), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger w-100" %></td>
       </tr>
       <tr class="d-table-row d-lg-none">
         <td colspan="12" style="padding: 0 !important">
