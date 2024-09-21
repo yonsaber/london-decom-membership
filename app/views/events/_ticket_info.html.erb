@@ -1,0 +1,5 @@
+<% if @event.ticket_sale_start_date.nil? %>
+  Tickets for our next event will be available to buy here soon, watch this space!.
+<% else %>
+  Tickets for our next event will be available to buy here on <%= @event.ticket_sale_start_date.strftime("%d/%m/%Y at %I:%M:%S %p") %> (GMT).
+<% end %>

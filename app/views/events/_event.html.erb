@@ -1,23 +1,19 @@
 <h1><%= @event.name %></h1>
 
-<% if @event.prerelease? && !current_user.early_access %> <!-- Non-Early Access Users branch -->
-  <% if @event.ticket_sale_start_date.nil? %>
-    Tickets for our next event will be available to buy here soon, watch this space!.
-  <% else %>
-    Tickets for our next event will be available to buy here on <%= @event.ticket_sale_start_date.strftime("%d/%m/%Y at %I:%M:%S %p") %> (GMT).
-  <% end %>
+<% if @event.prerelease? && !current_user.early_access %>
+  <%= render partial: '/events/ticket_info' %>
 <% elsif @event.live? || current_user.early_access %>
-  <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>  <!-- Brought tickets branch -->
+  <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 && @event.available_tickets_for_code(current_user.membership_number) == 0 %>
     <p>
       You have bought the
       <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket') %>
       available to you. Look below to see how you can participate.
     </p>
-  <% elsif current_user.ticket_type != :general %> <!-- Non-General ticket branch -->
+  <% elsif current_user.ticket_type != :general %>
     <%= render partial: '/events/buy_ticket' %>
-  <% else %> <!-- General ticket branch -->
+  <% else %>
     <p class="mb-1">
-      <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
+      <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 && @event.available_tickets_for_code(current_user.membership_number) > 0 %>
         You have already bought
         <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket') %>.
         You can buy
@@ -26,28 +22,27 @@
         You can buy
         <%= pluralize(@event.available_tickets_for_code(current_user.membership_number), 'ticket') %>.
       <% else %>
-        Currently, there are no tickets available to purchase!
+        <%= render partial: '/events/ticket_info' %>
       <% end %>
     </p>
     <%= render partial: '/events/buy_ticket' %>
   <% end %>
 <% end %>
 
-<%= render partial: '/tickets/low_income' %>
-
-<% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
-  <hr />
-  <%= render partial: '/volunteers/applied_list' %>
-  <%= render partial: '/volunteers/list' %>
-<% end %>
-
 <% if @event.tickets_sold_for_code(current_user.membership_number) == 0 %>
+  <%= render partial: '/tickets/low_income' %>
   <p>
     <strong>
       Bought a transferred ticket and can't see the volunteer opportunities on this page? Drop an email to <a href="mailto:members@londondecom.org">members@londondecom.org</a> and we'll sort you out!
     </strong>
   </p>
   <hr />
+<% end %>
+
+<% if @event.tickets_sold_for_code(current_user.membership_number) > 0 %>
+  <hr />
+  <%= render partial: '/volunteers/applied_list' %>
+  <%= render partial: '/volunteers/list' %>
 <% end %>
 
 <%= render partial: '/events/info' %>
