@@ -6,7 +6,7 @@ class Event < ApplicationRecord
 
   def self.active(early_access: false)
     if early_access
-      order('created_at DESC').first
+      where.not(event_mode: 'draft').order('created_at DESC').first
     else
       where(active: true).first
     end
