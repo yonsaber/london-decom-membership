@@ -22,11 +22,17 @@
       <tr>
         <td class="align-middle"><%= user.name %></td>
         <td class="d-none d-lg-table-cell align-middle"><%= user.email %></td>
-        <td class="d-none d-sm-table-cell align-middle"><%= distance_of_time_in_words(user.created_at.to_time - Time.now) %></td>
-        <td class="d-none d-md-table-cell align-middle">
-          Last confirmation sent <%= distance_of_time_in_words(user.confirmation_sent_at.to_time - Time.now) %> ago
+        <td class="d-none d-sm-table-cell align-middle"><%= distance_of_time_in_words(user.created_at.to_time - Time.now.utc) %></td>
+        <td class="d-none d-md-table-cell align-middle text-center">
+          <% if user.confirmation_period_expired? %>
+            <%= button_to 'Resend', resend_email_admin_user_path(user), method: :post, class: "btn btn-primary align-middle" %>
+          <% else %>
+            Last confirmation sent <%= distance_of_time_in_words(user.confirmation_sent_at.to_time - Time.now.utc) %> ago
+          <% end %>
         </td>
-        <td><%= button_to 'Delete', admin_user_path(user), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger" %></td>
+        <td class="align-middle text-center">
+          <%= button_to 'Delete', admin_user_path(user), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger" %>
+        </td>
       </tr>
     <% end %>
   <% end %>

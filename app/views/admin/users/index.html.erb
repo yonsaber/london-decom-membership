@@ -37,8 +37,8 @@
             <span class="badge bg-danger">No</span>
           <% end %>
         </td>
-        <td class="d-none d-lg-table-cell align-middle"><%= user.created_at.to_s %></td>
-        <td><%= link_to 'Edit', edit_admin_user_path(user), class: "btn btn-primary me-1" %></td>
+        <td class="d-none d-lg-table-cell align-middle text-center"><%= user.created_at.strftime("%d/%m/%Y at %I:%M:%S %p") %></td>
+        <td class="align-middle text-center"><%= link_to 'Edit', edit_admin_user_path(user), class: "btn btn-primary text-center" %></td>
       </tr>
     <% end %>
   <% end %>
