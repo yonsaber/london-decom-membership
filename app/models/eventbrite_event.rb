@@ -22,7 +22,7 @@ class EventbriteEvent
     discounts = []
     page = 1
     finished = false
-    while finished == false
+    until finished
       response = HTTP.get(
         "https://www.eventbriteapi.com/v3/organizations/#{organization_id}/discounts/" \
         "?scope=event&event_id=#{eventbrite_id}&token=#{eventbrite_token}&page_size=200&page=#{page}"
