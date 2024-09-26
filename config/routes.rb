@@ -33,4 +33,10 @@ Rails.application.routes.draw do
   end
   resources :low_income_requests
   root to: 'home#index'
+
+  %w[400 404 422 500 503].each do |code|
+    get code, to: 'errors#show', code:
+  end
+
+  match '*any', to: 'errors#show', code: 404, via: :all if Rails.env.production?
 end

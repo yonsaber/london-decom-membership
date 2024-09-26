@@ -44,5 +44,7 @@ module LondonDecomMembership
                            threadsafe: true,
                            secure: true
     end
+
+    config.exceptions_app = routes
   end
 end
