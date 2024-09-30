@@ -75,13 +75,7 @@ class User < ApplicationRecord
   def update_mailchimp
     return if ENV['MAILCHIMP_TOKEN'].blank?
 
-    gibbon.lists(list_id).members(email_hash).upsert(
-      body: {
-        email_address: email,
-        status: 'subscribed',
-        merge_fields: { NAME: name }
-      }
-    )
+    mailchimp_upsert('subscribed')
     gibbon.lists(list_id).members(email_hash).tags.create(
       body: {
         tags: [
@@ -92,6 +86,13 @@ class User < ApplicationRecord
     )
   rescue Gibbon::MailChimpError => e
     Rollbar.error(e)
+
+    # NOTE: If a member is in compliance state, we are able to resubscribe them by setting their state to pending
+    #       this should resend the confirmation email to them so they are no longer in a compliance state
+    # References for this change:
+    # * https://www.drupal.org/project/mailchimp/issues/2188819
+    # * https://stackoverflow.com/questions/42159327/resubscribe-a-user-to-a-mailchimp-list-after-unsubscribe
+    mailchimp_upsert('pending') if e.status_code == 400 && !e.title.index('Member In Compliance State').nil?
   end
 
   private
@@ -106,5 +107,15 @@ class User < ApplicationRecord
 
   def list_id
     @list_id ||= gibbon.lists.retrieve.body['lists'].first['id']
+  end
+
+  def mailchimp_upsert(status)
+    gibbon.lists(list_id).members(email_hash).upsert(
+      body: {
+        email_address: email,
+        status:,
+        merge_fields: { NAME: name }
+      }
+    )
   end
 end
