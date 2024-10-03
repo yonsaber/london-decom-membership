@@ -208,11 +208,13 @@ The fields `Event Timings`, `Theme Details` and `Further Information` are multil
 
 ## Scheduler
 
-We are now using `whenever` to schedule rake tasks using cron.
+We are now using a manual cronfile and [supercronic](https://github.com/aptible/supercronic) to schedule rake tasks.
 
-Locally you don't need to worry about this, if you do want to test out the cron, simply run `whenever --update-crontab --set environment='development'`
+Locally you don't need to worry about this.
 
-On the server it will automatically run the required command to set up the cron events.
+For setting the crontab schedule, you can use [crontab.guru](https://crontab.guru) to help generate the correct timing strings.
+
+On the server it will automatically run the required command to set up the cron jobs.
 
 Currently we have the following scheduled tasks running:
 
