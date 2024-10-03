@@ -1,0 +1,1 @@
+0 3 1,8,15,22 * * /bin/bash -l -c 'cd /rails && RAILS_ENV=production bundle exec rake users:purge_old_users'

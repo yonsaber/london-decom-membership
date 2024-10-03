@@ -3,7 +3,11 @@
 app = "london-decom-membership"
 kill_signal = "SIGINT"
 kill_timeout = 5
-processes = []
+[processes]
+  # The command below is used to launch a Rails server; be sure to
+  # replace with the command you're using to launch your server.
+  app = "bin/rails server"
+  cron = "supercronic /rails/crontab"
 
 [build]
   [build.args]
