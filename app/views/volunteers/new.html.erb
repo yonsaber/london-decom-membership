@@ -1,4 +1,7 @@
-<h2>Signup to volunteer for <%= @volunteer_role.name %></h2>
+<h2>Apply to volunteer <%= @volunteer_role.name %></h2>
+
+<p>Thank you for deciding to volunteer! Your name and email address will be submitted to us via your member account so we just need a couple of things below.</p>
+<p>You can use the comments box to provide a couple of sentences about why you want to volunteer in the role and include any questions you have.</p>
 
 <%= simple_format @volunteer_role.description %>
 
@@ -8,5 +11,5 @@
   <%= form.check_box :accept_code_of_conduct, label: 'I agree to the <a href="https://londondecom.org/code-of-conduct/">Decom Code of Conduct</a>'.html_safe %>
   <%= form.check_box :accept_health_and_safety, label: 'I confirm that I\'ve read the <a href="https://drive.google.com/file/d/1WKf7nU6sA6Ktz8TWDmv0vUEc2KVGHnDE/view?usp=share_link">Decom Health and Safety Guidelines</a>'.html_safe %>
   <br />
-  <%= form.submit 'Volunteer' %>
+  <%= form.submit 'Volunteer', class: "btn btn-primary w-100" %>
 <% end %>
