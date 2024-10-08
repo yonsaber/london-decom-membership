@@ -23,6 +23,7 @@ RSpec.feature 'Member signup', type: :feature do
     fill_in 'Name', with: 'James Darling'
     fill_in 'Email address', with: 'james@abscond.org'
     fill_in 'Password', with: 'password'
+    check 'I confirm that I am over 18 years of age'
     check 'I have read and am prepared to take into consideration'
     check 'Volunteers and Participants Code of Conduct'
     check 'Health and Safety Guidelines'
