@@ -1,4 +1,7 @@
-<%= LowIncomeRequest.where(status: 'approved').count %> requests approved so far.
+<h1>Low Income Requests</h1>
+
+<p>Approved: <%= LowIncomeRequest.where(status: 'approved').count %> of <%= LowIncomeRequest.count %> requests</p>
+<p>Rejected: <%= LowIncomeRequest.where(status: 'rejected').count %> of <%= LowIncomeRequest.count %> requests</p>
 
 <table class="table">
   <tr>
@@ -12,7 +15,7 @@
     <tr>
       <td><%= low_income_request.user.name %></td>
       <td><%= low_income_request.user.email %></td>
-      <td><%= low_income_request.created_at.to_s %></td>
+      <td><%= low_income_request.created_at.to_fs(:decom_standard) %></td>
       <td><%= low_income_request.request_reason %></td>
       <td>
         <% if low_income_request.status == 'approved' %>
@@ -20,8 +23,8 @@
         <% elsif low_income_request.status == 'rejected' %>
           Rejected
         <% else %>
-          <%= button_to 'Approve', approve_admin_low_income_request_path(low_income_request) %>
-          <%= button_to 'Reject', reject_admin_low_income_request_path(low_income_request) %>
+          <%= button_to 'Approve', approve_admin_low_income_request_path(low_income_request), class: 'btn btn-primary w-100' %>
+          <%= button_to 'Reject', reject_admin_low_income_request_path(low_income_request), class: 'btn btn-danger w-100' %>
         <% end %>
       </td>
     </tr>

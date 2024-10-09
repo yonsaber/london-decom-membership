@@ -112,4 +112,19 @@ RSpec.feature 'Low Income', type: :feature do
 
     expect(page).to_not have_text('Apply for low income')
   end
+
+  scenario 'number of requests are equal to the number of available codes' do
+    stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
+    create(:event, :prerelease)
+    login
+
+    10.times do
+      request = LowIncomeRequest.new(user: User.first, request_reason: 'testing!')
+      request.save!
+    end
+
+    visit root_path
+
+    expect(page).to_not have_text('Apply for low income')
+  end
 end

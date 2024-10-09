@@ -24,7 +24,7 @@ class Event < ApplicationRecord
     else
       outside_window = Time.zone.now.before?(low_income_requests_start) ||
                        Time.zone.now.after?(low_income_requests_end)
-      !outside_window && event_mode == 'prerelease'
+      !outside_window && (event_mode == 'prerelease' || LowIncomeRequest.count == LowIncomeCode.count)
     end
   end
 
