@@ -7,6 +7,7 @@ class User < ApplicationRecord
   attr_accessor :last_sign_in_ip, :current_sign_in_ip
 
   validates :name, presence: true
+  validates :over_eighteen, acceptance: true
   validates :accept_principles, acceptance: true
   validates :accept_emails, acceptance: true
   validates :accept_no_ticket, acceptance: true

@@ -30,6 +30,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       :sign_up,
       keys: %i[
         name
+        over_eighteen
         accept_principles
         marketing_opt_in
         accept_emails
