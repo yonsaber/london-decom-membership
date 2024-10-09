@@ -87,12 +87,16 @@ class User < ApplicationRecord
   rescue Gibbon::MailChimpError => e
     Rollbar.error(e)
 
-    # NOTE: If a member is in compliance state, we are able to resubscribe them by setting their state to pending
-    #       this should resend the confirmation email to them so they are no longer in a compliance state
-    # References for this change:
-    # * https://www.drupal.org/project/mailchimp/issues/2188819
-    # * https://stackoverflow.com/questions/42159327/resubscribe-a-user-to-a-mailchimp-list-after-unsubscribe
-    mailchimp_upsert('pending') if e.status_code == 400 && !e.title.index('Member In Compliance State').nil?
+    begin
+      # NOTE: If a member is in compliance state, we are able to resubscribe them by setting their state to pending
+      #       this should resend the confirmation email to them so they are no longer in a compliance state
+      # References for this change:
+      # * https://www.drupal.org/project/mailchimp/issues/2188819
+      # * https://stackoverflow.com/questions/42159327/resubscribe-a-user-to-a-mailchimp-list-after-unsubscribe
+      mailchimp_upsert('pending') if e.status_code == 400 && !e.title.downcase.index('member in compliance state').nil?
+    rescue Gibbon::MailChimpError => e
+      Rollbar.error(e)
+    end
   end
 
   private
