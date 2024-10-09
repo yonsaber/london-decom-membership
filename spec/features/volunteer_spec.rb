@@ -8,6 +8,48 @@ RSpec.feature 'Volunteering', type: :feature do
     expect(page).to_not have_text('Volunteer opportunities')
   end
 
+  scenario 'draft event, cannot see volunteer link' do
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    create(:event, :draft)
+    login
+    expect(page).to_not have_text('Looking to volunteer?')
+  end
+
+  scenario 'prerelease event, cannot see volunteer link' do
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    create(:event, :prerelease)
+    login
+    expect(page).to_not have_text('Looking to volunteer?')
+  end
+
+  scenario 'prerelease event, early access, can see volunteer link' do
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    create(:event, :prerelease)
+    login(early_access: true)
+    expect(page).to have_text('Looking to volunteer?')
+  end
+
+  scenario 'live event, early access, can see volunteer link' do
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    create(:event)
+    login(early_access: true)
+    expect(page).to have_text('Looking to volunteer?')
+  end
+
+  scenario 'live event, can see volunteer link' do
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    create(:event)
+    login
+    expect(page).to have_text('Looking to volunteer?')
+  end
+
+  scenario 'ended event, early access, cannot see volunteer link' do
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    create(:event, :ended)
+    login(early_access: true)
+    expect(page).to_not have_text('Looking to volunteer?')
+  end
+
   scenario 'signing up to volunteer successfully' do
     role = create(:volunteer_role, name: 'Ranger', description: 'A description of rangering')
     lead = create(:volunteer, volunteer_role: role, lead: true).user
