@@ -84,12 +84,12 @@
 <% if current_user.ticket_type != :general || @event.available_tickets_for_code(current_user.membership_number) > 0 %>
 <script src="https://www.eventbrite.com/static/widgets/eb_widgets.js"></script>
 <script type="text/javascript">
-    var orderCompleteCallback = function() {
+    let orderCompleteCallback = function() {
       const request = $.ajax({
         type: 'PATCH',
         url: "/events/<%= @event.id %>/clear_discount_from_cache?eventbrite_id=<%= @event.eventbrite_id %>&code=<%= current_user.membership_number %>"
       });
-      request.done((response) => {
+      request.done(_ => {
         location.reload();
       });
     };
