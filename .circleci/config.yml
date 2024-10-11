@@ -1,8 +1,6 @@
 ---
-version: 2
-jobs:
-  build:
-    working_directory: ~/london-decom-membership
+executors:
+  membershipsite-executors:
     docker:
       - image: cimg/ruby:3.3.5-browsers
         environment:
@@ -14,23 +12,32 @@ jobs:
           POSTGRES_USER: london-decom-membership
           POSTGRES_DB: london-decom-membership_test
           POSTGRES_PASSWORD: password
+  base-image:
+    docker:
+      - image: cimg/base:2021.04
+
+version: 2.1
+jobs:
+  build-and-test:
+    executor: membershipsite-executors
+    working_directory: ~/london-decom-membership
     steps:
       - checkout
 
       # Restore Cached Dependencies
-      - type: cache-restore
-        name: Restore bundle cache
-        key: london-decom-membership-{{ checksum "Gemfile.lock" }}
+      - restore_cache:
+          name: Restore bundle cache
+          key: london-decom-membership-{{ checksum "Gemfile.lock" }}
 
       # Bundle install dependencies
       - run: bundle install --path vendor/bundle
 
       # Cache Dependencies
-      - type: cache-save
-        name: Store bundle cache
-        key: london-decom-membership-{{ checksum "Gemfile.lock" }}
-        paths:
-          - vendor/bundle
+      - save_cache:
+          name: Store bundle cache
+          key: london-decom-membership-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
 
       # Wait for DB
       - run: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -43,3 +50,31 @@ jobs:
 
       # Run the tests
       - run: bundle exec rake
+
+  deploy:
+    executor: base-image
+    working_directory: ~/london-decom-membership
+    steps:
+      - run: |
+          # Deployment script
+            fly deploy
+          # Notify rollbar
+            curl https://api.rollbar.com/api/1/deploy/ \
+          -F access_token=$ROLLBAR_ACCESS_TOKEN \
+          -F environment=production \
+          -F revision=$CIRCLE_SHA1 \
+          -F rollbar_username=$CIRCLE_USERNAME \
+          -F local_username=$CIRCLE_USERNAME
+
+workflows:
+    build-test-deploy:
+      jobs:
+        - build-and-test
+        - deploy:
+            requires:
+              - build-and-test
+            filters:
+              branches:
+                only:
+                  - main
+                  - master
