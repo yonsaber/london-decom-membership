@@ -24,62 +24,71 @@ jobs:
     steps:
       - checkout
 
-      # Restore Cached Dependencies
       - restore_cache:
           name: Restore bundle cache
           key: london-decom-membership-{{ checksum "Gemfile.lock" }}
 
-      # Bundle install dependencies
-      - run: bundle install --path vendor/bundle
+      - run:
+          name: Bundle install dependencies
+          command: bundle install --path vendor/bundle
 
-      # Cache Dependencies
       - save_cache:
           name: Store bundle cache
           key: london-decom-membership-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
-      # Wait for DB
-      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
-      # Setup the environment
-      - run: cp .sample.env .env
+      - run:
+          name: Setup the environment
+          command: cp .sample.env .env
 
-      # Setup the database
-      - run: bundle exec rake db:setup
+      - run:
+          name: Setup the database
+          command: bundle exec rake db:setup
 
-      # Run the tests
-      - run: bundle exec rake
+      - run:
+          name: Run the tests
+          command: bundle exec rake
 
   deploy:
     executor: base-image
     working_directory: ~/london-decom-membership
     steps:
-      - run: |
-          # Setup fly
-            curl -L https://fly.io/install.sh | sh
-          # Configure fly
+      - checkout
+      - run:
+          name: Setup Fly
+          command: curl -L https://fly.io/install.sh | sh
+      - run:
+          name: Configure Fly
+          command: |
             export FLYCTL_INSTALL="/home/circleci/.fly"
             export PATH="$FLYCTL_INSTALL/bin:$PATH"
-          # Run deploy
-            flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
-          # Notify rollbar
+      - run:
+          name: Deploy
+          command: flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
+      - run:
+          name: Notify Rollbar
+          command: |
             curl https://api.rollbar.com/api/1/deploy/ \
-          -F access_token=$ROLLBAR_ACCESS_TOKEN \
-          -F environment=production \
-          -F revision=$CIRCLE_SHA1 \
-          -F rollbar_username=$CIRCLE_USERNAME \
-          -F local_username=$CIRCLE_USERNAME
+            -F access_token=$ROLLBAR_ACCESS_TOKEN \
+            -F environment=production \
+            -F revision=$CIRCLE_SHA1 \
+            -F rollbar_username=$CIRCLE_USERNAME \
+            -F local_username=$CIRCLE_USERNAME
 
 workflows:
-    build-test-deploy:
-      jobs:
-        - build-and-test
-        - deploy:
-            requires:
-              - build-and-test
-            filters:
-              branches:
-                only:
-                  - main
-                  - master
+  build-test-deploy:
+    jobs:
+      - build-and-test
+      - deploy:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                - main
+                - master
