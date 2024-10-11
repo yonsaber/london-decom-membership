@@ -56,8 +56,10 @@ jobs:
     working_directory: ~/london-decom-membership
     steps:
       - run: |
-          # Deployment script
-            fly deploy
+          # Setup fly
+            curl -L https://fly.io/install.sh | sh
+          # Run deploy
+            flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
           # Notify rollbar
             curl https://api.rollbar.com/api/1/deploy/ \
           -F access_token=$ROLLBAR_ACCESS_TOKEN \
