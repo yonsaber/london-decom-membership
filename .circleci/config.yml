@@ -12,9 +12,11 @@ executors:
           POSTGRES_USER: london-decom-membership
           POSTGRES_DB: london-decom-membership_test
           POSTGRES_PASSWORD: password
+    resource_class: small
   base-image:
     docker:
       - image: cimg/base:2021.04
+    resource_class: small
 
 version: 2.1
 jobs:
@@ -60,16 +62,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Setup Fly
-          command: curl -L https://fly.io/install.sh | sh
-      - run:
-          name: Configure Fly
+          name: Deploy to fly
           command: |
-            export FLYCTL_INSTALL="/home/circleci/.fly"
-            export PATH="$FLYCTL_INSTALL/bin:$PATH"
-      - run:
-          name: Deploy
-          command: flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
+                curl -L https://fly.io/install.sh | sh
+                export FLYCTL_INSTALL="/home/circleci/.fly"
+                export PATH="$FLYCTL_INSTALL/bin:$PATH"
+                flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
       - run:
           name: Notify Rollbar
           command: |
