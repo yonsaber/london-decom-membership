@@ -58,6 +58,9 @@ jobs:
       - run: |
           # Setup fly
             curl -L https://fly.io/install.sh | sh
+          # Configure fly
+            export FLYCTL_INSTALL="/home/circleci/.fly"
+            export PATH="$FLYCTL_INSTALL/bin:$PATH"
           # Run deploy
             flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
           # Notify rollbar
