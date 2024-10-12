@@ -1,6 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   prepend_before_action :check_captcha, only: [:create]
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :fetch_active_event
 
   private
 
@@ -55,5 +56,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def after_inactive_sign_up_path_for(_resource)
     confirmation_notice_path
+  end
+
+  def fetch_active_event
+    @event = Event.active(early_access: current_user&.early_access?)
   end
 end
