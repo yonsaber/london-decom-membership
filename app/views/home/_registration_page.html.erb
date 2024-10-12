@@ -27,13 +27,11 @@
   <p><br/>
     By signing up you are joining London Decompression as a member.
   </p>
-  <%= f.submit 'Sign up' %>
+  <%= f.submit 'Sign up', class: 'btn btn-primary w-100' %>
 <% end %>
 
-<p>
-  <%= link_to "Haven't received your confirmation email?", new_user_confirmation_path %>
-</p>
+<br />
 
-<p>
-  Questions? Email us at <%= link_to 'members@londondecom.org', 'mailto:members@londondecom.org' %>
-</p>
+<p><%= link_to "Haven't received your confirmation email?", new_user_confirmation_path %></p>
+
+<p>Questions? Email us at <%= link_to 'members@londondecom.org', 'mailto:members@londondecom.org' %></p>
