@@ -69,6 +69,90 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe '#update_mailchimp' do
+    around do |example|
+      ClimateControl.modify MAILCHIMP_TOKEN: '12345678901234567890123456789012-us3' do
+        example.run
+      end
+    end
+
+    before do
+      stub_request(:get, 'https://us3.api.mailchimp.com/3.0/lists').to_return(body: '{"lists":[{"id":"1234"}]}')
+      @user_stub = stub_request(:put, 'https://us3.api.mailchimp.com/3.0/lists/1234/members/2585df46821f60e7ea95e8cb7f495623')
+                   .with(
+                     body: {
+                       email_address: 'james@abscond.org',
+                       status: 'subscribed',
+                       merge_fields: { NAME: 'James Darling' }
+                     }
+                   )
+                   .to_return(
+                     status: 400,
+                     body: {
+                       title: 'Member In Compliance State',
+                       status_code: '400'
+                     }.to_json
+                   )
+      @pending_user_stub = stub_request(:put, 'https://us3.api.mailchimp.com/3.0/lists/1234/members/2585df46821f60e7ea95e8cb7f495623')
+                           .with(
+                             body: {
+                               email_address: 'james@abscond.org',
+                               status: 'pending',
+                               merge_fields: { NAME: 'James Darling' }
+                             }
+                           )
+    end
+
+    it 'should try create a user on Mailchimp and mark them pending' do
+      new_user = create(:user, email: 'james@abscond.org', name: 'James Darling')
+      new_user.update_mailchimp
+      expect(@user_stub).to have_been_requested
+      expect(@pending_user_stub).to have_been_requested
+    end
+  end
+
+  describe '#update_mailchimp' do
+    around do |example|
+      ClimateControl.modify MAILCHIMP_TOKEN: '12345678901234567890123456789012-us3' do
+        example.run
+      end
+    end
+
+    before do
+      stub_request(:get, 'https://us3.api.mailchimp.com/3.0/lists').to_return(body: '{"lists":[{"id":"1234"}]}')
+      @user_stub = stub_request(:put, 'https://us3.api.mailchimp.com/3.0/lists/1234/members/2585df46821f60e7ea95e8cb7f495623')
+                   .with(
+                     body: {
+                       email_address: 'james@abscond.org',
+                       status: 'subscribed',
+                       merge_fields: { NAME: 'James Darling' }
+                     }
+                   )
+                   .to_return(
+                     status: 400,
+                     body: {
+                       title: 'Some Other Error',
+                       status_code: '400'
+                     }.to_json
+                   )
+      @pending_user_stub = stub_request(:put, 'https://us3.api.mailchimp.com/3.0/lists/1234/members/2585df46821f60e7ea95e8cb7f495623')
+                           .with(
+                             body: {
+                               email_address: 'james@abscond.org',
+                               status: 'pending',
+                               merge_fields: { NAME: 'James Darling' }
+                             }
+                           )
+    end
+
+    it 'should try create a user on Mailchimp and mark them pending' do
+      new_user = create(:user, email: 'james@abscond.org', name: 'James Darling')
+      new_user.update_mailchimp
+      expect(@user_stub).to have_been_requested
+      expect(@pending_user_stub).to_not have_been_requested
+    end
+  end
+
   describe '#delete_mailchimp_user' do
     around do |example|
       ClimateControl.modify MAILCHIMP_TOKEN: '12345678901234567890123456789012-us3' do
