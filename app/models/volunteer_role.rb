@@ -8,7 +8,7 @@ class VolunteerRole < ApplicationRecord
 
   scope :available_for_user, lambda { |user|
     where.not(id: user.volunteers.pluck(:volunteer_role_id))
-         .order(:priority)
+         .order(priority: :desc)
          .where('hidden IS NOT true')
   }
 
@@ -18,5 +18,15 @@ class VolunteerRole < ApplicationRecord
 
   def lead_emails
     leads.collect { |l| l.user.email }
+  end
+
+  def remaining_slots
+    # Avoid showing negative numbers on the site because that is a bad look!
+    slots_remain = available_slots - volunteers.where(lead: false).count
+    if slots_remain.zero? || slots_remain.negative?
+      0
+    else
+      slots_remain
+    end
   end
 end

@@ -1,36 +1,51 @@
 <h1>Volunteer roles</h1>
 
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Brief descriptioin</th>
-    <th>Description</th>
-    <th>Priority</th>
-    <th>Hidden</th>
-    <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  <% @volunteer_roles.each do |volunteer_role| %>
+<div class="overflow-auto">
+  <table class="table">
     <tr>
-      <td class="align-middle"><%= volunteer_role.name %></td>
-      <td class="align-middle"><%= volunteer_role.brief_description %></td>
-      <td class="align-middle"><%= volunteer_role.description %></td>
-      <td class="align-middle text-center"><%= volunteer_role.priority %></td>
-      <td class="align-middle text-center">
-        <% if volunteer_role.hidden %>
-          <span class="badge bg-primary">Yes</span>
-        <% else %>
-          <span class="badge bg-success">No</span>
-        <% end %>
-      </td>
-      <td class="align-middle"><%= link_to 'Edit', edit_admin_event_volunteer_role_path(@event, volunteer_role) %></td>
-      <td class="align-middle"><%= link_to pluralize(volunteer_role.leads.count, 'lead'), admin_event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
-      <td class="align-middle"><%= link_to pluralize(volunteer_role.volunteers.count, 'volunteer'), event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
-      <td class="align-middle"><%= button_to 'Destroy', admin_event_volunteer_role_path(@event, volunteer_role), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: 'btn btn-danger' %></td>
+      <th>Name</th>
+      <th>Brief Description</th>
+      <th>Description</th>
+      <th>Priority</th>
+      <th>Hidden</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
     </tr>
-  <% end %>
-</table>
+    <% @volunteer_roles.each do |volunteer_role| %>
+      <tr>
+        <td class="align-middle"><%= volunteer_role.name %></td>
+        <td class="align-middle"><%= volunteer_role.brief_description %></td>
+        <td class="align-middle"><%= volunteer_role.description %></td>
+        <td class="align-middle text-center"><%= volunteer_role.priority %></td>
+        <td class="align-middle text-center">
+          <% if volunteer_role.hidden %>
+            <span class="badge bg-primary">Yes</span>
+          <% else %>
+            <span class="badge bg-success">No</span>
+          <% end %>
+        </td>
+        <td class="align-middle"><%= link_to pluralize(volunteer_role.leads.count, 'lead'), admin_event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
+        <td class="align-middle"><%= link_to pluralize(volunteer_role.volunteers.count, 'volunteer'), event_volunteer_role_volunteers_path(@event, volunteer_role) %></td>
+        <td class="align-middle">
+          <% if volunteer_role.available_slots == 0 %>
+            No Limit
+          <% else %>
+            <%= pluralize(volunteer_role.remaining_slots, 'remaining slot') %>
+          <% end %>
+        </td>
+        <td class="align-middle">
+          <div class="row">
+            <div class="col-sm-6 d-flex align-items-end">
+              <%= link_to 'Edit', edit_admin_event_volunteer_role_path(@event, volunteer_role), class: 'btn btn-primary w-100 m-2' %>
+              <%= button_to 'Destroy', admin_event_volunteer_role_path(@event, volunteer_role), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: 'btn btn-danger w-100 m-2' %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
 
 <%= link_to 'Add new', new_admin_event_volunteer_role_path(@event) %>
