@@ -2,7 +2,7 @@ class Admin::VolunteerRolesController < AdminController
   before_action :find_event
 
   def index
-    @volunteer_roles = @event.volunteer_roles.all
+    @volunteer_roles = @event.volunteer_roles.all.order(priority: :desc)
   end
 
   def new
