@@ -29,7 +29,7 @@
   <% if @event.low_income_open? %>
     <p>Low income applications are currently open and will close in <%= distance_of_time_in_words(Time.zone.now - @event.low_income_requests_end) %></p>
   <% else %>
-    <% if Time.zone.now > @event.low_income_requests_end %>
+    <% if Time.zone.now.after?(@event.low_income_requests_end) || !@event.low_income_open? %>
       <p>Low income application window has closed, you can still however provide people with low income request access</p>
     <% else %>
       <p>Low income application window is currently closed, but will open in <%= distance_of_time_in_words(Time.zone.now - @event.low_income_requests_start) %></p>
