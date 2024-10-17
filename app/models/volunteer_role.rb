@@ -20,6 +20,10 @@ class VolunteerRole < ApplicationRecord
     leads.collect { |l| l.user.email }
   end
 
+  def below_threshold?
+    ((available_slots.to_f / 100) * 25).ceil >= remaining_slots
+  end
+
   def remaining_slots
     # Avoid showing negative numbers on the site because that is a bad look!
     slots_remain = available_slots - volunteers.where(lead: false).count

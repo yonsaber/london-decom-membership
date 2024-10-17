@@ -10,7 +10,7 @@
             <% end %>
           </h5>
           <p>
-            <% if ((volunteer_role.available_slots.to_f / 100) * 25).ceil >= volunteer_role.remaining_slots && !volunteer_role.remaining_slots.zero? %>
+            <% if volunteer_role.below_threshold? && !volunteer_role.remaining_slots.zero? %>
               <b>Few spaces remain!</b>
             <% end %>
           </p>
