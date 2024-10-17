@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 module LondonDecomMembership
   class Application < Rails::Application
+    cache_key = 'ldm'
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.2
 
@@ -26,21 +28,17 @@ module LondonDecomMembership
 
     if (ENV.fetch('REDIS_URL', nil) && ENV.fetch('REDIS_PORT', nil)) && !Rails.env.test?
       config.cache_store = :redis_cache_store, {
-        url: ENV.fetch('REDIS_URL', nil), port: ENV.fetch('REDIS_PORT', nil), db: 0, namespace: 'cache',
+        url: ENV.fetch('REDIS_URL', nil),
+        port: ENV.fetch('REDIS_PORT', nil),
+        db: 0,
+        namespace: "_#{cache_key.downcase}_cache",
         expires_in: 90.minutes
       }
 
       config.action_controller.enable_fragment_cache_logging = !Rails.env.production?
 
-      config.session_store :redis_store,
-                           servers: [{
-                             url: ENV.fetch('REDIS_URL', nil),
-                             port: ENV.fetch('REDIS_PORT', nil),
-                             db: 0,
-                             namespace: 'session'
-                           }],
-                           expire_after: 90.minutes,
-                           key: "_#{Rails.application.class.module_parent_name.downcase}_session",
+      config.session_store expire_after: 90.minutes,
+                           key: "_#{cache_key.downcase}_session",
                            threadsafe: true,
                            secure: true
     end

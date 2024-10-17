@@ -15,7 +15,7 @@ gem 'bootsnap', '~> 1.18', '>= 1.18.4', require: false
 gem 'rubocop', '1.66.1'
 gem 'rollbar'
 
-gem 'redis-rails'
+gem 'redis'
 
 gem 'devise'
 gem 'devise-i18n'
