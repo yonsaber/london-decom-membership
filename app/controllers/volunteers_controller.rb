@@ -16,18 +16,27 @@ class VolunteersController < ApplicationController
   end
 
   def create
-    @volunteer = current_user.volunteers.build(volunteer_params)
-    if @volunteer.save
-      LeadsMailer.new_volunteer(@volunteer).deliver_now
+    if @event.tickets_sold_for_code(current_user.membership_number).zero?
+      flash[:alert] =
+        "We are not currently taking applications for the #{@volunteer_role.name} role, please check back later!"
+      redirect_to event_volunteering_index_path(@event)
+    elsif !@volunteer_role.available_slots.zero? && @volunteer_role.remaining_slots.zero?
+      flash[:alert] = "Unfortunately the last available slot for the #{@volunteer_role.name} role has been taken"
       redirect_to event_volunteering_index_path(@event)
     else
-      render action: :new
+      try_volunteer_user
     end
   end
 
   def destroy
+    @current_user_volunteer_role = current_user.volunteers.find_by(volunteer_role: @volunteer_role)
     if current_user.lead_for?(@volunteer_role)
       lead_deleting_volunteer
+    # NOTE: Previously if we were an admin and went to delete a user in the volunteers list
+    #       we'd run into an issue where it couldn't find that volunteer and fail to destroy them
+    #       this ensures we don't run into that issue any more
+    elsif current_user.admin && @current_user_volunteer_role&.user_id != current_user.id
+      admin_deleting_volunteer
     else
       volunteer_cancelling
     end
@@ -41,6 +50,16 @@ class VolunteersController < ApplicationController
 
   private
 
+  def try_volunteer_user
+    @volunteer = current_user.volunteers.build(volunteer_params)
+    if @volunteer.save
+      LeadsMailer.new_volunteer(@volunteer).deliver_now
+      redirect_to event_volunteering_index_path(@event)
+    else
+      render action: :new
+    end
+  end
+
   def lead_deleting_volunteer
     @volunteer = @volunteer_role.volunteers.find(params[:id])
     @volunteer.destroy
@@ -53,10 +72,17 @@ class VolunteersController < ApplicationController
     end
   end
 
-  def volunteer_cancelling
-    @volunteer = current_user.volunteers.find_by(volunteer_role: @volunteer_role)
+  def admin_deleting_volunteer
+    @volunteer = @volunteer_role.volunteers.find(params[:id])
     @volunteer.destroy
     LeadsMailer.cancelled_volunteer(@volunteer).deliver_now
+    flash[:notice] = "#{@volunteer.user.name} has been removed as a volunteer for #{@volunteer_role.name}"
+    redirect_to event_volunteer_role_volunteers_path(@event, @volunteer_role)
+  end
+
+  def volunteer_cancelling
+    @current_user_volunteer_role.destroy
+    LeadsMailer.cancelled_volunteer(@current_user_volunteer_role).deliver_now
     flash[:notice] = "You are no longer volunteering for #{@volunteer_role.name}"
     redirect_to event_volunteering_index_path(@event)
   end

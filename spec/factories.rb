@@ -60,5 +60,6 @@ FactoryBot.define do
     end
     password { 'password' }
     confirmed_at { Time.zone.now }
+    ticket_bought { false }
   end
 end
