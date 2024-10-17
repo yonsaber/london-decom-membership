@@ -23,7 +23,7 @@ module LondonDecomMembership
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = 'London'
     # config.eager_load_paths << Rails.root.join("extras")
 
     if (ENV.fetch('REDIS_URL', nil) && ENV.fetch('REDIS_PORT', nil)) && !Rails.env.test?

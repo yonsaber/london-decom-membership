@@ -32,7 +32,7 @@ RSpec.feature 'Event', type: :feature do
     login
 
     expect(page).to have_text(
-      'Tickets for our next event will be available to buy here on 22/10/2023 at 12:00:00 PM (GMT).'
+      'Tickets for our next event will be available to buy here on 22/10/2023 at 01:00:00 PM BST.'
     )
     expect(page).to have_text('Here is the crucial info')
   end
