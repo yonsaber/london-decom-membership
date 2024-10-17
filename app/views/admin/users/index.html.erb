@@ -7,38 +7,40 @@
   <%= submit_tag 'Search' %>
 <% end %>
 
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Admin</th>
-    <th>Early Access</th>
-    <th>Created</th>
-    <th>Actions</th>
-  </tr>
-  <% @users.each do |user| %>
+<div class="overflow-auto">
+  <table class="table">
     <tr>
-      <td class="align-middle"><%= user.name %></td>
-      <td class="align-middle"><%= user.email %></td>
-      <td class="text-center align-middle">
-        <% if user.admin? %>
-          <span class="badge bg-success">Yes</span>
-        <% else %>
-          <span class="badge bg-danger">No</span>
-        <% end %>
-      </td>
-      <td class="text-center align-middle">
-        <% if user.early_access %>
-          <span class="badge bg-success">Yes</span>
-        <% else %>
-          <span class="badge bg-danger">No</span>
-        <% end %>
-      </td>
-      <td class="align-middle"><%= user.created_at.to_fs(:decom_standard) %></td>
-      <td class="align-middle"><%= link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-primary w-100' %></td>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Admin</th>
+      <th>Early Access</th>
+      <th>Created</th>
+      <th>Actions</th>
     </tr>
-  <% end %>
-</table>
+    <% @users.each do |user| %>
+      <tr>
+        <td class="align-middle"><%= user.name %></td>
+        <td class="align-middle"><%= user.email %></td>
+        <td class="text-center align-middle">
+          <% if user.admin? %>
+            <span class="badge bg-success">Yes</span>
+          <% else %>
+            <span class="badge bg-danger">No</span>
+          <% end %>
+        </td>
+        <td class="text-center align-middle">
+          <% if user.early_access %>
+            <span class="badge bg-success">Yes</span>
+          <% else %>
+            <span class="badge bg-danger">No</span>
+          <% end %>
+        </td>
+        <td class="align-middle"><%= user.created_at.to_fs(:decom_standard) %></td>
+        <td class="align-middle"><%= link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-primary w-100' %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
 
 <%= paginate @users, theme: 'twitter-bootstrap-4' %>
 
