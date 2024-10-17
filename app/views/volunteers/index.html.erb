@@ -10,40 +10,44 @@
 
 <p>If you have any questions, reach out to the Volunteers Team via <a href="mailto:volunteers@londondecom.org">volunteers@londondecom.org</a>.</p>
 
-<table class="table">
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Phone</th>
-    <th>Comments</th>
-    <th>State</th>
-    <th>Next State</th>
-    <th></th>
-  </tr>
-  <% @volunteers.each do |volunteer| %>
-    <% cache volunteer do %>
-      <tr>
-        <td class="align-middle"><%= volunteer.user.name %></td>
-        <td class="align-middle"><%= volunteer.user.email %></td>
-        <td class="align-middle"><%= volunteer.phone %></td>
-        <td class="align-middle"><%= volunteer.additional_comments %></td>
-        <td class="align-middle">
-          <%= volunteer.state %>
-        </td>
-        <td class="align-middle">
-          <% if volunteer.next_state %>
-            <%= form_for [@event, @volunteer_role, volunteer] do |form| %>
-              <%= form.hidden_field :state, value: volunteer.next_state %>
-              <%= form.submit "Mark as #{volunteer.next_state}", class: "btn btn-primary w-100" %>
+<p>There are a total of <%= pluralize(@volunteer_role.available_slots, 'slot') %> for this role, and you have <%= @volunteer_role.remaining_slots %> left!</p>
+
+<div class="overflow-auto">
+  <table class="table">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Phone</th>
+      <th>Comments</th>
+      <th>State</th>
+      <th>Next State</th>
+      <th></th>
+    </tr>
+    <% @volunteers.each do |volunteer| %>
+      <% cache volunteer do %>
+        <tr>
+          <td class="align-middle"><%= volunteer.user.name %></td>
+          <td class="align-middle"><%= volunteer.user.email %></td>
+          <td class="align-middle"><%= volunteer.phone %></td>
+          <td class="align-middle"><%= volunteer.additional_comments %></td>
+          <td class="align-middle">
+            <%= volunteer.state %>
+          </td>
+          <td class="align-middle">
+            <% if volunteer.next_state %>
+              <%= form_for [@event, @volunteer_role, volunteer] do |form| %>
+                <%= form.hidden_field :state, value: volunteer.next_state %>
+                <%= form.submit "Mark as #{volunteer.next_state}", class: 'btn btn-primary w-100' %>
+              <% end %>
             <% end %>
-          <% end %>
-        </td>
-        <td class="align-middle">
-          <%= form_for [@event, @volunteer_role, volunteer], method: :delete do |form| %>
-            <%= form.submit "remove", data: {confirm: 'Are you sure?'}, class: "btn btn-danger w-100"  %>
-          <% end %>
-        </td>
-      </tr>
+          </td>
+          <td class="align-middle">
+            <%= form_for [@event, @volunteer_role, volunteer], method: :delete do |form| %>
+              <%= form.submit 'Remove', data: {confirm: 'Are you sure?'}, class: 'btn btn-danger w-100'  %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     <% end %>
-  <% end %>
-</table>
+  </table>
+</div>

@@ -1,5 +1,8 @@
 <%= form.text_field :name %>
+<p><i class="text-muted">The two description fields accepts HTML tags</i></p>
 <%= form.text_area :brief_description %>
 <%= form.text_area :description %>
-<%= form.check_box :hidden %>
 <%= form.number_field :priority %>
+<%= form.number_field :available_slots, min: 0 %>
+<p><i class="text-muted">Setting this to 0 means infinite slots</i></p>
+<%= form.check_box :hidden %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_15_235553) do
+ActiveRecord::Schema[7.2].define(version: 2024_10_13_003910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -105,6 +105,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_15_235553) do
     t.boolean "hidden"
     t.text "brief_description"
     t.integer "priority"
+    t.integer "available_slots", default: 0
     t.index ["event_id"], name: "index_volunteer_roles_on_event_id"
   end
 

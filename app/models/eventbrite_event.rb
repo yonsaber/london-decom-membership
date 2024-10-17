@@ -59,9 +59,34 @@ class EventbriteEvent
     0
   end
 
+  # FIXME: Ensure that ticket_bought gets reset at some point (and existing accounts that HAVE the value set)
+  #        get reset correctly, this is just a slightly hacky way for the cache to know that the user has been
+  #        changed and we can now show them all the volunteering opportunities
   def tickets_sold_for_code(code)
-    discount_code(code)['quantity_sold']
+    quantity_sold = discount_code(code)['quantity_sold']
+
+    # TODO: Move this out of this logic as we are doing too much here, massive hack and SQL hog (even if caching)
+    ticket_sold = quantity_sold.positive?
+    if ticket_sold
+      user = find_user_by_code(code)
+      if user.nil?
+        Rollbar.error("Unable to find user with membership_number #{code}!")
+      elsif ticket_sold != user.ticket_bought
+        user.update(ticket_bought: ticket_sold)
+      end
+    end
+
+    quantity_sold
   rescue EventbriteDiscountCodeNotFound
     0
+  end
+
+  private
+
+  def find_user_by_code(code)
+    user = MembershipCode.find_by(code:)&.user
+    user = LowIncomeCode.find_by(code:)&.low_income_request&.user if user.nil?
+    user = DirectSaleCode.find_by(code:).user if user.nil?
+    user
   end
 end

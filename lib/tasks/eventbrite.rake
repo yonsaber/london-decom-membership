@@ -7,26 +7,29 @@ task tickets_bought: :environment do
     eventbrite = EventbriteEvent.new(event.eventbrite_token, event.eventbrite_id)
     discount_codes = eventbrite.fetch_all_discounts
     memberships_not_in_eventbrite = []
+    low_income_memberships_not_in_eventbrite = []
+    direct_sale_memberships_not_in_eventbrite = []
     User.find_each do |user|
-      discount_code = discount_codes.find do |discount_code_json|
-        discount_code_json['code'] == user.membership_number
-      end
-      if discount_code.present?
-        Rails.cache.write(
-          "eventbrite:event:#{event.eventbrite_id}:discounts:#{user.membership_number}",
-          [discount_code],
-          expires_in: 1.day
-        )
-        user.update(ticket_bought: discount_code['quantity_sold'].positive?)
-      else
-        memberships_not_in_eventbrite.push(user.membership_number)
+      membership_number = find_user_by_discount_code(event, user, discount_codes)
+
+      unless membership_number.nil?
+        case user.ticket_type
+        when :low_income
+          low_income_memberships_not_in_eventbrite.push(user.membership_number)
+        when :direct
+          direct_sale_memberships_not_in_eventbrite.push(user.membership_number)
+        else
+          memberships_not_in_eventbrite.push(user.membership_number)
+        end
       end
     end
     if memberships_not_in_eventbrite.nil?
       Rollbar.info("Rake task 'tickets_bought' completed")
     else
       Rollbar.info("Rake task 'tickets_bought' completed",
-                   memberships_not_in_eventbrite: memberships_not_in_eventbrite.join(','))
+                   memberships_not_in_eventbrite: memberships_not_in_eventbrite.join(','),
+                   low_income_memberships_not_in_eventbrite: low_income_memberships_not_in_eventbrite.join(','),
+                   direct_sale_memberships_not_in_eventbrite: direct_sale_memberships_not_in_eventbrite.join(','))
     end
   else
     Rollbar.info('No active events, skipping update')
@@ -58,5 +61,23 @@ task unused_low_income: :environment do
   else
     Rollbar.info("Rake task 'unused_low_income' completed",
                  unused_low_income_tickets: unused_low_income.pluck(:email).join(','))
+  end
+end
+
+private
+
+def find_user_by_discount_code(event, user, discount_codes)
+  discount_code = discount_codes.find do |discount_code_json|
+    discount_code_json['code'] == user.membership_number
+  end
+  if discount_code.present?
+    Rails.cache.write(
+      "eventbrite:event:#{event.eventbrite_id}:discounts:#{user.membership_number}",
+      [discount_code],
+      expires_in: 1.day
+    )
+    user.update(ticket_bought: discount_code['quantity_sold'].positive?)
+  else
+    user.membership_number
   end
 end
