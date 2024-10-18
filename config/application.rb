@@ -37,8 +37,14 @@ module LondonDecomMembership
 
       config.action_controller.enable_fragment_cache_logging = !Rails.env.production?
 
-      config.session_store expire_after: 90.minutes,
-                           key: "_#{cache_key.downcase}_session",
+      config.session_store :redis_store,
+                           servers: [{
+                             url: ENV.fetch('REDIS_URL', nil),
+                             port: ENV.fetch('REDIS_PORT', nil),
+                             db: 0,
+                             namespace: "_#{cache_key.downcase}_session"
+                           }],
+                           expires_after: 90.minutes,
                            threadsafe: true,
                            secure: true
     end
