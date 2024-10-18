@@ -26,12 +26,30 @@ RSpec.feature 'Tickets', type: :feature do
     expect(page).to have_text('You can buy 1 ticket')
   end
 
-  scenario 'user has 1 available tickets and bought 1' do
+  scenario 'user has bought only ticket' do
     stub_eventbrite_event(available_tickets_for_code: 0, tickets_sold_for_code: 1)
     create(:event)
     login
 
     expect(page).to_not have_text('Buy Ticket')
     expect(page).to have_text('You have bought the 1 ticket available to you')
+  end
+
+  scenario 'user has 2 available tickets' do
+    stub_eventbrite_event
+    create(:event)
+    login
+
+    expect(page).to have_text('Buy Ticket')
+    expect(page).to have_text('You can buy 2 tickets')
+  end
+
+  scenario 'user has 1 available tickets and bought 1' do
+    stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 1)
+    create(:event)
+    login
+
+    expect(page).to have_text('Buy Ticket')
+    expect(page).to have_text('You have already bought 1 ticket. You can buy 1 more ticket')
   end
 end
