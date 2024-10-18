@@ -16,6 +16,7 @@ gem 'rubocop', '1.66.1'
 gem 'rollbar'
 
 gem 'redis'
+gem 'redis-actionpack'
 
 gem 'devise'
 gem 'devise-i18n'
