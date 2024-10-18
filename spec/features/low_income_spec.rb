@@ -15,6 +15,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_text('Low income applications are not currently open.')
   end
 
   scenario "prerelease event and user has 1 available tickets but low income window isn't open yet" do
@@ -28,6 +29,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_text('Low income applications are not currently open.')
   end
 
   scenario 'prerelease event and user has 0 available tickets can no longer apply for low income' do
@@ -36,6 +38,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to_not have_text('Low income applications are not currently open.')
   end
 
   scenario 'prerelease event and user has 1 available tickets but the low income window has closed' do
@@ -44,6 +47,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_text('Low income applications are not currently open.')
   end
 
   scenario 'user has 1 available tickets and bought none, gets low income approved' do
@@ -95,6 +99,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to_not have_text('Low income applications are not currently open.')
   end
 
   scenario 'user has 2 available tickets and bought 2' do
@@ -103,6 +108,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to_not have_text('Low income applications are not currently open.')
   end
 
   scenario 'prerelease, user has 2 available tickets and bought 2' do
@@ -111,6 +117,7 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to_not have_text('Low income applications are not currently open.')
   end
 
   scenario 'live event and user has 1 available tickets but the low income window has closed' do
@@ -119,20 +126,72 @@ RSpec.feature 'Low Income', type: :feature do
     login
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_text('Low income applications are not currently open.')
   end
 
-  scenario 'number of requests are equal to the number of available codes' do
+  scenario 'number of requests are below 15% of 10 available codes' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
 
-    10.times do
-      request = LowIncomeRequest.new(user: User.first, request_reason: 'testing!')
+    8.times do |i|
+      user = User.new(
+        email: "person#{i}@devdecom.com",
+        name: "person #{i}",
+        password: 'password',
+        confirmed_at: Time.zone.now
+      )
+      request = LowIncomeRequest.new(user:, request_reason: 'testing!')
+      request.save!
+    end
+
+    visit root_path
+
+    expect(page).to have_text('Apply for low income')
+    expect(page).to_not have_text('Low income applications are not currently open.')
+  end
+
+  scenario 'number of requests are below 15% of 10 available codes and window closed' do
+    stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
+    create(:event, :prerelease, low_income_requests_end: Time.zone.now.advance(days: -1))
+    login
+
+    8.times do |i|
+      user = User.new(
+        email: "person#{i}@devdecom.com",
+        name: "person #{i}",
+        password: 'password',
+        confirmed_at: Time.zone.now
+      )
+      request = LowIncomeRequest.new(user:, request_reason: 'testing!')
       request.save!
     end
 
     visit root_path
 
     expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_text('Low income applications are not currently open.')
+  end
+
+  scenario 'number of requests are above 15% of 10 available codes' do
+    stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
+    create(:event, :prerelease)
+    login
+
+    9.times do |i|
+      user = User.new(
+        email: "person#{i}@devdecom.com",
+        name: "person #{i}",
+        password: 'password',
+        confirmed_at: Time.zone.now
+      )
+      request = LowIncomeRequest.new(user:, request_reason: 'testing!')
+      request.save!
+    end
+
+    visit root_path
+
+    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_text('Low Income applications are closed as we have reached our capacity.')
   end
 end
