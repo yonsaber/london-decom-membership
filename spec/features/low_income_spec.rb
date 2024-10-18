@@ -129,7 +129,7 @@ RSpec.feature 'Low Income', type: :feature do
     expect(page).to have_text('Low income applications are not currently open.')
   end
 
-  scenario 'number of requests are below 15% of 10 available codes' do
+  scenario 'number of requests are above 15% of 10 available codes' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
@@ -151,7 +151,7 @@ RSpec.feature 'Low Income', type: :feature do
     expect(page).to_not have_text('Low income applications are not currently open.')
   end
 
-  scenario 'number of requests are below 15% of 10 available codes and window closed' do
+  scenario 'number of requests are above 15% of 10 available codes and window closed' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
     create(:event, :prerelease, low_income_requests_end: Time.zone.now.advance(days: -1))
     login
@@ -173,7 +173,7 @@ RSpec.feature 'Low Income', type: :feature do
     expect(page).to have_text('Low income applications are not currently open.')
   end
 
-  scenario 'number of requests are above 15% of 10 available codes' do
+  scenario 'number of requests are below 15% of 10 available codes' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
