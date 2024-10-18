@@ -24,8 +24,15 @@ class Event < ApplicationRecord
     else
       outside_window = Time.zone.now.before?(low_income_requests_start) ||
                        Time.zone.now.after?(low_income_requests_end)
-      !outside_window && (event_mode == 'prerelease' || LowIncomeRequest.count == LowIncomeCode.count)
+      !outside_window && event_mode == 'prerelease' && !low_income_at_capacity?
     end
+  end
+
+  def low_income_at_capacity?
+    # TODO: Change me!!
+    # NOTE: This is to handle holding back a set number of tickets to make sure we have some breathing room it's 15%
+    #       of the tickets that we hold bac
+    LowIncomeRequest.count >= (LowIncomeCode.count - ((15.to_f / 100) * LowIncomeCode.count.to_f)).ceil
   end
 
   def eventbrite_start_time
