@@ -44,7 +44,7 @@ module LondonDecomMembership
                              db: 0,
                              namespace: "_#{cache_key.downcase}_session"
                            }],
-                           expires_after: 90.minutes,
+                           expire_after: 90.minutes,
                            threadsafe: true,
                            secure: true
     end
