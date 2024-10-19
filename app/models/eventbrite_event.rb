@@ -53,6 +53,22 @@ class EventbriteEvent
     @discount_code = discounts[0]
   end
 
+  def ticket_class_sold_out?(code)
+    user_discount_code = discount_code(code)
+    no_tickets_to_buy = (user_discount_code['quantity_available'] - user_discount_code['quantity_sold']).zero?
+
+    # NOTE: No point checking if the tickets are on sale if there are no tickets for the user to buy / they have
+    #       have already bought their tickets
+    return false if no_tickets_to_buy
+
+    user_ticket_class_ids = user_discount_code['ticket_class_ids']
+    available_ticket_classes = find_user_ticket_classes_by_status(user_ticket_class_ids, 'AVAILABLE')
+
+    available_ticket_classes.empty?
+  rescue EventbriteDiscountCodeNotFound
+    false
+  end
+
   def available_tickets_for_code(code)
     discount_code(code)['quantity_available'] - tickets_sold_for_code(code)
   rescue EventbriteDiscountCodeNotFound
@@ -88,5 +104,30 @@ class EventbriteEvent
     user = LowIncomeCode.find_by(code:)&.low_income_request&.user if user.nil?
     user = DirectSaleCode.find_by(code:).user if user.nil?
     user
+  end
+
+  def fetch_ticket_classes
+    Rails.cache.fetch(
+      "eventbrite:event:#{eventbrite_id}:ticketclasses", expires_in: 30.minutes
+    ) do
+      response = HTTP.auth("Bearer #{eventbrite_token}").get(
+        "https://www.eventbriteapi.com/v3/events/#{eventbrite_id}/ticket_classes/"
+      )
+      JSON.parse(response)['ticket_classes']
+    end
+  end
+
+  def find_user_ticket_classes_by_status(user_ticket_class_ids, status)
+    ticket_classes = fetch_ticket_classes
+    available_ticket_classes = []
+
+    ticket_classes.each do |ticket_class|
+      next unless user_ticket_class_ids.include?(ticket_class['id'])
+
+      Rails.logger.info("Ticket class '#{ticket_class['name']}' has status '#{ticket_class['on_sale_status']}'")
+      available_ticket_classes.push(ticket_class) if ticket_class['on_sale_status'] == status
+    end
+
+    available_ticket_classes
   end
 end
