@@ -11,6 +11,7 @@ Rails.application.routes.draw do
         patch :give_direct_sale
         post :resend_email
         post :admin_clear_discount_from_cache
+        post :admin_send_password_reset
       end
     end
     resources :membership_codes

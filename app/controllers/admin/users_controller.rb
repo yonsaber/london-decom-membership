@@ -72,6 +72,17 @@ class Admin::UsersController < AdminController
     redirect_to edit_admin_user_path(@user)
   end
 
+  def admin_send_password_reset
+    @user = User.find(params[:id])
+    return if @user.nil?
+
+    @user.send_reset_password_instructions
+
+    flash[:notice] = "Send the password reset instructions to #{@user.name}"
+
+    redirect_to edit_admin_user_path(@user)
+  end
+
   private
 
   def user_params
