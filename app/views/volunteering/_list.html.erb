@@ -6,7 +6,7 @@
           <h5>
             <%= volunteer_role.name %>
             <% if volunteer_role.available_slots != 0 %>
-              (<%= pluralize(volunteer_role.remaining_slots, 'available slot') %>)
+              (<%= pluralize(volunteer_role.remaining_slots, 'available slot') %> of <%= volunteer_role.available_slots %>)
             <% end %>
           </h5>
           <p>

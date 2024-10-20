@@ -52,7 +52,7 @@
                     <li class="nav-item">
                       <%= link_to 'Profile', edit_user_registration_path, class: 'nav-link' %>
                     </li>
-                    <% if @event && ((@event.prerelease? && (current_user.early_access || current_user.admin?)) || @event.live?) %>
+                    <% if @event && (@event.prerelease? || @event.live?) %>
                       <li class="nav-item">
                         <%= link_to 'Volunteering', event_volunteering_index_path(@event), class: 'nav-link' %>
                       </li>

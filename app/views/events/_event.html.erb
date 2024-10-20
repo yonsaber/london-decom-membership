@@ -87,7 +87,7 @@
     let orderCompleteCallback = function() {
       const request = $.ajax({
         type: 'PATCH',
-        url: "/events/<%= @event.id %>/clear_discount_from_cache?eventbrite_id=<%= @event.eventbrite_id %>&code=<%= current_user.membership_number %>"
+        url: "/events/<%= @event.id %>/clear_discount_from_cache?eid=<%= @event.eventbrite_id %>&code=<%= current_user.membership_number %>"
       });
       request.done(_ => {
         location.reload();
