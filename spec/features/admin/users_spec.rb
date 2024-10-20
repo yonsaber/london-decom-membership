@@ -31,6 +31,25 @@ RSpec.feature 'Users Admin', type: :feature do
     expect(page).to have_text('test_mail_user@example.com')
   end
 
+  scenario 'no event, clear cache button greyed out' do
+    login(admin: true)
+    create(:user, email: 'test_mail_user@example.com')
+    click_link 'Users'
+    expect(page).to have_text('test_mail_user@example.com')
+    find_all("a[text()='Edit']").last.click
+    expect(page).to have_text('User has no cached ticket')
+  end
+
+  scenario 'clear cache button greyed out' do
+    stub_eventbrite_event
+    login(admin: true)
+    create(:user, email: 'test_mail_user@example.com')
+    click_link 'Users'
+    expect(page).to have_text('test_mail_user@example.com')
+    find_all("a[text()='Edit']").last.click
+    expect(page).to have_text('User has no cached ticket')
+  end
+
   scenario 'as not an admin' do
     stub_eventbrite_event
     login(admin: false)
