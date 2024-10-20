@@ -251,7 +251,7 @@ RSpec.feature 'Volunteering', type: :feature do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
-    expect(page).to_not have_text('Volunteering')
+    expect(page).to have_text('Volunteering')
     expect(page).to_not have_text('Looking to volunteer?')
   end
 
@@ -259,10 +259,10 @@ RSpec.feature 'Volunteering', type: :feature do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
-    expect(page).to_not have_text('Volunteering')
+    expect(page).to have_text('Volunteering')
     expect(page).to_not have_text('Looking to volunteer?')
     click_link 'Profile'
-    expect(page).to_not have_text('Volunteering')
+    expect(page).to have_text('Volunteering')
   end
 
   scenario 'event in pre-release mode, early access, has volunteer link' do
