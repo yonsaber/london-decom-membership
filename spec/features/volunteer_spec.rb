@@ -100,6 +100,32 @@ RSpec.feature 'Volunteering', type: :feature do
     expect(page).to have_selector('#volunteer_accept_health_and_safety.is-invalid')
   end
 
+  scenario 'listing of volunteer roles with limited slots' do
+    stub_eventbrite_event(tickets_sold_for_code: 1)
+    event = create(:event, :live)
+
+    volunteer_roles = create_list(:volunteer_role, 5) do |vr, i|
+      vr.name = "Limited Role #{i + 1}"
+      vr.description = 'Limited Role'
+      vr.available_slots = (i + 1) * 10
+      vr.event = event
+      vr.save!
+    end
+
+    create_list(:volunteer, 5) do |v, _|
+      v.volunteer_role = volunteer_roles[1]
+      v.save!
+    end
+
+    login
+
+    click_link 'Volunteering'
+    expect(page).to have_text('Limited Role 2')
+    expect(page).to have_text('15 available slots of 20')
+    expect(page).to have_text('Limited Role 3')
+    expect(page).to have_text('30 available slots of 30')
+  end
+
   scenario 'signing up to volunteer successfully' do
     role = create(:volunteer_role, name: 'Ranger', description: 'A description of rangering')
     lead = create(:volunteer, volunteer_role: role, lead: true).user
@@ -225,7 +251,7 @@ RSpec.feature 'Volunteering', type: :feature do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
-    expect(page).to_not have_text('Volunteering')
+    expect(page).to have_text('Volunteering')
     expect(page).to_not have_text('Looking to volunteer?')
   end
 
@@ -233,10 +259,10 @@ RSpec.feature 'Volunteering', type: :feature do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
-    expect(page).to_not have_text('Volunteering')
+    expect(page).to have_text('Volunteering')
     expect(page).to_not have_text('Looking to volunteer?')
     click_link 'Profile'
-    expect(page).to_not have_text('Volunteering')
+    expect(page).to have_text('Volunteering')
   end
 
   scenario 'event in pre-release mode, early access, has volunteer link' do
