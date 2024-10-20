@@ -78,7 +78,7 @@ class Admin::UsersController < AdminController
 
     @user.send_reset_password_instructions
 
-    flash[:notice] = "Send the password reset instructions to #{@user.name}"
+    flash[:notice] = "Sent the password reset instructions to #{@user.name}"
 
     redirect_to edit_admin_user_path(@user)
   end

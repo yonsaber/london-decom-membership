@@ -59,7 +59,7 @@ RSpec.feature 'Users Admin', type: :feature do
     find_all("a[text()='Edit']").last.click
     expect(page).to have_text('Send Password Reset Email')
     click_button 'Send Password Reset Email'
-    expect(page).to have_text('Send the password reset instructions to James Darling')
+    expect(page).to have_text('Sent the password reset instructions to James Darling')
   end
 
   scenario 'as not an admin' do
