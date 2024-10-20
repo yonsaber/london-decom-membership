@@ -19,6 +19,12 @@ class Admin::UsersController < AdminController
 
   def edit
     @user = User.find(params[:id])
+    event = Event.active(early_access: @user.early_access)
+    return if event.nil?
+
+    @has_cache_entry = Rails.cache.exist?(
+      "eventbrite:event:#{event.eventbrite_id}:discounts:#{@user.membership_number}"
+    )
   end
 
   def update
@@ -48,6 +54,21 @@ class Admin::UsersController < AdminController
     @user = User.find(params[:id])
     direct_sale_code = DirectSaleCode.available.first
     direct_sale_code.update(user: @user)
+    redirect_to edit_admin_user_path(@user)
+  end
+
+  def admin_clear_discount_from_cache
+    @user = User.find(params[:id])
+    event = Event.active(early_access: @user.early_access)
+    return if event.nil? || @user.nil?
+
+    deleted = Rails.cache.delete("eventbrite:event:#{event.eventbrite_id}:discounts:#{@user.membership_number}")
+    if deleted
+      flash[:notice] = 'Successfully cleared user ticket!'
+    else
+      flash[:alert] = 'There was an issue clearing the user ticket, please contact members@londondecom.org'
+    end
+
     redirect_to edit_admin_user_path(@user)
   end
 

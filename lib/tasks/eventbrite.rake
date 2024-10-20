@@ -77,6 +77,7 @@ def find_user_by_discount_code(event, user, discount_codes)
       expires_in: 1.day
     )
     user.update(ticket_bought: discount_code['quantity_sold'].positive?)
+    nil
   else
     user.membership_number
   end
