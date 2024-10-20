@@ -8,6 +8,15 @@ class LeadsMailer < ApplicationMailer
     )
   end
 
+  def admin_cancelled_volunteer(volunteer)
+    @volunteer = volunteer
+    mail(
+      to: get_to_email_with_fallback(volunteer),
+      from: 'volunteers@londondecom.org',
+      subject: "Decom volunteer cancellation for #{volunteer.volunteer_role.name}"
+    )
+  end
+
   def cancelled_volunteer(volunteer)
     @volunteer = volunteer
     mail(

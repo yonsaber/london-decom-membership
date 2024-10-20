@@ -75,7 +75,7 @@ class VolunteersController < ApplicationController
   def admin_deleting_volunteer
     @volunteer = @volunteer_role.volunteers.find(params[:id])
     @volunteer.destroy
-    LeadsMailer.cancelled_volunteer(@volunteer).deliver_now
+    LeadsMailer.admin_cancelled_volunteer(@volunteer).deliver_now
     flash[:notice] = "#{@volunteer.user.name} has been removed as a volunteer for #{@volunteer_role.name}"
     redirect_to event_volunteer_role_volunteers_path(@event, @volunteer_role)
   end
