@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       member do
         patch :give_direct_sale
         post :resend_email
+        post :admin_clear_discount_from_cache
       end
     end
     resources :membership_codes
@@ -27,7 +28,7 @@ Rails.application.routes.draw do
     end
   end
   resources :events, only: %i[patch] do
-    patch :clear_discount_from_cache
+    patch :clear_discount_from_cache # TODO: Move this into a members do block
     resources :volunteer_roles, only: [] do
       resources :volunteers, only: %i[index new create destroy update]
     end
