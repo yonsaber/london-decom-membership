@@ -7,16 +7,7 @@
   <%= form.submit 'Update user details', class: "btn btn-success w-100"  %>
 <% end %>
 <div class="row mt-3">
-  <div class="col-4">
-    <% if @has_cache_entry %>
-      <%= button_to 'Clear Cached User Ticket', admin_clear_discount_from_cache_admin_user_path(@user), method: :post, class: "btn btn-danger w-100" %>
-      <p><i class="text-muted">This button is ONLY to be used if a user is reporting they cannot see a ticket on the members site, despite having one assigned</i></p>
-    <% else %>
-      <button class="btn btn-secondary w-100" disabled>User has no cached ticket</button>
-    <% end %>
-  </div>
-
-  <div class="col-4">
+  <div class="col-6">
     <% if @user.ticket_type == :direct %>
       <button class="btn btn-secondary w-100" disabled>Has direct sale</button>
     <% else %>
@@ -26,7 +17,22 @@
     <% end %>
   </div>
 
-  <div class="col-4">
+  <div class="col-6">
+    <%= button_to 'Send Password Reset Email', admin_send_password_reset_admin_user_path(@user), method: :post, class: "btn btn-primary w-100" %>
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col-6">
+    <% if @has_cache_entry %>
+      <%= button_to 'Clear Cached User Ticket', admin_clear_discount_from_cache_admin_user_path(@user), method: :post, class: "btn btn-danger w-100" %>
+      <p><i class="text-muted">This button is ONLY to be used if a user is reporting they cannot see a ticket on the members site, despite having one assigned</i></p>
+    <% else %>
+      <button class="btn btn-secondary w-100" disabled>User has no cached ticket</button>
+    <% end %>
+  </div>
+
+  <div class="col-6">
     <%= button_to 'Delete', admin_user_path(@user), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger w-100" %>
   </div>
 </div>
