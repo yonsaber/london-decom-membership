@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.feature 'Event', type: :feature do
   scenario 'there is no active event' do
-    pending 'eb is down'
     create(:event, active: false)
     login
 
@@ -10,7 +9,6 @@ RSpec.feature 'Event', type: :feature do
   end
 
   scenario 'is active but in draft mode' do
-    pending 'eb is down'
     stub_eventbrite_event(available_tickets_for_code: 0, tickets_sold_for_code: 0)
     create(:event, :draft)
     login

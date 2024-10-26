@@ -2,7 +2,6 @@ require 'rails_helper'
 
 RSpec.feature 'Tickets', type: :feature do
   scenario 'there is no active event' do
-    pending 'eb is down'
     login
     create(:event, active: false)
 
