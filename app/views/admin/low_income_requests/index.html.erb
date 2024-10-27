@@ -34,3 +34,5 @@
 </div>
 
 <%= paginate @low_income_requests, theme: 'twitter-bootstrap-4' %>
+
+<%= link_to "Download CSV of low income requests", admin_low_income_requests_path(format: :csv), class: 'btn btn-primary mt-4 w-100' %>
