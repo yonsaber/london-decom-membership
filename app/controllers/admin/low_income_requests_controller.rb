@@ -1,6 +1,10 @@
 class Admin::LowIncomeRequestsController < AdminController
   def index
     @low_income_requests = LowIncomeRequest.order(:created_at).page params[:page]
+    respond_to do |format|
+      format.html
+      format.csv { send_data @low_income_requests.to_csv, filename: "low-income-requests-#{Date.today}.csv" }
+    end
   end
 
   def approve
