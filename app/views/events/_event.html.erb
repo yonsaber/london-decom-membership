@@ -15,11 +15,15 @@
       <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket') %>
       available to you. Look below to see how you can participate.
     </p>
+  <% elsif @event.ticket_class_sold_out?(current_user.membership_number) %>
+    <p><b>Tickets are sold out</b></p>
+  <% elsif @event.available_tickets_for_code(current_user.membership_number) == 0 %>
+    <p><b>There are no tickets for you to buy</b></p>
   <% else %>
     <p>
       <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 && @event.available_tickets_for_code(current_user.membership_number) > 0 %>
         You have already bought
-        <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket') %>.
+        <%= pluralize(@event.tickets_sold_for_code(current_user.membership_number), 'ticket' ) %>.
         You can buy
         <%= pluralize(@event.available_tickets_for_code(current_user.membership_number), 'more ticket') %>.
       <% else %>
