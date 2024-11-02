@@ -32,7 +32,7 @@ RSpec.feature 'Tickets', type: :feature do
     login
 
     expect(page).to_not have_text('Buy Ticket')
-    expect(page).to have_text('There are no tickets for you to buy')
+    expect(page).to have_text('There are no tickets available')
   end
 
   scenario 'user has bought only ticket' do
