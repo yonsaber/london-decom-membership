@@ -5,6 +5,9 @@ class Admin::EventsController < AdminController
 
   def show
     @event = Event.find(params[:id])
+
+    @has_event_cache_entry = Rails.cache.exist?("eventbrite:event:#{@event.eventbrite_id}")
+    @has_ticket_class_cache_entry = Rails.cache.exist?("eventbrite:event:#{@event.eventbrite_id}:ticketclasses")
   end
 
   def new
@@ -32,6 +35,34 @@ class Admin::EventsController < AdminController
     else
       render action: :edit
     end
+  end
+
+  def clear_event_from_cache
+    @event = Event.find(params[:event_id])
+    return if @event.nil?
+
+    deleted = Rails.cache.delete("eventbrite:event:#{@event.eventbrite_id}")
+    if deleted
+      flash[:notice] = 'Successfully cleared event data from cache'
+    else
+      flash[:alert] = 'There was an issue clearing the event from cache, please contact the members team'
+    end
+
+    redirect_to admin_event_path(@event)
+  end
+
+  def clear_ticket_classes_from_cache
+    @event = Event.find(params[:event_id])
+    return if @event.nil?
+
+    deleted = Rails.cache.delete("eventbrite:event:#{@event.eventbrite_id}:ticketclasses")
+    if deleted
+      flash[:notice] = 'Successfully cleared ticket classes data from cache'
+    else
+      flash[:alert] = 'There was an issue clearing the ticket classes from cache, please contact the members team'
+    end
+
+    redirect_to admin_event_path(@event)
   end
 
   private
