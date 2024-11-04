@@ -16,7 +16,11 @@
       available to you. Look below to see how you can participate.
     </p>
   <% elsif @event.ticket_class_sold_out?(current_user.membership_number) %>
-    <p><b>Tickets are sold out</b></p>
+    <% if Time.zone.now.before?(Time.parse('2024-11-04 19:00:00').change(offset: 0)) %>
+      <p><b>Tickets are currently sold out, but the next wave is at 7pm!</b></p>
+    <% else %>
+      <p><b>Tickets are sold out</b></p>
+    <% end %>
   <% elsif @event.available_tickets_for_code(current_user.membership_number) == 0 %>
     <p><b>There are no tickets available</b></p>
   <% else %>

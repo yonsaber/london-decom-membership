@@ -68,6 +68,10 @@ RSpec.feature 'Tickets', type: :feature do
     login
 
     expect(page).to_not have_text('Buy Ticket')
-    expect(page).to have_text('Tickets are sold out')
+    if Time.zone.now.before?(Time.parse('2024-11-04 19:00:00').change(offset: 0))
+      expect(page).to have_text('Tickets are currently sold out')
+    else
+      expect(page).to have_text('Tickets are sold out')
+    end
   end
 end
