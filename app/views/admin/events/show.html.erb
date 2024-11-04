@@ -84,9 +84,15 @@
 </div>
 
 <br>
+<div class="row mt-3">
+  <div class="col-6">
+    <%= link_to 'Volunteer Roles', admin_event_volunteer_roles_path(@event), class: "btn btn-secondary mb-3 w-100" %>
+  </div>
+  <div class="col-6">
+    <%= link_to 'Edit Event', edit_admin_event_path(@event), class: "btn btn-danger mb-3 w-100" %>
+  </div>
+</div>
 
-<%= link_to 'Volunteer Roles', admin_event_volunteer_roles_path(@event), class: "btn btn-secondary mb-3" %>
-<%= link_to 'Edit Event', edit_admin_event_path(@event), class: "btn btn-danger mb-3" %>
 <p>
   <small class="text-muted">
     Right now events cannot be deleted, if it is desperately needed, click: <%= mail_to "geeks@londondecom.org", "geeks@londondecom.org", subject: "Event Deletion from Members website (Event ID #{@event.id})" %> to send an email to us!
@@ -106,6 +112,23 @@
       <div class="accordion-body">
         <pre>Event Created At: <%= @event.created_at %></pre>
         <pre>Event Last Updated At: <%= @event.updated_at %></pre>
+
+        <div class="row mt-3">
+          <div class="col-6">
+            <% if @has_event_cache_entry %>
+              <%= link_to 'Clear Event Cache Item', admin_event_clear_event_from_cache_path(@event), method: :post, class: "btn btn-danger mb-3 w-100" %>
+            <% else %>
+              <button class="btn btn-secondary w-100" disabled>Event has no cached data</button>
+            <% end %>
+          </div>
+          <div class="col-6">
+            <% if @has_ticket_class_cache_entry %>
+              <%= link_to 'Clear Ticket Classes Cache Item', admin_event_clear_ticket_classes_from_cache_path(@event), method: :post, class: "btn btn-danger mb-3 w-100" %>
+            <% else %>
+              <button class="btn btn-secondary w-100" disabled>No cached ticket class data</button>
+            <% end %>
+          </div>
+        </div>
       </div>
     </div>
   </div>

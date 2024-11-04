@@ -23,6 +23,8 @@ Rails.application.routes.draw do
       end
     end
     resources :events, only: %i[index show new create update edit] do
+      post :clear_event_from_cache
+      post :clear_ticket_classes_from_cache
       resources :volunteer_roles do
         resources :volunteers
       end
