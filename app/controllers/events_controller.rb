@@ -20,11 +20,11 @@ class EventsController < ApplicationController
     discount_key = "eventbrite:event:#{eventbrite_id}:discounts:#{code}"
     ticket_classes_key = "eventbrite:event:#{eventbrite_id}:ticketclasses"
 
-    if Rails.cache.exists?(discount_key)
+    if Rails.cache.exist?(discount_key)
       cleared_discount = Rails.cache.delete("eventbrite:event:#{eventbrite_id}:discounts:#{code}")
     end
 
-    cleared_ticket_classes = Rails.cache.delete(ticket_classes_key) if Rails.cache.exists?(discount_key)
+    cleared_ticket_classes = Rails.cache.delete(ticket_classes_key) if Rails.cache.exist?(discount_key)
 
     return unless cleared_discount && cleared_ticket_classes
 
