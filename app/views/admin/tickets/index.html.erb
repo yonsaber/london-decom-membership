@@ -1,0 +1,27 @@
+<h2>Users with tickets</h2>
+<p>This is only for general tickets, this will not work for low income or direct sale tickets.</p>
+<p>Please note, DO NOT do this if you are unsure about the transfer.</p>
+
+<%= form_tag nil, method: :get do %>
+  <%= text_field_tag :q, params[:q] %>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+<div class="overflow-auto">
+  <table class="table table-striped">
+    <tr>
+      <th>User
+      <th></th>
+    </tr>
+    <% @users.each do |user| %>
+      <% cache user do %>
+        <tr>
+          <td><%= user.name %></td>
+          <td><%= link_to 'Transfer', edit_admin_ticket_path(user.membership_number) %></td>
+        </tr>
+      <% end %>
+    <% end %>
+  </table>
+</div>
+
+<%= paginate @users, theme: 'twitter-bootstrap-4' %>
