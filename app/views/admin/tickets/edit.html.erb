@@ -1,0 +1,15 @@
+<h1>Ticket Transfer</h1>
+
+<p><i class="text-muted">This ONLY impacts the tickets on the members site, this does not impact Eventbrite</i></p>
+
+<p>Current ticket holder: <%= @user.name %></p>
+
+<%= bootstrap_form_tag url: admin_ticket_path(@user.membership_number), method: :patch do |form| %>
+  <%= form.hidden_field :user_from_id, :value => @user.id %>
+  <%= form.select :user_to_id,
+                  @users.pluck(:id, :name, :email).collect {|u| ["#{u[1]} (#{u[2]})", u[0]]},
+                  {label: 'User to transfer ticket to:'},
+                  {class: 'selectpicker', data: { 'live-search': 'true' }}
+  %>
+  <%= form.submit 'Transfer Ticket' %>
+<% end %>
