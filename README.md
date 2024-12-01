@@ -145,6 +145,10 @@ This is ONLY if your PostgreSQL server is not on the same machine.
 
 By default these will default to `127.0.0.1` and `1025` respectively, however, if you have a remote setup where the code is running on a remote machine, you can set these to access mailcatcher from a different IP address.
 
+### USE_HOST_NAME_IN_DEV_ENV
+
+Setting this to true, will add the host name previously set, into the `config.hosts` value, so the website will be accessible via the host name, as well as localhost
+
 #### Development Note
 
 In dev, you can enable caching (in memory) by running `rails dev:cache` to toggle local caching.
