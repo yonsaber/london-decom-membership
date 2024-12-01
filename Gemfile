@@ -14,6 +14,7 @@ gem 'bootsnap', '~> 1.18', '>= 1.18.4', require: false
 
 gem 'rubocop', '1.66.1'
 gem 'rollbar'
+gem 'ostruct' # TODO: Remove this once rollbar releases it's next version
 
 gem 'redis'
 gem 'redis-actionpack'
@@ -36,6 +37,8 @@ gem 'bootstrap4-kaminari-views'
 gem 'postmark-rails'
 
 gem 'recaptcha'
+
+gem 'csv'
 
 gem 'whenever', require: false
 
