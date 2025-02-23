@@ -40,6 +40,8 @@ gem 'recaptcha'
 
 gem 'csv'
 
+gem 'rack-attack'
+
 gem 'whenever', require: false
 
 group :development, :test do
