@@ -29,8 +29,8 @@ class Rack::Attack
 
   # Throttle all requests by IP (60rpm)
   #
-  # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.ip}"
-  throttle('req/ip', limit: 300, period: 5.minutes, &:ip)
+  # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.remote_ip}"
+  throttle('req/ip', limit: 300, period: 5.minutes, &:remote_ip)
 
   blocklist_ip('109.107.189.44')
 
@@ -45,9 +45,9 @@ class Rack::Attack
 
   # Throttle POST requests to /login by IP address
   #
-  # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.ip}"
+  # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.remote_ip}"
   throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
-    req.ip if req.path == '/users/sign_in' && req.post?
+    req.remote_ip if req.path == '/users/sign_in' && req.post?
   end
 
   # Throttle POST requests to /login by email param
@@ -80,7 +80,7 @@ class Rack::Attack
   #    ['']] # body
   # end
 
-  blocklist('block russian spammer') do |request|
+  blocklist('block spammer ip address') do |request|
     request.remote_ip == '109.107.189.44'
   end
 end
