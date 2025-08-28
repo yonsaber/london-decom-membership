@@ -7,7 +7,12 @@
         <div class="list-group-item">
           <div class="row">
             <div class="col-md-8 col-12">
-              <h5><%= volunteer.volunteer_role.name %></h5>
+              <h5>
+            <% if volunteer.volunteer_role.is_pre_event_role %>
+              Pre-Event:
+            <% end %>
+                <%= volunteer.volunteer_role.name %>
+              </h5>
               <% if volunteer.state == 'confirmed' %>
                 <p>You are confirmed as a volunteer</p>
               <% elsif volunteer.state == 'contacted' %>

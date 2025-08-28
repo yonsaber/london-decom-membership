@@ -5,4 +5,5 @@
 <%= form.number_field :priority %>
 <%= form.number_field :available_slots, min: 0 %>
 <p><i class="text-muted">Setting this to 0 means infinite slots</i></p>
-<%= form.check_box :hidden %>
+<%= form.check_box :is_pre_event_role, label: 'Is Role for Pre-Event' %>
+<%= form.check_box :hidden, label: 'Hide role from users' %>

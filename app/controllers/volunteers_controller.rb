@@ -16,11 +16,11 @@ class VolunteersController < ApplicationController
   end
 
   def create
-    if @event.tickets_sold_for_code(current_user.membership_number).zero?
+    if @event.tickets_sold_for_code(current_user.membership_number).zero? && !@volunteer_role.is_pre_event_role?
       flash[:alert] =
         "We are not currently taking applications for the #{@volunteer_role.name} role, please check back later!"
       redirect_to event_volunteering_index_path(@event)
-    elsif !@volunteer_role.available_slots.zero? && @volunteer_role.remaining_slots.zero?
+    elsif !@volunteer_role.any_available_slots?
       flash[:alert] = "Unfortunately the last available slot for the #{@volunteer_role.name} role has been taken"
       redirect_to event_volunteering_index_path(@event)
     else

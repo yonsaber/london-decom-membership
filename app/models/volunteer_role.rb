@@ -8,8 +8,7 @@ class VolunteerRole < ApplicationRecord
 
   scope :available_for_user, lambda { |user|
     where.not(id: user.volunteers.pluck(:volunteer_role_id))
-         .order(priority: :desc)
-         .where('hidden IS NOT true')
+         .where(hidden: false)
   }
 
   def leads
@@ -20,10 +19,24 @@ class VolunteerRole < ApplicationRecord
     leads.collect { |l| l.user.email }
   end
 
+  # Checks if a role is below the 25% threshold (rounded up) of being able to support more people applying
+  # @return [TrueClass, FalseClass]
   def below_threshold?
     ((available_slots.to_f / 100) * 25).ceil >= remaining_slots
   end
 
+  # Checks if there are any available slots
+  # @return [TrueClass, FalseClass]
+  def any_available_slots?
+    if available_slots.zero?
+      true
+    else
+      !remaining_slots.zero?
+    end
+  end
+
+  # Shows the number of remaining slots for the role, ignoring the leads in the counting
+  # @return [Integer]
   def remaining_slots
     # Avoid showing negative numbers on the site because that is a bad look!
     slots_remain = available_slots - volunteers.where(lead: false).count

@@ -16,7 +16,7 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     fill_in 'Name', with: 'Role2'
     fill_in 'Brief description', with: 'Description of role'
     fill_in 'Description', with: 'Description of role but with more info'
-    check 'Hidden'
+    check 'Hide role from users'
     fill_in 'Priority', with: '10'
     click_button 'Create Volunteer Role'
     expect(page).to have_content('Role2')
@@ -45,7 +45,7 @@ RSpec.feature 'Volunteer Roles Admin', type: :feature do
     fill_in 'Name', with: 'Role1 edited'
     fill_in 'Brief description', with: 'Description of role edited'
     fill_in 'Description', with: 'Description of role but with more info edited'
-    check 'Hidden'
+    check 'Hide role from users'
     fill_in 'Priority', with: '11'
     click_button 'Save Volunteer Role'
     expect(page).to have_content('Role1 edited')

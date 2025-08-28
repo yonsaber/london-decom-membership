@@ -8,6 +8,7 @@
       <th>Description</th>
       <th>Priority</th>
       <th>Hidden</th>
+      <th>Pre-Event Role</th>
       <th></th>
       <th></th>
       <th></th>
@@ -21,6 +22,13 @@
         <td class="align-middle text-center"><%= volunteer_role.priority %></td>
         <td class="align-middle text-center">
           <% if volunteer_role.hidden %>
+            <span class="badge bg-primary">Yes</span>
+          <% else %>
+            <span class="badge bg-success">No</span>
+          <% end %>
+        </td>
+        <td class="align-middle text-center">
+          <% if volunteer_role.is_pre_event_role %>
             <span class="badge bg-primary">Yes</span>
           <% else %>
             <span class="badge bg-success">No</span>

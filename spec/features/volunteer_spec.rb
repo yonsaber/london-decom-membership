@@ -15,11 +15,11 @@ RSpec.feature 'Volunteering', type: :feature do
     expect(page).to_not have_text('Looking to volunteer?')
   end
 
-  scenario 'prerelease event, cannot see volunteer link' do
+  scenario 'prerelease event, can see volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_text('Looking to volunteer?')
   end
 
   scenario 'prerelease event, early access, can see volunteer link' do
@@ -43,7 +43,30 @@ RSpec.feature 'Volunteering', type: :feature do
     expect(page).to have_text('Looking to volunteer?')
   end
 
-  scenario 'live event, no ticket, can see volunteer link but cannot apply' do
+  scenario 'live event, no ticket, can see volunteer link and can apply for pre event time role' do
+    create(
+      :volunteer_role,
+      name: 'Pre-Event Ranger',
+      description: 'A description of rangering',
+      is_pre_event_role: true
+    )
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    login
+    expect(page).to have_text('Looking to volunteer?')
+    click_link 'Volunteering'
+    page.assert_no_selector('a', exact_text: 'Volunteer')
+  end
+
+  scenario 'live event, no ticket, can see volunteer link but cannot see hidden event' do
+    create(:volunteer_role, name: 'Ranger', description: 'A description of rangering', hidden: true)
+    stub_eventbrite_event(tickets_sold_for_code: 0)
+    login
+    expect(page).to have_text('Looking to volunteer?')
+    click_link 'Volunteering'
+    page.assert_no_selector('a', exact_text: 'Volunteer')
+  end
+
+  scenario 'live event, no ticket, can see volunteer link but cannot apply for event time role' do
     create(:volunteer_role, name: 'Ranger', description: 'A description of rangering')
     stub_eventbrite_event(tickets_sold_for_code: 0)
     login
@@ -277,24 +300,6 @@ RSpec.feature 'Volunteering', type: :feature do
     login
     expect(page).to_not have_text('Volunteering')
     expect(page).to_not have_text('Looking to volunteer?')
-  end
-
-  scenario 'event in pre-release mode, has volunteer link' do
-    stub_eventbrite_event(tickets_sold_for_code: 0)
-    create(:event, :prerelease)
-    login
-    expect(page).to have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
-  end
-
-  scenario 'event in pre-release mode, has volunteer link, across profile page' do
-    stub_eventbrite_event(tickets_sold_for_code: 0)
-    create(:event, :prerelease)
-    login
-    expect(page).to have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
-    click_link 'Profile'
-    expect(page).to have_text('Volunteering')
   end
 
   scenario 'event in pre-release mode, early access, has volunteer link' do

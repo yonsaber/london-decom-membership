@@ -41,7 +41,7 @@ class Admin::VolunteerRolesController < AdminController
 
   def volunteer_role_params
     params.require(:volunteer_role)
-          .permit(:name, :description, :brief_description, :hidden, :priority, :available_slots)
+          .permit(:name, :description, :brief_description, :hidden, :priority, :available_slots, :is_pre_event_role)
   end
 
   def find_event

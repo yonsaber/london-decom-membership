@@ -45,6 +45,7 @@ FactoryBot.define do
     name { 'MyString' }
     description { 'MyText' }
     brief_description { 'MyText' }
+    hidden { false }
     event
   end
 

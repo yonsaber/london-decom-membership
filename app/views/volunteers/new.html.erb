@@ -5,7 +5,7 @@
 
 <%= simple_format @volunteer_role.description %>
 
-<% if @event.tickets_sold_for_code(current_user.membership_number) != 0 %>
+<% if @event.tickets_sold_for_code(current_user.membership_number) != 0 || @volunteer_role.is_pre_event_role %>
   <% if !@volunteer_role.available_slots.zero? && @volunteer_role.remaining_slots.zero? %>
     <p>Unfortunately there are no open slots for this role at the moment! Please check back later.</p>
   <% else %>
