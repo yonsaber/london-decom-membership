@@ -51,7 +51,7 @@
 <% end %>
 
 <% if @event.live? || (current_user.early_access || current_user.admin) %>
-  <p>Looking to volunteer? We now have a <%= link_to 'dedicated page', event_volunteering_index_path(@event) %> for volunteering during London Decompression!</p>
+  <p>Looking to volunteer? We now have a <%= link_to 'dedicated page', event_volunteering_index_path(@event) %> for volunteering before and during London Decompression!</p>
 <% end %>
 
 <hr>
