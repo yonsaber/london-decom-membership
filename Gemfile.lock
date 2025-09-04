@@ -147,6 +147,9 @@ GEM
       dotenv (= 3.1.8)
       railties (>= 6.1)
     drb (2.2.3)
+    email_address (0.2.6)
+      base64
+      simpleidn
     erb (5.0.2)
     erubi (1.13.1)
     eventbrite_sdk (3.6.0)
@@ -475,6 +478,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    simpleidn (0.2.3)
     spring (4.4.0)
     spring-watcher-listen (2.1.0)
       listen (>= 2.7, < 4.0)
@@ -557,6 +561,7 @@ DEPENDENCIES
   devise-i18n
   dockerfile-rails (>= 1.6)
   dotenv-rails
+  email_address
   eventbrite_sdk
   factory_bot_rails
   faker

@@ -41,6 +41,7 @@ gem 'recaptcha'
 gem 'csv'
 
 gem 'rack-attack'
+gem 'email_address'
 
 gem 'whenever', require: false
 

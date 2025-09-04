@@ -1,5 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  prepend_before_action :check_captcha, only: [:create]
+  # prepend_before_action :check_captcha, only: [:create]
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :fetch_active_event
 

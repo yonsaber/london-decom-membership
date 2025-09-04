@@ -14,6 +14,10 @@ class User < ApplicationRecord
   validates :accept_code_of_conduct, acceptance: true
   validates :accept_health_and_safety, acceptance: true
   validates :membership_code, presence: true
+  validates :email, presence: true, uniqueness: { case_insensitive: true }
+
+  # attribute needs to be called :email
+  validates_with EmailAddress::ActiveRecordValidator, field: :email
 
   before_validation :set_membership_code, on: :create
 
