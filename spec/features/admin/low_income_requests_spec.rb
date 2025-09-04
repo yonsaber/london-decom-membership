@@ -38,7 +38,7 @@ RSpec.feature 'Low Income Requests Admin', type: :feature do
   scenario 'as not an admin' do
     stub_eventbrite_event
     login(admin: false)
-    visit admin_low_income_codes_path
+    visit admin_codes_path
     expect(page).to have_text('You are not permitted to view this')
   end
 end

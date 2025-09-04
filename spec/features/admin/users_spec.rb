@@ -66,7 +66,7 @@ RSpec.feature 'Users Admin', type: :feature do
     stub_eventbrite_event
     login(admin: false)
     expect(page).to_not have_link('Users')
-    visit admin_membership_codes_path
+    visit admin_codes_path
     expect(page).to have_text('You are not permitted to view this')
   end
 end

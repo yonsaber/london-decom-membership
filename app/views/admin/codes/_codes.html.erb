@@ -1,0 +1,13 @@
+<h2><%= type.model_name.human %>s</h2>
+<h3>Generate</h3>
+<%= bootstrap_form_tag url: admin_codes_path, id: type.model_name.human.downcase.gsub!(' ', '-') do |f| %>
+  <%= f.number_field :number, label: 'Number of codes to generate', id: "#{type.model_name.human.downcase.gsub!(' ', '-')}-number" %>
+  <%= f.hidden_field :type, :value => type %>
+  <%= f.submit 'Create', id: "#{type.model_name.human.downcase.gsub!(' ', '-')}-create", class: 'btn btn-primary' %>
+<% end %>
+
+<h2>Status</h2>
+<p><%= t('assigned_codes', count: type.taken.count) %>. <%= t('codes', count: type.available.count) %></p>
+<p>
+  Use this list to import into Eventbrite <%= link_to "Download codes CSV", admin_codes_path(format: :csv, type: type) %>
+</p>
