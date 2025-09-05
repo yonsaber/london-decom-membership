@@ -115,11 +115,11 @@ Once enabled, it uses the `HOST_NAME` environment variable to populate the `data
 
 In your Plausible analytics account, from the logged in page, click `add website`, fill in the data for the site e.g `members.londondecom.org` and you are done! Once the site is live and analytics are enabled it will start recording!
 
-### REDIS_HOST & REDIS_PORT
+### REDIS_URL & REDIS_PORT
 
 Add these values to enable the Redis caching, the default TTL for all cache items is 90 mins, unless specified in code.
 
-We don't use any caching outside of Redis at the current time, and if not enabled will still function as normal.
+We don't use any caching outside Redis at the current time, and if not enabled will still function as normal.
 
 This is being used to both prevent excess calls to Eventbrite and speed up page loading via [fragment caching](https://guides.rubyonrails.org/caching_with_rails.html#fragment-caching)
 
