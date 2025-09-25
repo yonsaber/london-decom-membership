@@ -17,7 +17,7 @@ Rails.application.configure do
   # Enable server timing.
   config.server_timing = true
 
-  # Enable/disable caching. By default caching is disabled.
+  # Enable/disable caching. By default, caching is disabled.
   # Run rails dev:cache to toggle caching.
   if !ENV['REDIS_URL'].present? && !ENV['REDIS_PORT'].present?
     config.action_controller.perform_caching = true
