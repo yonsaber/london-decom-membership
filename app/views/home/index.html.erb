@@ -1,10 +1,10 @@
 <% if @event and !@event.draft? %>
   <% if @event.ended? %>
-    <center>
-      <%= render partial: '/events/event_ended' %>
-    </center>
+    <div style="text-align: center;">
+      <%= render partial: 'event_ended' %>
+    </div>
   <% else %>
-    <%= render partial: '/events/event' %>
+    <%= render partial: 'event' %>
   <% end %>
 <% else %>
   <h1>Hey <%= current_user.name %></h1>
