@@ -67,16 +67,22 @@ jobs:
                 curl -L https://fly.io/install.sh | sh
                 export FLYCTL_INSTALL="/home/circleci/.fly"
                 export PATH="$FLYCTL_INSTALL/bin:$PATH"
-                flyctl deploy -e GIT_SHA="$GIT_SHA" -e GIT_AUTHOR="$GIT_AUTHOR"
+                flyctl deploy -e GIT_SHA="$CIRCLE_SHA1" -e GIT_AUTHOR="$CIRCLE_USERNAME"
       - run:
           name: Notify Rollbar
           command: |
-            curl https://api.rollbar.com/api/1/deploy/ \
-            -F access_token=$ROLLBAR_ACCESS_TOKEN \
-            -F environment=production \
-            -F revision=$CIRCLE_SHA1 \
-            -F rollbar_username=$CIRCLE_USERNAME \
-            -F local_username=$CIRCLE_USERNAME
+            curl --request POST \
+            --url https://api.rollbar.com/api/1/deploy \
+            --header "X-Rollbar-Access-Token: $ROLLBAR_ACCESS_TOKEN" \
+            --header 'accept: application/json' \
+            --header 'content-type: application/json' \
+            --data '{
+              "environment": "production",
+              "revision": "'"$CIRCLE_SHA1"'",
+              "rollbar_username": "'"$ROLLBAR_USERNAME"'",
+              "local_username": "'"$CIRCLE_USERNAME"'",
+              "comment": "Deploy with bug"
+            }'
 
 workflows:
   build-test-deploy:
@@ -90,3 +96,5 @@ workflows:
               only:
                 - main
                 - master
+            tags:
+              only: /^v*/
