@@ -15,7 +15,7 @@ executors:
     resource_class: small
   base-image:
     docker:
-      - image: cimg/base:2021.04
+      - image: cimg/base:2025.10
     resource_class: small
 
 version: 2.1
@@ -91,10 +91,4 @@ workflows:
       - deploy:
           requires:
             - build-and-test
-          filters:
-            branches:
-              only:
-                - main
-                - master
-            tags:
-              only: /^v*/
+          filters: pipeline.git.branch == "master" and pipeline.git.tag starts-with "v"
