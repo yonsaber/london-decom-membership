@@ -1,6 +1,6 @@
 class Admin::EventsController < AdminController
   def index
-    @events = Event.all
+    @events = Event.all.order(id: :desc)
   end
 
   def show
