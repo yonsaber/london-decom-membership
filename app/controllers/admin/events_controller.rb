@@ -1,6 +1,6 @@
 class Admin::EventsController < AdminController
   def index
-    @events = Event.all
+    @events = Event.all.order(id: :desc)
   end
 
   def show
@@ -8,6 +8,7 @@ class Admin::EventsController < AdminController
 
     @has_event_cache_entry = Rails.cache.exist?("eventbrite:event:#{@event.eventbrite_id}")
     @has_ticket_class_cache_entry = Rails.cache.exist?("eventbrite:event:#{@event.eventbrite_id}:ticketclasses")
+    @event_ticket_classes = Rails.cache.fetch("eventbrite:event:#{@event.eventbrite_id}:ticketclasses")
   end
 
   def new
