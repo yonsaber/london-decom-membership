@@ -44,7 +44,7 @@
         Event Details
       </button>
     </h2>
-    <div id="eventDetailsCollapse" class="accordion-collapse collapse show" aria-labelledby="eventHeading" data-bs-parent="#accordionExample">
+    <div id="eventDetailsCollapse" class="accordion-collapse collapse show" aria-labelledby="eventHeading" data-bs-parent="#accordionEventData">
       <div class="accordion-body">
         <p>Ticket Sale Start Date: <%= @event.ticket_sale_start_date.present? ? @event.ticket_sale_start_date.to_fs(:decom_standard) : 'No set sale date' %></p>
         <% if @event.low_income_requests_start.present? && @event.low_income_requests_end.present? %>
@@ -102,6 +102,33 @@
   </small>
 </p>
 
+<div class="accordion">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="eventTicketClassHeading">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#eventTicketClassCollapse" aria-expanded="true" aria-controls="eventTicketClassCollapse">
+        Event Ticket Class Statuses
+      </button>
+    </h2>
+    <div id="eventTicketClassCollapse" class="accordion-collapse collapse show" aria-labelledby="eventTicketClassHeading" data-bs-parent="#accordionTicketClasses">
+      <div class="accordion-body">
+        <% if @event_ticket_classes.nil? %>
+          <p>Currently, there is no ticket data in the cache for this event.</p>
+        <% else %>
+          <p>Please note, data could be up to 30 mins out of date...</p>
+          <% @event_ticket_classes.each do |ticket_class|  %>
+            <p>Ticket Class: <%=  ticket_class['display_name']  %></p>
+            <ul>
+              <li>Sold: <%= ticket_class['quantity_sold'] %> of <%=  ticket_class['quantity_total']  %></li>
+              <li>Current Status: <%= ticket_class['on_sale_status'].humanize %></li>
+            </ul>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
 <%# TODO: Make this section for developer admins only or super users %>
 
 <div class="accordion">
