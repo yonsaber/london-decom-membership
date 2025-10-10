@@ -91,4 +91,6 @@ workflows:
       - deploy:
           requires:
             - build-and-test
-          filters: pipeline.git.branch == "master" and pipeline.git.tag starts-with "v"
+          filters:
+            tags:
+              only: /^v.*/
