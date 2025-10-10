@@ -62,6 +62,15 @@ RSpec.feature 'Tickets', type: :feature do
     expect(page).to have_text('You have already bought 1 ticket. You can buy 1 more ticket')
   end
 
+  scenario 'user has 1 available tickets but ticket class is not on sale' do
+    stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0, ticket_class_on_sale?: false)
+    create(:event)
+    login
+
+    expect(page).to_not have_text('Buy Ticket')
+    expect(page).to have_text('Tickets are not currently on sale')
+  end
+
   scenario 'user has 1 available tickets but in a sold out ticket class' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0, ticket_class_sold_out?: true)
     create(:event)

@@ -6,6 +6,7 @@ def stub_eventbrite_event(opts = {})
       available_tickets_for_code: 2,
       tickets_sold_for_code: 0,
       ticket_class_sold_out?: false,
+      ticket_class_on_sale?: true,
       eventbrite_event: double(
         :eventbrite_event,
         start: double(
