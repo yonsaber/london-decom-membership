@@ -54,7 +54,7 @@ class EventbriteEvent
   end
 
   def ticket_class_not_on_sale?(code)
-    check_user_ticket_classes_by_statuses(code, 'NOT_YET_ON_SALE').all?
+    check_user_ticket_classes_by_statuses(code, 'NOT_YET_ON_SALE').any? && ticket_class_sold_out?(code)
   rescue EventbriteDiscountCodeNotFound
     false
   end
