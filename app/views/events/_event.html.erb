@@ -33,6 +33,7 @@
         <%= pluralize(@event.available_tickets_for_code(current_user.membership_number), 'ticket') %>.
       <% end %>
     </p>
+    <b style="color: darkred">Please note: There is currently an issue with Eventbrite and Firefox, if you are having issues buying your ticket, please use another browser!</b>
     <button id="eventbrite-buy-link" type="button" class="btn btn-primary">
       Buy <%= 'Ticket'.pluralize(@event.available_tickets_for_code(current_user.membership_number)) %>
     </button>
