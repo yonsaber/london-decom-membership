@@ -32,7 +32,9 @@ jobs:
 
       - run:
           name: Bundle install dependencies
-          command: bundle install --path vendor/bundle
+          command: |
+            bundle config set path 'vendor/bundle'
+            bundle install
 
       - save_cache:
           name: Store bundle cache
@@ -55,6 +57,9 @@ jobs:
       - run:
           name: Run the tests
           command: bundle exec rake
+
+      - store_test_results:
+          path: ~/test-results
 
   deploy:
     executor: base-image
@@ -92,5 +97,7 @@ workflows:
           requires:
             - build-and-test
           filters:
-            tags:
-              only: /^v.*/
+            branches:
+              only:
+                - main
+                - master
