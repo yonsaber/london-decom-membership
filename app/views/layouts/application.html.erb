@@ -16,11 +16,14 @@
   </head>
 
   <body>
-    <% unless Rails.env.production? %>
-      <div class="alert alert-danger dev_notice" role="alert">
-        This is a non-prod instance of the members website, changes are to be expected!
-      </div>
-    <% end %>
+  <% unless Rails.env.production? %>
+    <div class="alert alert-danger dev_notice" role="alert">
+      This is a non-prod instance of the members website, changes are to be expected!
+    </div>
+  <% end %>
+  <div class="alert alert-danger dev_notice" role="alert">
+    <b>Please note: There is currently a known issue with Eventbrite and Firefox, please use another browser!</b>
+  </div>
     <div class="page-header">
       <div class="container">
         <div class="row">
