@@ -30,9 +30,12 @@ class Rack::Attack
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.remote_ip}"
-  throttle('req/ip', limit: 300, period: 5.minutes, &:remote_ip)
+  throttle('req/ip', limit: 50, period: 2.minutes, &:remote_ip)
 
   blocklist_ip('109.107.189.44')
+  blocklist_ip('104.248.45.83')
+  blocklist_ip('20.42.209.0')
+  blocklist_ip('13.79.87.25')
 
   ### Prevent Brute-Force Login Attacks ###
 
@@ -79,8 +82,4 @@ class Rack::Attack
   #    {},   # headers
   #    ['']] # body
   # end
-
-  blocklist('block spammer ip address') do |request|
-    request.remote_ip == '109.107.189.44'
-  end
 end
