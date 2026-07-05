@@ -1,10 +1,10 @@
 class Admin::EventsController < AdminController
   def index
-    @events = Event.all.order(id: :desc)
+    @events = Event.order(id: :desc)
   end
 
   def show
-    @event = Event.find(params[:id])
+    @event = Event.find(params.expect(:id))
 
     @has_event_cache_entry = Rails.cache.exist?("eventbrite:event:#{@event.eventbrite_id}")
     @has_ticket_class_cache_entry = Rails.cache.exist?("eventbrite:event:#{@event.eventbrite_id}:ticketclasses")
@@ -13,6 +13,10 @@ class Admin::EventsController < AdminController
 
   def new
     @event = Event.new
+  end
+
+  def edit
+    @event = Event.find(params.expect(:id))
   end
 
   def create
@@ -24,12 +28,8 @@ class Admin::EventsController < AdminController
     end
   end
 
-  def edit
-    @event = Event.find(params[:id])
-  end
-
   def update
-    @event = Event.find(params[:id])
+    @event = Event.find(params.expect(:id))
 
     if @event.update(event_params)
       redirect_to admin_event_path(@event)
@@ -39,7 +39,7 @@ class Admin::EventsController < AdminController
   end
 
   def clear_event_from_cache
-    @event = Event.find(params[:event_id])
+    @event = Event.find(params.expect(:event_id))
     return if @event.nil?
 
     deleted = Rails.cache.delete("eventbrite:event:#{@event.eventbrite_id}")
@@ -53,7 +53,7 @@ class Admin::EventsController < AdminController
   end
 
   def clear_ticket_classes_from_cache
-    @event = Event.find(params[:event_id])
+    @event = Event.find(params.expect(:event_id))
     return if @event.nil?
 
     deleted = Rails.cache.delete("eventbrite:event:#{@event.eventbrite_id}:ticketclasses")
@@ -69,12 +69,12 @@ class Admin::EventsController < AdminController
   private
 
   def event_params
-    params.require(:event).permit(
-      :name, :active,
-      :ticket_sale_start_date, :theme, :theme_details, :theme_image_url,
-      :location, :maps_location_url, :event_timings, :further_information,
-      :ticket_price_info, :ticket_information, :event_date, :event_mode,
-      :low_income_requests_start, :low_income_requests_end
+    params.expect(
+      event: [:name, :active,
+              :ticket_sale_start_date, :theme, :theme_details, :theme_image_url,
+              :location, :maps_location_url, :event_timings, :further_information,
+              :ticket_price_info, :ticket_information, :event_date, :event_mode,
+              :low_income_requests_start, :low_income_requests_end]
     )
   end
 end

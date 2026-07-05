@@ -18,7 +18,7 @@ class Admin::UsersController < AdminController
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     event = Event.active(early_access: @user.early_access)
     return if event.nil?
 
@@ -28,20 +28,20 @@ class Admin::UsersController < AdminController
   end
 
   def update
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     @user.update!(user_params)
     @user.update_mailchimp
     redirect_to action: :index
   end
 
   def resend_email
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     @user.resend_confirmation_instructions
     redirect_to action: :unconfirmed
   end
 
   def destroy
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     @user.destroy
     if @user.confirmed?
       redirect_to action: :index
@@ -51,14 +51,14 @@ class Admin::UsersController < AdminController
   end
 
   def give_direct_sale
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     direct_sale_code = DirectSaleCode.available.first
     direct_sale_code.update(user: @user)
     redirect_to edit_admin_user_path(@user)
   end
 
   def admin_clear_discount_from_cache
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     event = Event.active(early_access: @user.early_access)
     return if event.nil? || @user.nil?
 
@@ -73,7 +73,7 @@ class Admin::UsersController < AdminController
   end
 
   def admin_send_password_reset
-    @user = User.find(params[:id])
+    @user = User.find(params.expect(:id))
     return if @user.nil?
 
     @user.send_reset_password_instructions
@@ -86,6 +86,6 @@ class Admin::UsersController < AdminController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :admin, :early_access, :marketing_opt_in)
+    params.expect(user: [:name, :email, :admin, :early_access, :marketing_opt_in])
   end
 end

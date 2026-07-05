@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
   it "creates a new code if one doesn't exist and assigns an available code if one exists" do
     MembershipCode.destroy_all
     other_user = create(:user)
@@ -50,19 +50,19 @@ RSpec.describe User, type: :model do
                               )
     end
 
-    it 'should create a user on Mailchimp' do
+    it 'creates a user on Mailchimp' do
       new_user = create(:user, email: 'james@abscond.org', name: 'James Darling')
       new_user.update_mailchimp
       expect(@user_stub).to have_been_requested
     end
 
-    it 'should create both tags on the user on Mailchimp' do
+    it 'creates both tags on the user on Mailchimp' do
       new_user = create(:user, email: 'james@abscond.org', name: 'James Darling', marketing_opt_in: true)
       new_user.update_mailchimp
       expect(@full_tag_stub).to have_been_requested
     end
 
-    it 'should create only member tag the user on Mailchimp' do
+    it 'creates only member tag the user on Mailchimp' do
       new_user = create(:user, email: 'james@abscond.org', name: 'James Darling', marketing_opt_in: false)
       new_user.update_mailchimp
       expect(@member_only_tag_stub).to have_been_requested
@@ -103,7 +103,7 @@ RSpec.describe User, type: :model do
                            )
     end
 
-    it 'should try create a user on Mailchimp and mark them pending' do
+    it 'tries create a user on Mailchimp and mark them pending' do
       new_user = create(:user, email: 'james@abscond.org', name: 'James Darling')
       new_user.update_mailchimp
       expect(@user_stub).to have_been_requested
@@ -145,11 +145,11 @@ RSpec.describe User, type: :model do
                            )
     end
 
-    it 'should try create a user on Mailchimp and mark them pending' do
+    it 'tries create a user on Mailchimp and mark them pending' do
       new_user = create(:user, email: 'james@abscond.org', name: 'James Darling')
       new_user.update_mailchimp
       expect(@user_stub).to have_been_requested
-      expect(@pending_user_stub).to_not have_been_requested
+      expect(@pending_user_stub).not_to have_been_requested
     end
   end
 
@@ -183,7 +183,7 @@ RSpec.describe User, type: :model do
                       .with(body: '')
     end
 
-    it 'should delete a user on Mailchimp' do
+    it 'deletes a user on Mailchimp' do
       new_user = create(:user, email: 'james@abscond.org', name: 'James Darling')
       new_user.update_mailchimp
       new_user.delete_mailchimp_user

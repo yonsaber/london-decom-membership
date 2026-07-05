@@ -17,7 +17,7 @@ Rails.application.configure do
 
   # Enable/disable Action Controller caching. By default Action Controller caching is disabled.
   # Run rails dev:cache to toggle Action Controller caching.
-  if !ENV['REDIS_URL'].present? && !ENV['REDIS_PORT'].present?
+  if ENV['REDIS_URL'].blank? && ENV['REDIS_PORT'].blank?
     config.action_controller.perform_caching = false
 
     config.cache_store = :null_store

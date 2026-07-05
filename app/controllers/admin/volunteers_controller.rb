@@ -21,7 +21,7 @@ class Admin::VolunteersController < AdminController
   end
 
   def destroy
-    @lead = @volunteer_role.leads.find(params[:id])
+    @lead = @volunteer_role.leads.find(params.expect(:id))
     @lead.update(lead: false)
     flash[:notice] = "#{@lead.user.name} has been removed as a lead to #{@lead.volunteer_role.name}"
     redirect_to admin_event_volunteer_role_volunteers_path(@event)
@@ -30,10 +30,10 @@ class Admin::VolunteersController < AdminController
   private
 
   def find_event
-    @event = Event.find(params[:event_id])
+    @event = Event.find(params.expect(:event_id))
   end
 
   def find_volunteer_role
-    @volunteer_role = @event.volunteer_roles.find(params[:volunteer_role_id])
+    @volunteer_role = @event.volunteer_roles.find(params.expect(:volunteer_role_id))
   end
 end

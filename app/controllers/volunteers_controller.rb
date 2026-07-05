@@ -7,7 +7,7 @@ class VolunteersController < ApplicationController
     @volunteers = @volunteer_role.volunteers.order(:created_at)
     respond_to do |format|
       format.html
-      format.csv { send_data @volunteers.to_csv, filename: "volunteers-#{@volunteer_role.name}-#{Date.today}.csv" }
+      format.csv { send_data @volunteers.to_csv, filename: "volunteers-#{@volunteer_role.name}-#{Time.zone.today}.csv" }
     end
   end
 
@@ -28,6 +28,12 @@ class VolunteersController < ApplicationController
     end
   end
 
+  def update
+    @volunteer = @volunteer_role.volunteers.find(params.expect(:id))
+    @volunteer.update(state: params[:volunteer][:state])
+    redirect_to event_volunteer_role_volunteers_path(@event, @volunteer_role)
+  end
+
   def destroy
     @current_user_volunteer_role = current_user.volunteers.find_by(volunteer_role: @volunteer_role)
     if current_user.lead_for?(@volunteer_role)
@@ -40,12 +46,6 @@ class VolunteersController < ApplicationController
     else
       volunteer_cancelling
     end
-  end
-
-  def update
-    @volunteer = @volunteer_role.volunteers.find(params[:id])
-    @volunteer.update(state: params[:volunteer][:state])
-    redirect_to event_volunteer_role_volunteers_path(@event, @volunteer_role)
   end
 
   private
@@ -61,7 +61,7 @@ class VolunteersController < ApplicationController
   end
 
   def lead_deleting_volunteer
-    @volunteer = @volunteer_role.volunteers.find(params[:id])
+    @volunteer = @volunteer_role.volunteers.find(params.expect(:id))
     @volunteer.destroy
     flash[:notice] = "#{@volunteer.user.name} has been removed as a volunteer"
 
@@ -73,7 +73,7 @@ class VolunteersController < ApplicationController
   end
 
   def admin_deleting_volunteer
-    @volunteer = @volunteer_role.volunteers.find(params[:id])
+    @volunteer = @volunteer_role.volunteers.find(params.expect(:id))
     @volunteer.destroy
     LeadsMailer.admin_cancelled_volunteer(@volunteer).deliver_now
     flash[:notice] = "#{@volunteer.user.name} has been removed as a volunteer for #{@volunteer_role.name}"
@@ -88,19 +88,19 @@ class VolunteersController < ApplicationController
   end
 
   def find_event
-    @event = Event.find(params[:event_id])
+    @event = Event.find(params.expect(:event_id))
   end
 
   def find_volunteer_role
-    @volunteer_role = @event.volunteer_roles.find(params[:volunteer_role_id])
+    @volunteer_role = @event.volunteer_roles.find(params.expect(:volunteer_role_id))
   end
 
   def volunteer_params
-    params.require(:volunteer).permit(
-      :accept_code_of_conduct,
-      :accept_health_and_safety,
-      :additional_comments,
-      :phone
+    params.expect(
+      volunteer: [:accept_code_of_conduct,
+                  :accept_health_and_safety,
+                  :additional_comments,
+                  :phone]
     ).merge(volunteer_role: @volunteer_role)
   end
 

@@ -8,6 +8,6 @@ class VolunteeringController < ApplicationController
   private
 
   def find_event
-    @event = Event.find(params[:event_id])
+    @event = Event.find(params.expect(:event_id))
   end
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Tickets', type: :feature do
+RSpec.feature 'Tickets' do
   scenario 'there is no active event' do
     login
     create(:event, active: false)
@@ -31,7 +31,7 @@ RSpec.feature 'Tickets', type: :feature do
     create(:event)
     login
 
-    expect(page).to_not have_text('Buy Ticket')
+    expect(page).to have_no_text('Buy Ticket')
     expect(page).to have_text('There are no tickets available')
   end
 
@@ -40,7 +40,7 @@ RSpec.feature 'Tickets', type: :feature do
     create(:event)
     login
 
-    expect(page).to_not have_text('Buy Ticket')
+    expect(page).to have_no_text('Buy Ticket')
     expect(page).to have_text('You have bought the 1 ticket available to you')
   end
 
@@ -67,7 +67,7 @@ RSpec.feature 'Tickets', type: :feature do
     create(:event)
     login
 
-    expect(page).to_not have_text('Buy Ticket')
+    expect(page).to have_no_text('Buy Ticket')
     expect(page).to have_text('Tickets are not currently on sale')
   end
 
@@ -76,7 +76,7 @@ RSpec.feature 'Tickets', type: :feature do
     create(:event)
     login
 
-    expect(page).to_not have_text('Buy Ticket')
+    expect(page).to have_no_text('Buy Ticket')
     expect(page).to have_text('Tickets are sold out')
   end
 end

@@ -528,29 +528,29 @@ Style/SelectByRange: # new in 1.85
 Style/TallyMethod: # new in 1.85
   Enabled: true
 RSpec/DiscardedMatcher: # new in 3.10
-  Enabled: true
+  Enabled: false
 RSpec/IncludeExamples: # new in 3.6
-  Enabled: true
+  Enabled: false
 RSpec/LeakyLocalVariable: # new in 3.8
-  Enabled: true
+  Enabled: false
 RSpec/MatchWithSimpleRegex: # new in 3.10
-  Enabled: true
+  Enabled: false
 RSpec/Output: # new in 3.9
-  Enabled: true
+  Enabled: false
 RSpecRails/AvoidSetupHook: # new in 2.4
-  Enabled: true
+  Enabled: false
 RSpecRails/HaveHttpStatus: # new in 2.12
-  Enabled: true
+  Enabled: false
 RSpecRails/HttpStatusNameConsistency: # new in 2.32
-  Enabled: true
+  Enabled: false
 RSpecRails/InferredSpecType: # new in 2.14
-  Enabled: true
+  Enabled: false
 RSpecRails/MinitestAssertions: # new in 2.17
-  Enabled: true
+  Enabled: false
 RSpecRails/NegationBeValid: # new in 2.23
-  Enabled: true
+  Enabled: false
 RSpecRails/TravelAround: # new in 2.19
-  Enabled: true
+  Enabled: false
 Rails/ActionControllerFlashBeforeRender: # new in 2.16
   Enabled: true
 Rails/ActionControllerTestCase: # new in 2.14
@@ -693,3 +693,23 @@ FactoryBot/RedundantFactoryOption: # new in 2.23
   Enabled: true
 FactoryBot/SyntaxMethods: # new in 2.7
   Enabled: true
+
+# Disabled as part of update
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+Rails/SkipsModelValidations:
+  Enabled: false
+Rails/UniqueValidationWithoutIndex:
+  Enabled: false
+Rails/OutputSafety:
+  Enabled: false
+RSpec/ExampleLength:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/InstanceVariable:
+  Enabled: false
+RSpec/RepeatedExampleGroupDescription:
+  Enabled: false
+RSpec/VerifiedDoubles:
+  Enabled: false

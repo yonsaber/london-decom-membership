@@ -1,7 +1,7 @@
-if Rails.env.development? || Rails.env.test?
+if Rails.env.local?
   namespace :brakeman do
     desc 'Run Brakeman'
-    task :run do
+    task run: :environment do
       require 'brakeman'
 
       Brakeman.run(

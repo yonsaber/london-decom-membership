@@ -2,8 +2,8 @@ class LowIncomeCode < ApplicationRecord
   belongs_to :low_income_request, optional: true
   before_create :set_code
 
-  scope :available, -> { where('low_income_request_id IS NULL') }
-  scope :taken, -> { where('low_income_request_id IS NOT NULL') }
+  scope :available, -> { where(low_income_request_id: nil) }
+  scope :taken, -> { where.not(low_income_request_id: nil) }
 
   CHARACTER_MAP = {
     '3' => ['3'],

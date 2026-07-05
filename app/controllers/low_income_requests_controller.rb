@@ -12,6 +12,6 @@ class LowIncomeRequestsController < ApplicationController
   private
 
   def low_income_request_params
-    params.require(:low_income_request).permit(:request_reason)
+    params.expect(low_income_request: [:request_reason])
   end
 end
