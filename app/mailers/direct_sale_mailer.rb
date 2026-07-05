@@ -1,8 +1,10 @@
 class DirectSaleMailer < ApplicationMailer
-  def given_direct_sale(user)
+  default from: email_address_with_name('tickets@londondecom.org', 'Decom Ticketing Team')
+
+  def given_direct_sale
+    @user = params[:user]
     mail(
-      to: user.email,
-      from: 'tickets@londondecom.org',
+      to: @user.email,
       subject: "You've been given a direct sale ticket!"
     )
   end
