@@ -71,5 +71,6 @@ RSpec.configure do |config|
     example.run
     MembershipCode.destroy_all
     LowIncomeCode.destroy_all
+    DirectSaleCode.destroy_all
   end
 end
