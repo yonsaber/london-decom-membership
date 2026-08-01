@@ -54,6 +54,7 @@ class Admin::UsersController < AdminController
     @user = User.find(params.expect(:id))
     direct_sale_code = DirectSaleCode.available.first
     direct_sale_code.update(user: @user)
+    DirectSaleMailer.with(user: @user).given_direct_sale.deliver_now
     redirect_to edit_admin_user_path(@user)
   end
 
