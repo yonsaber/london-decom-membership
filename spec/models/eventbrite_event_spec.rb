@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'webmock/rspec'
 
-RSpec.describe EventbriteEvent, type: :model do
+RSpec.describe EventbriteEvent do
   describe 'set user.ticket_bought' do
     before do
       stub_request(:get, 'https://www.eventbriteapi.com/v3/events/12345/')
@@ -19,7 +19,7 @@ RSpec.describe EventbriteEvent, type: :model do
     end
 
     it 'to false when ticket not sold' do
-      eb = EventbriteEvent.new('mytoken', '12345')
+      eb = described_class.new('mytoken', '12345')
       user = create(:user)
       tickets_sold_for_code = eb.tickets_sold_for_code(user.membership_number)
       user.reload
@@ -49,7 +49,7 @@ RSpec.describe EventbriteEvent, type: :model do
     #       outcomes with values changing so I'm happy
 
     it 'to true when ticket sold' do
-      eb = EventbriteEvent.new('mytoken', '12345')
+      eb = described_class.new('mytoken', '12345')
       user = create(:user)
       tickets_sold_for_code = eb.tickets_sold_for_code(user.membership_number)
       user.reload
@@ -58,7 +58,7 @@ RSpec.describe EventbriteEvent, type: :model do
     end
 
     it 'to true when low income ticket sold' do
-      eb = EventbriteEvent.new('mytoken', '12345')
+      eb = described_class.new('mytoken', '12345')
       user = create(:user, email: 'test_mail_user@example.com')
       low_income_request = create(:low_income_request, request_reason: 'Reason 1', user_id: user.id, status: 'approved')
       low_income_code = create(:low_income_code, low_income_request_id: low_income_request.id)
@@ -71,7 +71,7 @@ RSpec.describe EventbriteEvent, type: :model do
     end
 
     it 'to true when direct sale ticket sold' do
-      eb = EventbriteEvent.new('mytoken', '12345')
+      eb = described_class.new('mytoken', '12345')
       user = create(:user, email: 'test_mail_user@example.com')
       direct_sale_code = create(:direct_sale_code, user_id: user.id)
       user.reload

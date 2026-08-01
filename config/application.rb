@@ -26,7 +26,7 @@ module LondonDecomMembership
     config.time_zone = 'London'
     # config.eager_load_paths << Rails.root.join("extras")
 
-    if (ENV.fetch('REDIS_URL', nil) && ENV.fetch('REDIS_PORT', nil)) && !Rails.env.test?
+    if ENV.fetch('REDIS_URL', nil) && ENV.fetch('REDIS_PORT', nil) && !Rails.env.test?
       config.cache_store = :redis_cache_store, {
         url: ENV.fetch('REDIS_URL', nil),
         port: ENV.fetch('REDIS_PORT', nil),

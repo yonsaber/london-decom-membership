@@ -17,7 +17,7 @@ class LowIncomeRequest < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << %w[Name Email LI\ Request\ Status Ticket\ Bought Created\ At Last\ Updated\ At]
 
-      all.each do |lir|
+      find_each do |lir|
         csv << [
           lir.user.name,
           lir.user.email,

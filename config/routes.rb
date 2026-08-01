@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       end
     end
   end
-  resources :events, only: %i[patch] do
+  resources :events, only: %i[edit] do
     patch :clear_discount_from_cache # TODO: Move this into a members do block
     resources :volunteer_roles, only: [] do
       resources :volunteers, only: %i[index new create destroy update]

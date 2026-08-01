@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Volunteering leads', type: :feature do
+RSpec.feature 'Volunteering leads' do
   scenario 'viewing the volunteers for their role' do
     stub_eventbrite_event(tickets_sold_for_code: 1)
     login
@@ -12,12 +12,12 @@ RSpec.feature 'Volunteering leads', type: :feature do
 
     visit root_path
     click_link 'Volunteering'
-    expect(page).to have_content('As you are the lead for this role')
+    expect(page).to have_text('As you are the lead for this role')
 
     click_link 'View Volunteers'
-    expect(page).to have_content(volunteer1.email)
-    expect(page).to have_content(volunteer2.email)
-    expect(page).to_not have_content(not_a_volunteer.email)
+    expect(page).to have_text(volunteer1.email)
+    expect(page).to have_text(volunteer2.email)
+    expect(page).to have_no_text(not_a_volunteer.email)
   end
 
   scenario 'marking volunteers as contacted and confirmed' do
@@ -27,11 +27,11 @@ RSpec.feature 'Volunteering leads', type: :feature do
     create(:volunteer, volunteer_role: role, user: @user, lead: true)
 
     visit event_volunteer_role_volunteers_path(role.event, role)
-    expect(page).to have_content('new')
+    expect(page).to have_text('new')
     click_button 'Mark as contacted'
-    expect(page).to have_content('contacted')
+    expect(page).to have_text('contacted')
     click_button 'Mark as confirmed'
-    expect(page).to have_content('confirmed')
+    expect(page).to have_text('confirmed')
   end
 
   scenario 'removing a volunteer' do
@@ -43,8 +43,8 @@ RSpec.feature 'Volunteering leads', type: :feature do
 
     visit event_volunteer_role_volunteers_path(role.event, role)
     page.all('input[value="Remove"]')[1].click
-    expect(page).to have_content("#{volunteer1.name} has been removed as a volunteer")
-    expect(page).to_not have_content(volunteer1.email)
+    expect(page).to have_text("#{volunteer1.name} has been removed as a volunteer")
+    expect(page).to have_no_text(volunteer1.email)
   end
 
   scenario 'downloading CSV of volunteers' do
@@ -59,8 +59,8 @@ RSpec.feature 'Volunteering leads', type: :feature do
     visit event_volunteer_role_volunteers_path(role.event, role)
     click_link 'download a CSV'
 
-    expect(page).to have_content("#{volunteer1.name},#{volunteer1.email},077777,A comment,new")
-    expect(page).to_not have_content('Another role')
+    expect(page).to have_text("#{volunteer1.name},#{volunteer1.email},077777,A comment,new")
+    expect(page).to have_no_text('Another role')
   end
 
   scenario 'viewing the volunteers when not a lead' do
@@ -70,7 +70,7 @@ RSpec.feature 'Volunteering leads', type: :feature do
     create(:volunteer, volunteer_role: role, user: @user, lead: false)
     visit root_path
     click_link 'Volunteering'
-    expect(page).to_not have_content('As you are the lead for this role')
+    expect(page).to have_no_text('As you are the lead for this role')
     visit event_volunteer_role_volunteers_path(role.event, role)
     expect(page).to have_text('You are not permitted to view that page')
   end
@@ -86,6 +86,6 @@ RSpec.feature 'Volunteering leads', type: :feature do
     click_link 'View Volunteers'
     click_link 'Volunteering'
     click_link 'Un-Volunteer'
-    expect(page).to_not have_text("You've signed up to volunteer for:")
+    expect(page).to have_no_text("You've signed up to volunteer for:")
   end
 end

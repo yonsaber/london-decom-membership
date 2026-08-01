@@ -64,8 +64,6 @@ task unused_low_income: :environment do
   end
 end
 
-private
-
 def find_user_by_discount_code(event, user, discount_codes)
   discount_code = discount_codes.find do |discount_code_json|
     discount_code_json['code'] == user.membership_number

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Membership Code Admin', type: :feature do
+RSpec.feature 'Membership Code Admin' do
   scenario 'should list existing codes, and can generate more' do
     # 10 low income codes are generated in spec_helper.rb
     stub_eventbrite_event

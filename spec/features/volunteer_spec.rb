@@ -1,25 +1,25 @@
 require 'rails_helper'
 
-RSpec.feature 'Volunteering', type: :feature do
+RSpec.feature 'Volunteering' do
   scenario "don't have a ticket yet" do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event)
     login
-    expect(page).to_not have_text('Volunteer opportunities')
+    expect(page).to have_no_text('Volunteer opportunities')
   end
 
   scenario 'draft event, cannot see volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :draft)
     login
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'prerelease event, cannot see volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'prerelease event, early access, can see volunteer link' do
@@ -77,7 +77,7 @@ RSpec.feature 'Volunteering', type: :feature do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :ended)
     login(early_access: true)
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'signing up to volunteer unsuccessfully' do
@@ -93,11 +93,11 @@ RSpec.feature 'Volunteering', type: :feature do
     fill_in 'Phone', with: '07777777'
     fill_in 'Additional comments', with: 'some addition comments'
     click_button 'Volunteer'
-    expect(page).to have_selector('#volunteer_accept_code_of_conduct.is-invalid')
+    expect(page).to have_css('#volunteer_accept_code_of_conduct.is-invalid')
     check 'I agree to the Decom Code of Conduct'
     click_button 'Volunteer'
-    expect(page).to_not have_selector('#volunteer_accept_code_of_conduct.is-invalid')
-    expect(page).to have_selector('#volunteer_accept_health_and_safety.is-invalid')
+    expect(page).to have_no_css('#volunteer_accept_code_of_conduct.is-invalid')
+    expect(page).to have_css('#volunteer_accept_health_and_safety.is-invalid')
   end
 
   scenario 'listing of volunteer roles with limited slots' do
@@ -147,7 +147,7 @@ RSpec.feature 'Volunteering', type: :feature do
     expect(@user.volunteers.first.additional_comments).to eq('some addition comments')
 
     open_email(lead.email)
-    expect(current_email).to have_content('James Darling just volunteered for Ranger')
+    expect(current_email).to have_text('James Darling just volunteered for Ranger')
 
     expect(page).to have_text('The leads for this role should be in contact with you very soon')
     volunteer = @user.volunteers.last
@@ -179,7 +179,7 @@ RSpec.feature 'Volunteering', type: :feature do
     expect(@user.volunteers.first.additional_comments).to eq('some addition comments')
 
     open_email('volunteers@londondecom.org')
-    expect(current_email).to have_content('James Darling just volunteered for Ranger')
+    expect(current_email).to have_text('James Darling just volunteered for Ranger')
 
     expect(page).to have_text('The leads for this role should be in contact with you very soon')
     volunteer = @user.volunteers.last
@@ -258,25 +258,25 @@ RSpec.feature 'Volunteering', type: :feature do
 
     click_link 'Volunteering'
     click_link 'Un-Volunteer'
-    expect(page).to have_content('You are no longer volunteering for Ranger')
+    expect(page).to have_text('You are no longer volunteering for Ranger')
     expect(@user.volunteers.count).to eq(0)
 
     open_email(lead.email)
-    expect(current_email).to have_content('James Darling has cancelled their volunteering')
+    expect(current_email).to have_text('James Darling has cancelled their volunteering')
   end
 
   scenario 'no event, no volunteer link' do
     login
-    expect(page).to_not have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Volunteering')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'event in draft mode, no volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :draft)
     login
-    expect(page).to_not have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Volunteering')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'event in pre-release mode, has volunteer link' do
@@ -284,7 +284,7 @@ RSpec.feature 'Volunteering', type: :feature do
     create(:event, :prerelease)
     login
     expect(page).to have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'event in pre-release mode, has volunteer link, across profile page' do
@@ -292,7 +292,7 @@ RSpec.feature 'Volunteering', type: :feature do
     create(:event, :prerelease)
     login
     expect(page).to have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Looking to volunteer?')
     click_link 'Profile'
     expect(page).to have_text('Volunteering')
   end
@@ -377,31 +377,31 @@ RSpec.feature 'Volunteering', type: :feature do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :ended)
     login
-    expect(page).to_not have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Volunteering')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'event ended, early access, no volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :ended)
     login(early_access: true)
-    expect(page).to_not have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Volunteering')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'event ended, admin, no volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :ended)
     login(admin: true)
-    expect(page).to_not have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Volunteering')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 
   scenario 'event ended, early access and admin, no volunteer link' do
     stub_eventbrite_event(tickets_sold_for_code: 0)
     create(:event, :ended)
     login(early_access: true, admin: true)
-    expect(page).to_not have_text('Volunteering')
-    expect(page).to_not have_text('Looking to volunteer?')
+    expect(page).to have_no_text('Volunteering')
+    expect(page).to have_no_text('Looking to volunteer?')
   end
 end

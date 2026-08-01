@@ -41,7 +41,7 @@ class LeadsMailer < ApplicationMailer
   #       so we don't get flooded with error logs about trying to send emails to no recipients.
   def get_to_email_with_fallback(volunteer)
     to_emails = volunteer.volunteer_role.lead_emails
-    to_emails&.push('volunteers@londondecom.org') if to_emails.nil? || to_emails.empty?
+    to_emails&.push('volunteers@londondecom.org') if to_emails.blank?
     to_emails
   end
 end

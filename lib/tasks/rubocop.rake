@@ -1,6 +1,6 @@
-if Rails.env.development? || Rails.env.test?
+if Rails.env.local?
   desc 'Run rubocop - configure in .rubocop.yml'
-  task :rubocop do
+  task rubocop: :environment do
     require 'rubocop/rake_task'
 
     RuboCop::RakeTask.new(:rubocop) do |t|

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Low Income', type: :feature do
+RSpec.feature 'Low Income' do
   scenario 'prerelease event and user has 1 available tickets can apply for low income' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
     create(:event, :prerelease)
@@ -14,7 +14,7 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event, :prerelease, low_income_requests_start: nil, low_income_requests_end: nil)
     login
 
-    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_no_text('Apply for low income')
     expect(page).to have_text('Low income applications are not currently open.')
   end
 
@@ -28,7 +28,7 @@ RSpec.feature 'Low Income', type: :feature do
     )
     login
 
-    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_no_text('Apply for low income')
     expect(page).to have_text('Low income applications are not currently open.')
   end
 
@@ -37,8 +37,8 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event, :prerelease)
     login
 
-    expect(page).to_not have_text('Apply for low income')
-    expect(page).to_not have_text('Low income applications are not currently open.')
+    expect(page).to have_no_text('Apply for low income')
+    expect(page).to have_no_text('Low income applications are not currently open.')
   end
 
   scenario 'prerelease event and user has 1 available tickets but the low income window has closed' do
@@ -46,7 +46,7 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event, :prerelease, low_income_requests_end: Time.zone.now.advance(days: -6))
     login
 
-    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_no_text('Apply for low income')
     expect(page).to have_text('Low income applications are not currently open.')
   end
 
@@ -59,7 +59,7 @@ RSpec.feature 'Low Income', type: :feature do
     fill_in 'Please let us know why you believe you need a low income ticket', with: 'My reason'
     click_button 'Submit request'
 
-    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_no_text('Apply for low income')
     expect(page).to have_text('You have applied for a Low Income Ticket.')
     expect(page.html).to include(User.last.membership_code.code)
 
@@ -69,7 +69,7 @@ RSpec.feature 'Low Income', type: :feature do
 
     expect(page).to have_text('Your request for Low Income has been approved.')
     expect(page.html).to include(LowIncomeRequest.last.low_income_code.code)
-    expect(page.html).to_not include(User.last.membership_code.code)
+    expect(page.html).not_to include(User.last.membership_code.code)
   end
 
   scenario 'user has 1 available tickets and bought none, gets low income rejected' do
@@ -81,7 +81,7 @@ RSpec.feature 'Low Income', type: :feature do
     fill_in 'Please let us know why you believe you need a low income ticket', with: 'My reason'
     click_button 'Submit request'
 
-    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_no_text('Apply for low income')
     expect(page).to have_text('You have applied for a Low Income Ticket.')
     expect(page.html).to include(User.last.membership_code.code)
 
@@ -98,8 +98,8 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event, :live)
     login
 
-    expect(page).to_not have_text('Apply for low income')
-    expect(page).to_not have_text('Low income applications are not currently open.')
+    expect(page).to have_no_text('Apply for low income')
+    expect(page).to have_no_text('Low income applications are not currently open.')
   end
 
   scenario 'user has 2 available tickets and bought 2' do
@@ -107,8 +107,8 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event)
     login
 
-    expect(page).to_not have_text('Apply for low income')
-    expect(page).to_not have_text('Low income applications are not currently open.')
+    expect(page).to have_no_text('Apply for low income')
+    expect(page).to have_no_text('Low income applications are not currently open.')
   end
 
   scenario 'prerelease, user has 2 available tickets and bought 2' do
@@ -116,8 +116,8 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event, :prerelease)
     login
 
-    expect(page).to_not have_text('Apply for low income')
-    expect(page).to_not have_text('Low income applications are not currently open.')
+    expect(page).to have_no_text('Apply for low income')
+    expect(page).to have_no_text('Low income applications are not currently open.')
   end
 
   scenario 'live event and user has 1 available tickets but the low income window has closed' do
@@ -125,7 +125,7 @@ RSpec.feature 'Low Income', type: :feature do
     create(:event, low_income_requests_end: Time.zone.now.advance(days: -6))
     login
 
-    expect(page).to_not have_text('Apply for low income')
+    expect(page).to have_no_text('Apply for low income')
     expect(page).to have_text('Low income applications are not currently open.')
   end
 
@@ -148,7 +148,7 @@ RSpec.feature 'Low Income', type: :feature do
     visit root_path
 
     expect(page).to have_text('Apply for low income')
-    expect(page).to_not have_text('Low income applications are not currently open.')
+    expect(page).to have_no_text('Low income applications are not currently open.')
   end
 
   scenario 'number of requests are above 15% of 10 available codes and window closed' do
@@ -169,8 +169,8 @@ RSpec.feature 'Low Income', type: :feature do
 
     visit root_path
 
-    expect(page).to_not have_text('Apply for low income')
     expect(page).to have_text('Low income applications are not currently open.')
+    expect(page).to have_no_text('Apply for low income')
   end
 
   scenario 'number of requests are below 15% of 10 available codes' do
@@ -191,7 +191,7 @@ RSpec.feature 'Low Income', type: :feature do
 
     visit root_path
 
-    expect(page).to_not have_text('Apply for low income')
     expect(page).to have_text('Low Income applications are closed as we have reached our capacity.')
+    expect(page).to have_no_text('Apply for low income')
   end
 end

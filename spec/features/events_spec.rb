@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Event', type: :feature do
+RSpec.feature 'Event' do
   scenario 'there is no active event' do
     create(:event, active: false)
     login
@@ -42,7 +42,7 @@ RSpec.feature 'Event', type: :feature do
     create(:event, :live)
     login
 
-    expect(page).to_not have_text('Tickets for our next event will be available to buy here on')
+    expect(page).to have_no_text('Tickets for our next event will be available to buy here on')
     expect(page).to have_text('Here is the crucial info')
   end
 
