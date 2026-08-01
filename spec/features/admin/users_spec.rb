@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Users Admin' do
+RSpec.feature 'Users Admin', type: :feature do
   scenario 'should list all member email addresses' do
     stub_eventbrite_event
     login(admin: true)
@@ -66,7 +66,7 @@ RSpec.feature 'Users Admin' do
     stub_eventbrite_event
     login(admin: false)
     expect(page).to have_no_link('Users')
-    visit admin_membership_codes_path
+    visit admin_codes_path
     expect(page).to have_text('You are not permitted to view this')
   end
 end

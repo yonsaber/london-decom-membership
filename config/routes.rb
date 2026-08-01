@@ -15,8 +15,7 @@ Rails.application.routes.draw do
       end
     end
     resources :tickets
-    resources :membership_codes
-    resources :low_income_codes
+    resources :codes
     resources :low_income_requests, only: %i[index] do
       member do
         post :approve
