@@ -62,7 +62,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.around do |example|
-    10.times do
+    12.times do
       MembershipCode.create!
     end
     10.times do
@@ -71,5 +71,6 @@ RSpec.configure do |config|
     example.run
     MembershipCode.destroy_all
     LowIncomeCode.destroy_all
+    DirectSaleCode.destroy_all
   end
 end
