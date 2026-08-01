@@ -48,7 +48,12 @@ Rails.application.configure do
   }
   config.action_mailer.raise_delivery_errors = false
   # Sets the URL in the email for things like activating a user!
-  config.action_mailer.default_url_options = { host: ENV['HOST_NAME'] || 'localhost', port: 3000, protocol: 'https' }
+  host_name_in_dev = ENV.fetch('USE_HOST_NAME_IN_DEV_ENV', false)
+  config.action_mailer.default_url_options = {
+    host: ENV.fetch('HOST_NAME', 'localhost'),
+    port: host_name_in_dev ? nil : 3000,
+    protocol: 'https'
+  }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
