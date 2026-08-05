@@ -1,0 +1,4 @@
+<%= bootstrap_form_for [:admin, @frequently_asked_category] do |form| %>
+  <%= form.text_field :name %>
+  <%= form.submit 'Create FAQ Category', class: "btn btn-success w-100"  %>
+<% end %>

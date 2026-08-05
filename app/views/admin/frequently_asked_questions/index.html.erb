@@ -1,0 +1,72 @@
+<h1>Frequently Asked Questions</h1>
+
+<div class="overflow-hidden">
+  <table class="table">
+    <tr>
+      <th>Question</th>
+      <th>Answer (truncated)</th>
+      <th>Category</th>
+      <th>Last Edited</th>
+      <th></th>
+    </tr>
+    <% @frequently_asked_questions.each do |faq| %>
+      <tr>
+        <td class="align-middle"><%= faq.question %></td>
+        <td class="align-middle"><%= faq.answer.truncate(100) %></td>
+        <td class="align-middle">
+          <% if faq.category.present? %>
+            <%= faq.category.name %>
+          <% else %>
+            Uncategorized
+          <% end %>
+        </td>
+        <td class="align-middle">
+          <%= "#{faq.updated_at.to_fs(:decom_standard)} by #{faq.last_modified_by}" %>
+        </td>
+        <td class="align-middle">
+          <div class="row">
+            <div class="col-sm-6 d-flex align-items-end">
+              <%= link_to 'Edit', edit_admin_frequently_asked_question_path(faq), class: 'btn btn-primary w-100 m-2' %>
+              <%= button_to 'Delete', admin_frequently_asked_question_path(faq), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger w-100 m-2" %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="5">
+        <%= link_to 'Create New FAQ', new_admin_frequently_asked_question_path %>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<h2>Categories</h2>
+<div class="overflow-hidden">
+  <table class="table">
+    <tr>
+      <th>Category Name</th>
+      <th>Linked Questions</th>
+      <th></th>
+    </tr>
+    <% @categories.each do |cat| %>
+      <tr>
+        <td class="align-middle"><%= cat.name %></td>
+        <td class="align-middle"><%= cat.frequently_asked_questions.length %></td>
+        <td class="align-middle">
+          <div class="row">
+            <div class="col-sm-6 d-flex align-items-end">
+              <%= link_to 'Edit', edit_admin_frequently_asked_category_path(cat), class: 'btn btn-primary w-100 m-2' %>
+              <%= button_to 'Delete', admin_frequently_asked_category_path(cat), method: :delete, data: {confirm: 'Are you sure? This is irreversible'}, class: "btn btn-danger w-100 m-2" %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+    <tr>
+      <td colspan="3">
+        <%= link_to 'Create New FAQ', new_admin_frequently_asked_category_path %>
+      </td>
+    </tr>
+  </table>
+</div>

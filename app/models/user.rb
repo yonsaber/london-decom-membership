@@ -19,6 +19,10 @@ class User < ApplicationRecord
 
   has_one :membership_code, dependent: :destroy
   has_many :volunteers, dependent: :destroy
+  has_many :created_frequently_asked_questions, foreign_key: 'created_by_id', dependent: :nullify,
+  inverse_of: :creator, class_name: 'FrequentlyAskedQuestion'
+  has_many :updated_frequently_asked_questions, foreign_key: 'updated_by_id', dependent: :nullify,
+  inverse_of: :updater, class_name: 'FrequentlyAskedQuestion'
   has_one :low_income_request, dependent: :destroy
   has_one :direct_sale_code, dependent: :destroy
 

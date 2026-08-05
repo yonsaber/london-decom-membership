@@ -1,0 +1,6 @@
+<%= bootstrap_form_for [:admin, @frequently_asked_question] do |form| %>
+  <%= form.text_field :question %>
+  <%= form.text_area :answer %>
+  <%= form.select :category_id, FrequentlyAskedCategory.all.map {|cat| [cat.name.titleize, cat.id]}, :prompt => "Uncategorized" %>
+  <%= form.submit 'Update FAQ item', class: "btn btn-success w-100"  %>
+<% end %>

@@ -1,5 +1,6 @@
 class FrequentlyAskedCategory < ApplicationRecord
-  has_many :frequently_asked_questions, foreign_key: 'category_id', dependent: :nullify
+  has_many :frequently_asked_questions, foreign_key: 'category_id', dependent: :nullify,
+    inverse_of: :category
 
-  validates_presence_of :name
+  validates :name, presence: true
 end
