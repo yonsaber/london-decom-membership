@@ -1,7 +1,7 @@
 <h1>Frequently Asked Questions</h1>
 
 <div class="overflow-hidden">
-  <table class="table">
+  <table class="table" id="questions">
     <tr>
       <th>Question</th>
       <th>Answer (truncated)</th>
@@ -43,7 +43,7 @@
 
 <h2>Categories</h2>
 <div class="overflow-hidden">
-  <table class="table">
+  <table class="table" id="categories">
     <tr>
       <th>Category Name</th>
       <th>Linked Questions</th>
@@ -65,7 +65,7 @@
     <% end %>
     <tr>
       <td colspan="3">
-        <%= link_to 'Create New FAQ', new_admin_frequently_asked_category_path %>
+        <%= link_to 'Create New Category', new_admin_frequently_asked_category_path %>
       </td>
     </tr>
   </table>

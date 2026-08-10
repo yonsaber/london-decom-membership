@@ -5,7 +5,7 @@
   <p><%= faq.answer %></p>
   <p>
     <small class="text-muted">
-      Last Updated on <%= faq.updated_at.to_fs(:decom_standard) %> by: <%= faq.last_modified_by.downcase %>
+      Last Updated on <%= faq.updated_at.to_fs(:decom_standard) %> by <%= faq.last_modified_by.downcase %>
     </small>
   </p>
 </div>
