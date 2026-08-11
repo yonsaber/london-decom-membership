@@ -8,6 +8,10 @@ class Admin::FrequentlyAskedQuestionsController < AdminController
     @frequently_asked_question = FrequentlyAskedQuestion.new
   end
 
+  def show
+    render action: :index
+  end
+
   def edit
     @frequently_asked_question = FrequentlyAskedQuestion.find(params.expect(:id))
   end
@@ -15,6 +19,7 @@ class Admin::FrequentlyAskedQuestionsController < AdminController
   def create
     @frequently_asked_question = FrequentlyAskedQuestion.new(frequently_asked_params)
     @frequently_asked_question.created_by_id = current_user.id
+    @frequently_asked_question.updated_by_id = current_user.id
     if @frequently_asked_question.save
       redirect_to admin_frequently_asked_questions_path
     else

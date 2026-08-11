@@ -139,6 +139,12 @@ RSpec.feature 'FrequentlyAskedQuestions', type: :feature do
       :frequently_asked_question,
       question: 'What is your favorite color?',
       answer: 'Purple',
+      created_by_id: User.first.id
+    )
+    create(
+      :frequently_asked_question,
+      question: 'What is your favorite color?',
+      answer: 'Purple',
       created_by_id: User.first.id,
       category_id: category.id
     )
@@ -152,5 +158,26 @@ RSpec.feature 'FrequentlyAskedQuestions', type: :feature do
     click_button 'Update FAQ Item'
 
     expect(page).to have_text('Must be a unique question within category')
+  end
+
+  scenario 'when user deleted faq created_by and updated_by are nullified' do
+    stub_eventbrite_event
+    stub_request(:get, 'https://us21.api.mailchimp.com/3.0/lists').to_return(body: '{"lists":[{"id":"1234"}]}')
+    stub_request(:delete, 'https://us21.api.mailchimp.com/3.0/lists/1234/members/62970d198aed10b533c38a3142e6f0d0')
+      .with(body: '')
+    login(admin: true)
+    user = create(:user, email: 'test_mail_user@example.com', admin: true)
+    faq = create(
+      :frequently_asked_question,
+      question: 'What is your favorite ghostly color?',
+      answer: 'Purple',
+      created_by_id: user.id
+    )
+    click_link 'FAQ Editor'
+    expect(page).to have_text('What is your favorite ghostly color?')
+    user.destroy
+    expect(faq.reload.created_by_id).to be_nil
+    click_link 'FAQ Editor'
+    expect(page).to have_text("#{faq.updated_at.to_fs(:decom_standard)} by Unknown")
   end
 end
