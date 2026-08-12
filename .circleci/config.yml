@@ -69,9 +69,7 @@ jobs:
       - run:
           name: Deploy to fly
           command: |
-                curl -L https://fly.io/install.sh | sh
-                export FLYCTL_INSTALL="/home/circleci/.fly"
-                export PATH="$FLYCTL_INSTALL/bin:$PATH"
+                curl -L https://fly.io/install.sh | sh -s -- --non-interactive --setup-path
                 flyctl deploy -e GIT_SHA="$CIRCLE_SHA1" -e GIT_AUTHOR="$CIRCLE_USERNAME"
       - run:
           name: Notify Rollbar
