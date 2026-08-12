@@ -30,7 +30,7 @@ RSpec.feature 'FrequentlyAskedCategories', type: :feature do
       created_by_id: User.first.id
     )
     click_link 'FAQ'
-    expect(page).to have_text('0) What is your favorite color?')
+    expect(page).to have_text('1) What is your favorite color?')
     expect(page).to have_text("Last Updated on #{faq.created_at.to_fs(:decom_standard)} by james")
   end
 
@@ -47,7 +47,7 @@ RSpec.feature 'FrequentlyAskedCategories', type: :feature do
     )
     click_link 'FAQ'
     expect(page).to have_text('My Category')
-    expect(page).to have_text('0) What is your favorite color?')
+    expect(page).to have_text('1) What is your favorite color?')
     expect(page).to have_text("Last Updated on #{faq.created_at.to_fs(:decom_standard)} by james")
   end
 end

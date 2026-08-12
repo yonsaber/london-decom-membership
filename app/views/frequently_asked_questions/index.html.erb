@@ -7,7 +7,7 @@
     <% if c.frequently_asked_questions.length != 0 %>
       <h2><%= c.name %></h2>
       <% c.frequently_asked_questions.each_with_index do |q, i| %>
-        <%= render partial: 'frequently_asked_questions/faq_listing', locals: { faq: q, index: i } %>
+        <%= render partial: 'frequently_asked_questions/faq_listing', locals: { faq: q, index: i + 1 } %>
       <% end %>
     <% end %>
   <% end %>
@@ -15,7 +15,7 @@
   <% if @uncategorized_questions.length != 0 %>
     <h2>Uncategorized Questions</h2>
     <% @uncategorized_questions.each_with_index do |q, i| %>
-      <%= render partial: 'frequently_asked_questions/faq_listing', locals: { faq: q, index: i } %>
+      <%= render partial: 'frequently_asked_questions/faq_listing', locals: { faq: q, index: i + 1} %>
     <% end %>
   <% end %>
 
@@ -24,7 +24,7 @@
       <% if c.frequently_asked_questions.length != 0 %>
         <h2><%= c.name %></h2>
         <% c.frequently_asked_questions.each_with_index do |q, i| %>
-          <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i } %>
+          <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i + 1 } %>
         <% end %>
       <% end %>
     <% end %>
@@ -34,7 +34,7 @@
     <h2>Uncategorized Questions</h2>
     <% @uncategorized_questions.each_with_index do |q, i| %>
       <% cache q do %>
-        <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i } %>
+        <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i + 1} %>
       <% end %>
     <% end %>
   <% end %>

@@ -25,7 +25,7 @@ class FrequentlyAskedQuestion < ApplicationRecord
     query = query.where(category_id: category_id) if has_cat_id
     query = query.where(category_id: nil) unless has_cat_id
     possible = query.first
-    return unless possible.present?
+    return if possible.blank?
     return if id.present? && possible.id == id
 
     errors.add(:question, "Must be a unique question#{' within category' if has_cat_id}")

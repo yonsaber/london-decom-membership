@@ -4,12 +4,12 @@ class Admin::FrequentlyAskedQuestionsController < AdminController
     @categories = FrequentlyAskedCategory.all
   end
 
-  def new
-    @frequently_asked_question = FrequentlyAskedQuestion.new
-  end
-
   def show
     render action: :index
+  end
+
+  def new
+    @frequently_asked_question = FrequentlyAskedQuestion.new
   end
 
   def edit
