@@ -1,6 +1,4 @@
-<% category = faq.category.present? ? faq.category.name : "uncategorized" %>
-
-<div id="<%= "#{category.downcase}_#{faq.id}" %>">
+<div id="<%= "#{faq.generate_css_id}" %>">
   <h4><%= "#{index}) #{faq.question}" %></h4>
   <p><%= faq.answer %></p>
   <p>

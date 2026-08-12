@@ -17,6 +17,14 @@ class FrequentlyAskedQuestion < ApplicationRecord
     last_modifier.split.first
   end
 
+  def generate_css_id
+    if category.present?
+      "#{category.name.downcase.gsub(/[^\w\s]/, '')}_#{id}"
+    else
+      "uncategorized_#{id}"
+    end
+  end
+
   private
 
   def validate_unique_question
