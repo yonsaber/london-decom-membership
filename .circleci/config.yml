@@ -70,6 +70,7 @@ jobs:
           name: Deploy to fly
           command: |
                 curl -L https://fly.io/install.sh | sh -s -- --non-interactive --setup-path
+                source ~/.bashrc
                 flyctl deploy -e GIT_SHA="$CIRCLE_SHA1" -e GIT_AUTHOR="$CIRCLE_USERNAME"
       - run:
           name: Notify Rollbar
@@ -84,8 +85,10 @@ jobs:
               "revision": "'"$CIRCLE_SHA1"'",
               "rollbar_username": "'"$ROLLBAR_USERNAME"'",
               "local_username": "'"$CIRCLE_USERNAME"'",
-              "comment": "Deploy with bug"
+              "comment": "'"$GIT_COMMIT_DESC"'"
             }'
+          environment:
+            GIT_COMMIT_DESC: git log --format=oneline -n 1 $CIRCLE_SHA1
 
 workflows:
   build-test-deploy:
