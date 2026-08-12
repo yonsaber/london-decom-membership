@@ -1,4 +1,10 @@
 FactoryBot.define do
+  factory :frequently_asked_category do
+  end
+
+  factory :frequently_asked_question do
+  end
+
   factory :direct_sale_code do
     user { nil }
   end

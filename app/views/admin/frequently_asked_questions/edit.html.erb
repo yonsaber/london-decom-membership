@@ -1,0 +1,7 @@
+<%= bootstrap_form_for [:admin, @frequently_asked_question] do |form| %>
+  <%= form.text_field :question %>
+  <%= form.text_area :answer %>
+  <%= form.select :category_id, FrequentlyAskedCategory.all.map {|cat| [cat.name.titleize, cat.id]}, :include_blank => true %>
+  <p><i class="text-muted">Setting this to blank defaults the category to "Uncategorized"</i></p>
+  <%= form.submit 'Update FAQ Item', class: "btn btn-success w-100"  %>
+<% end %>

@@ -62,6 +62,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
   config.around do |example|
+    Rack::Attack.reset!
     12.times do
       MembershipCode.create!
     end
@@ -72,5 +73,6 @@ RSpec.configure do |config|
     MembershipCode.destroy_all
     LowIncomeCode.destroy_all
     DirectSaleCode.destroy_all
+    Rack::Attack.reset!
   end
 end

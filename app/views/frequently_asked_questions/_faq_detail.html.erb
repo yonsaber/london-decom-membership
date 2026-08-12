@@ -1,0 +1,9 @@
+<div id="<%= "#{faq.generate_css_id}" %>">
+  <h4><%= "#{index}) #{faq.question}" %></h4>
+  <p><%= faq.answer %></p>
+  <p>
+    <small class="text-muted">
+      Last Updated on <%= faq.updated_at.to_fs(:decom_standard) %> by <%= faq.last_modified_by.downcase %>
+    </small>
+  </p>
+</div>

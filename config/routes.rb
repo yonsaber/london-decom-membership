@@ -29,14 +29,17 @@ Rails.application.routes.draw do
         resources :volunteers
       end
     end
+    resources :frequently_asked_questions, only: %i[index show new create update edit destroy]
+    resources :frequently_asked_categories, only: %i[new create update edit destroy]
   end
-  resources :events, only: %i[edit] do
+  resources :events, only: [] do
     patch :clear_discount_from_cache # TODO: Move this into a members do block
     resources :volunteer_roles, only: [] do
       resources :volunteers, only: %i[index new create destroy update]
     end
     resources :volunteering, only: %i[index]
   end
+  resources :frequently_asked_questions, only: %i[index]
   resources :low_income_requests
   root to: 'home#index'
 end
