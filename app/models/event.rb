@@ -7,18 +7,18 @@ class Event < ApplicationRecord
             comparison: { greater_than: :low_income_requests_start },
             if: -> { low_income_requests_start.present? }
 
-  enum :event_mode, [:draft, :prerelease, :live, :ended]
+  enum :event_mode, { draft: 0, prerelease: 1, live: 2, ended: 3 }
 
   def self.active(early_access: false)
     if early_access
-      order('created_at DESC').first
+      order(created_at: :desc).first
     else
       where(active: true).first
     end
   end
 
   def low_income_open?
-    are_missing = !low_income_requests_start.present? && !low_income_requests_end.present?
+    are_missing = low_income_requests_start.blank? && low_income_requests_end.blank?
     if are_missing
       false
     else

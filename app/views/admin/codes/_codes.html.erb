@@ -1,0 +1,31 @@
+<h2><%= type.model_name.human %>s</h2>
+
+<% if type.model_name == LowIncomeCode.to_s %>
+  <p>These codes are for only those who have made low income applications and have been approved.</p>
+<% elsif type.model_name == MembershipCode.to_s %>
+  <p>
+    These codes are automatically assigned to every user in the system and allow for general sale tickets.
+    Typically, you will not need to generate these codes as they get automatically generated.
+  </p>
+<% elsif type.model_name == DirectSaleCode.to_s %>
+  <p>These codes are only for those who need a direct sale as they either missed the general sale or another situation.</p>
+<% else %>
+  <p>Unknown code type '<%= type.model_name %>', please contact an admin to alert them to this issue.</p>
+<% end %>
+
+<h3>Generate</h3>
+<%= bootstrap_form_tag url: admin_codes_path, id: type.model_name.human.downcase.gsub!(' ', '-') do |f| %>
+  <%= f.number_field :number,
+                     hide_label: true,
+                     placeholder: 'Number of codes to generate',
+                     id: "#{type.model_name.human.downcase.gsub!(' ', '-')}-number",
+                     append: f.primary('Generate'),
+                     input_group_class: 'input-group-lg' %>
+  <%= f.hidden_field :type, :value => type %>
+<% end %>
+
+<h3>Status</h3>
+<p><%= t('assigned_codes', count: type.taken.count) %>. <%= t('codes', count: type.available.count) %></p>
+<p>
+  Use this list to import into Eventbrite <%= link_to "Download codes CSV", admin_codes_path(format: :csv, type: type) %>
+</p>

@@ -2,8 +2,8 @@ class MembershipCode < ApplicationRecord
   belongs_to :user, optional: true
   before_create :set_code
 
-  scope :available, -> { where('user_id IS NULL') }
-  scope :taken, -> { where('user_id IS NOT NULL') }
+  scope :available, -> { where(user_id: nil) }
+  scope :taken, -> { where.not(user_id: nil) }
 
   CHARACTER_MAP = {
     '3' => ['3'],

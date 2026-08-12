@@ -6,6 +6,12 @@ class Rack::Attack
     end
   end
 
+  # Always allow requests from localhost (blocklist & throttles are skipped)
+  Rack::Attack.safelist('allow from localhost') do |req|
+    # Requests are allowed if the return value is truthy
+    ['127.0.0.1', '::1'].include?(req.ip)
+  end
+
   ### Configure Cache ###
 
   # If you don't want to use Rails.cache (Rack::Attack's default), then
@@ -30,12 +36,15 @@ class Rack::Attack
   # Throttle all requests by IP (60rpm)
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.remote_ip}"
-  throttle('req/ip', limit: 50, period: 2.minutes, &:remote_ip)
+  Rack::Attack.throttle('req/ip', limit: 50, period: 2.minutes, &:remote_ip)
 
   blocklist_ip('109.107.189.44')
   blocklist_ip('104.248.45.83')
   blocklist_ip('20.42.209.0')
   blocklist_ip('13.79.87.25')
+  blocklist_ip('20.215.211.30')
+  blocklist_ip('4.232.147.36')
+  blocklist_ip('72.146.20.230')
 
   ### Prevent Brute-Force Login Attacks ###
 
@@ -49,7 +58,7 @@ class Rack::Attack
   # Throttle POST requests to /login by IP address
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/ip:#{req.remote_ip}"
-  throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
+  Rack::Attack.throttle('logins/ip', limit: 5, period: 20.seconds) do |req|
     req.remote_ip if req.path == '/users/sign_in' && req.post?
   end
 
@@ -61,7 +70,7 @@ class Rack::Attack
   # throttle logins for another user and force their login requests to be
   # denied, but that's not very common and shouldn't happen to you. (Knock
   # on wood!)
-  throttle('logins/email', limit: 5, period: 20.seconds) do |req|
+  Rack::Attack.throttle('logins/email', limit: 5, period: 20.seconds) do |req|
     if req.path == '/users/sign_in' && req.post?
       # Normalize the email, using the same logic as your authentication process, to
       # protect against rate limit bypasses. Return the normalized email if present, nil otherwise.

@@ -1,0 +1,41 @@
+<h1>Frequently Asked Questions</h1>
+
+<% if @uncategorized_questions.length == 0 && @categories.length == 0 %>
+  <p>There are currently no FAQs in the system!</p>
+<% else %>
+  <% @categories.each do |c| %>
+    <% if c.frequently_asked_questions.length != 0 %>
+      <h2><%= c.name %></h2>
+      <% c.frequently_asked_questions.each_with_index do |q, i| %>
+        <p><%= i + 1 %>) <a href="#<%= "#{q.generate_css_id}" %>"><%= q.question %></a></p>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if @uncategorized_questions.length != 0 %>
+    <h2>Uncategorized Questions</h2>
+    <% @uncategorized_questions.each_with_index do |q, i| %>
+      <p><%= i + 1 %>) <a href="#<%= "#{q.generate_css_id}" %>"><%= q.question %></a></p>
+    <% end %>
+  <% end %>
+
+  <% @categories.each do |c| %>
+    <% cache c do %>
+      <% if c.frequently_asked_questions.length != 0 %>
+        <h2><%= c.name %></h2>
+        <% c.frequently_asked_questions.each_with_index do |q, i| %>
+          <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i + 1 } %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <% if @uncategorized_questions.length != 0 %>
+    <h2>Uncategorized Questions</h2>
+    <% @uncategorized_questions.each_with_index do |q, i| %>
+      <% cache q do %>
+        <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i + 1} %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

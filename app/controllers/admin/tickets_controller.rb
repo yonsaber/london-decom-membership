@@ -11,7 +11,7 @@ class Admin::TicketsController < AdminController
   end
 
   def edit
-    membership_code = MembershipCode.find_by(code: params[:id])
+    membership_code = MembershipCode.find_by(code: params.expect(:id))
     @membership_code = membership_code.code
     @user = User.find_by(id: membership_code.user_id)
     low_income_users = LowIncomeRequest.where(status: 'approved').select(:user_id)
@@ -20,9 +20,9 @@ class Admin::TicketsController < AdminController
   end
 
   def update
-    from_user = User.find(params[:user_from_id])
-    to_user = User.find(params[:user_to_id])
-    switch_users_memberships(from_user, to_user, params[:id])
+    from_user = User.find(params.expect(:user_from_id))
+    to_user = User.find(params.expect(:user_to_id))
+    switch_users_memberships(from_user, to_user, params.expect(:id))
     update_user_accounts(from_user, to_user)
     flash[:notice] = "Ticket was successfully transferred to #{to_user.name}"
     Rails.logger.info(

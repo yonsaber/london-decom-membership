@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Member signup', type: :feature do
+RSpec.feature 'Member signup' do
   around do |example|
     ClimateControl.modify MAILCHIMP_TOKEN: '12345678901234567890123456789012-us3' do
       example.run
@@ -42,6 +42,6 @@ RSpec.feature 'Member signup', type: :feature do
     visit root_path
     click_button 'Sign up'
     expect(page).to have_text("can't be blank")
-    expect(page).to have_selector('#user_accept_principles.is-invalid')
+    expect(page).to have_css('#user_accept_principles.is-invalid')
   end
 end

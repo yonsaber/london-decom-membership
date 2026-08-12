@@ -17,7 +17,7 @@ RSpec.feature 'Users Admin', type: :feature do
     click_link 'Users'
     find_all("a[text()='Edit']").last.click
     click_button 'Give direct access'
-    expect(page).to have_content('Has direct sale')
+    expect(page).to have_text('Has direct sale')
     expect(user.membership_number).to eq(direct_sale_code.code)
   end
 
@@ -26,7 +26,7 @@ RSpec.feature 'Users Admin', type: :feature do
     login(admin: true)
     create(:user, email: 'test_mail_user@example.com', confirmed_at: nil)
     click_link 'Users'
-    expect(page).to_not have_text('test_mail_user@example.com')
+    expect(page).to have_no_text('test_mail_user@example.com')
     click_link 'Unconfirmed accounts'
     expect(page).to have_text('test_mail_user@example.com')
   end
@@ -65,8 +65,8 @@ RSpec.feature 'Users Admin', type: :feature do
   scenario 'as not an admin' do
     stub_eventbrite_event
     login(admin: false)
-    expect(page).to_not have_link('Users')
-    visit admin_membership_codes_path
+    expect(page).to have_no_link('Users')
+    visit admin_codes_path
     expect(page).to have_text('You are not permitted to view this')
   end
 end

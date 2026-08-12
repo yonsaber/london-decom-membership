@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Tickets transfer', type: :feature do
+RSpec.feature 'Tickets transfer' do
   before do
     stub_eventbrite_event
   end
@@ -18,7 +18,7 @@ RSpec.feature 'Tickets transfer', type: :feature do
     click_link 'Transfer'
     select 'A User (user_a@example.com)', from: 'User to transfer ticket to:'
     click_button 'Transfer Ticket'
-    expect(page).to have_content('Ticket was successfully transferred to A User')
+    expect(page).to have_text('Ticket was successfully transferred to A User')
     user_a.reload
     user_b.reload
     expect(user_a.ticket_bought).to be_truthy
@@ -37,7 +37,7 @@ RSpec.feature 'Tickets transfer', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'View Tickets'
-    expect(page).to_not have_link('Transfer')
+    expect(page).to have_no_link('Transfer')
   end
 
   scenario 'cannot transfer tickets if other user has a direct sale tickets' do
@@ -49,6 +49,6 @@ RSpec.feature 'Tickets transfer', type: :feature do
     click_link 'Events'
     click_link 'Open'
     click_link 'View Tickets'
-    expect(page).to_not have_link('Transfer')
+    expect(page).to have_no_link('Transfer')
   end
 end

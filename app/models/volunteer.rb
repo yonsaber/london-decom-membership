@@ -22,7 +22,7 @@ class Volunteer < ApplicationRecord
     CSV.generate(headers: true) do |csv|
       csv << %w[Name Email Phone Comments State]
 
-      all.each do |v|
+      find_each do |v|
         csv << [v.user.name, v.user.email, v.phone, v.additional_comments, v.state]
       end
     end

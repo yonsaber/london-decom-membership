@@ -21,6 +21,9 @@
       This is a non-prod instance of the members website, changes are to be expected!
     </div>
   <% end %>
+    <div class="alert alert-danger dev_notice" role="alert">
+      This members site has been recently revised and upgraded. Please let us know if you spot any issues and let us know at <a href="mailto:newsitemembers@londondecom.org">newsitemembers@londondecom.org</a>
+    </div>
     <div class="page-header">
       <div class="container">
         <div class="row">
@@ -52,6 +55,9 @@
                     <li class="nav-item">
                       <%= link_to 'Profile', edit_user_registration_path, class: 'nav-link' %>
                     </li>
+                    <li class="nav-item">
+                      <%= link_to 'FAQ', frequently_asked_questions_path, class: 'nav-link' %>
+                    </li>
                     <% if @event && (@event.prerelease? || @event.live?) %>
                       <li class="nav-item">
                         <%= link_to 'Volunteering', event_volunteering_index_path(@event), class: 'nav-link' %>
@@ -62,16 +68,16 @@
                         <%= link_to 'Users', admin_users_path, class: 'nav-link' %>
                       </li>
                       <li class="nav-item">
-                        <%= link_to 'Membership Codes', admin_membership_codes_path, class: 'nav-link' %>
-                      </li>
-                      <li class="nav-item">
-                        <%= link_to 'Low Income Codes', admin_low_income_codes_path, class: 'nav-link' %>
+                        <%= link_to 'Codes', admin_codes_path, class: 'nav-link' %>
                       </li>
                       <li class="nav-item">
                         <%= link_to 'Low Income Requests', admin_low_income_requests_path, class: 'nav-link' %>
                       </li>
                       <li class="nav-item">
                         <%= link_to 'Events', admin_events_path, class: 'nav-link' %>
+                      </li>
+                      <li class="nav-item">
+                        <%= link_to 'FAQ Editor', admin_frequently_asked_questions_path, class: 'nav-link' %>
                       </li>
                     <% end %>
                     <li class="nav-item">

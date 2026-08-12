@@ -1,10 +1,10 @@
 class AdminController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_admin?
   before_action :fetch_active_event
 
   protected
 
-  def authenticate_admin!
+  def authenticate_admin?
     return true if current_user&.admin?
 
     render plain: 'You are not permitted to view this'

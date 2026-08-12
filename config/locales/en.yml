@@ -31,3 +31,10 @@
 
 en:
   hello: "Hello world"
+  codes:
+    one: "There is 1 code left"
+    other: "There are %{count} codes left"
+  assigned_codes:
+    zero: "No codes have been assigned"
+    one: "1 code has been assigned"
+    other: "%{count} codes have been assigned"

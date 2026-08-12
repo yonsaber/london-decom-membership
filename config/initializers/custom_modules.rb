@@ -1,3 +1,3 @@
 require 'devise_bootstrap_views_helper'
 
-ActionView::Base.include DeviseBootstrapViewsHelper
+ActiveSupport.on_load(:action_view) { include DeviseBootstrapViewsHelper }
