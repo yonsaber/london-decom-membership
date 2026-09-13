@@ -38,13 +38,26 @@ class Rack::Attack
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.remote_ip}"
   Rack::Attack.throttle('req/ip', limit: 50, period: 2.minutes, &:remote_ip)
 
-  blocklist_ip('109.107.189.44')
-  blocklist_ip('104.248.45.83')
-  blocklist_ip('20.42.209.0')
-  blocklist_ip('13.79.87.25')
-  blocklist_ip('20.215.211.30')
-  blocklist_ip('4.232.147.36')
-  blocklist_ip('72.146.20.230')
+  Rack::Attack.blocklist_ip('4.204.200.13')
+  Rack::Attack.blocklist_ip('4.223.73.90')
+  Rack::Attack.blocklist_ip('4.204.224.164')
+  Rack::Attack.blocklist_ip('4.232.147.36')
+  Rack::Attack.blocklist_ip('13.79.87.25')
+  Rack::Attack.blocklist_ip('20.42.209.0')
+  Rack::Attack.blocklist_ip('20.42.209.0')
+  Rack::Attack.blocklist_ip('20.48.251.3')
+  Rack::Attack.blocklist_ip('20.63.81.20')
+  Rack::Attack.blocklist_ip('20.215.185.25')
+  Rack::Attack.blocklist_ip('20.215.211.30')
+  Rack::Attack.blocklist_ip('20.218.119.12')
+  Rack::Attack.blocklist_ip('20.220.10.235')
+  Rack::Attack.blocklist_ip('20.251.112.224')
+  Rack::Attack.blocklist_ip('72.146.20.230')
+  Rack::Attack.blocklist_ip('104.28.222.16')
+  Rack::Attack.blocklist_ip('104.248.45.83')
+  Rack::Attack.blocklist_ip('109.107.189.44')
+  Rack::Attack.blocklist_ip('158.23.18.78')
+  Rack::Attack.blocklist_ip('185.177.72.58')
 
   ### Prevent Brute-Force Login Attacks ###
 
@@ -75,6 +88,20 @@ class Rack::Attack
       # Normalize the email, using the same logic as your authentication process, to
       # protect against rate limit bypasses. Return the normalized email if present, nil otherwise.
       req.params['email'].to_s.downcase.gsub(/\s+/, '').presence
+    end
+  end
+
+  # Block suspicious requests for '/etc/password' or wordpress specific paths.
+  # After 3 blocked requests in 10 minutes, block all requests from that IP for 10 minutes.
+  Rack::Attack.blocklist('fail2ban pentesters') do |req|
+    # `filter` returns truthy value if request fails, or if it's from a previously banned IP
+    # so the request is blocked
+    Rack::Attack::Fail2Ban.filter("pentesters-#{req.ip}", maxretry: 3, findtime: 10.minutes, bantime: 10.minutes) do
+      # The count for the IP is incremented if the return value is truthy
+      CGI.unescape(req.query_string) =~ %r{/etc/passwd} ||
+        req.path.include?('/etc/passwd') ||
+        req.path.include?('wp-admin') ||
+        req.path.include?('wp-login')
     end
   end
 

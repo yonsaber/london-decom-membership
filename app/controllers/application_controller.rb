@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
       :sign_up,
       keys: %i[
         name
+        address
         accept_principles
         marketing_opt_in
         accept_emails

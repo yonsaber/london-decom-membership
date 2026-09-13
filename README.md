@@ -4,7 +4,7 @@ Decompression Membership system is website that allows you to have event pages a
 
 ## Status
 
-[![CircleCI](https://circleci.com/gh/james/london-decom-membership.svg?style=shield)](https://circleci.com/gh/james/london-decom-membership)
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/PvVPEmRxDjZJtWuGvLhnwJ/W6F6E4hk9YD7kRxuaghEPp/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/PvVPEmRxDjZJtWuGvLhnwJ/W6F6E4hk9YD7kRxuaghEPp/tree/master)
 
 ## Running locally
 
