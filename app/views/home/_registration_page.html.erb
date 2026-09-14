@@ -16,6 +16,7 @@
 <%= bootstrap_form_for(@user, url: registration_path(@user)) do |f| %>
   <%= f.email_field :email, label: 'Email address', autofocus: true, autocomplete: 'email' %>
   <%= f.text_field :name, label: 'Full Name' %>
+  <%= f.text_field :address, label: 'Address' %>
   <%= f.password_field :password, autocomplete: 'current-password' %>
   <%= f.check_box :over_eighteen, label: 'I confirm that I am over 18 years of age (to attend London Decompression events you must be aged 18 or over)' %>
   <%= f.check_box :accept_principles, label: 'I have read and am prepared to take into consideration <a href="https://burningman.org/culture/philosophical-center/10-principles/" target="_blank">the principles of Burning Man</a>'.html_safe %>

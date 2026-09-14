@@ -31,6 +31,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       :sign_up,
       keys: %i[
         name
+        address
         over_eighteen
         accept_principles
         marketing_opt_in
@@ -46,6 +47,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       keys: %i[
         name
         email
+        address
         password
         password_confirmation
         current_password

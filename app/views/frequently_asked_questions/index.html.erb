@@ -20,10 +20,10 @@
   <% end %>
 
   <% @categories.each do |c| %>
-    <% cache c do %>
-      <% if c.frequently_asked_questions.length != 0 %>
-        <h2><%= c.name %></h2>
-        <% c.frequently_asked_questions.each_with_index do |q, i| %>
+    <% if c.frequently_asked_questions.length != 0 %>
+      <h2><%= c.name %></h2>
+      <% c.frequently_asked_questions.each_with_index do |q, i| %>
+        <% cache q do %>
           <%= render partial: 'frequently_asked_questions/faq_detail', locals: { faq: q, index: i + 1 } %>
         <% end %>
       <% end %>

@@ -22,6 +22,21 @@ RSpec.feature 'FrequentlyAskedQuestions', type: :feature do
     expect(page).to have_text("Last Updated on #{faq.created_at.to_fs(:decom_standard)} by james")
   end
 
+  scenario 'when uncategorized faq with link exists should show faq' do
+    stub_eventbrite_event
+    login
+    faq = create(
+      :frequently_asked_question,
+      question: 'What is your favorite color?',
+      answer: 'https://purple.invalid',
+      created_by_id: User.first.id
+    )
+    click_link 'FAQ'
+    expect(page).to have_text('1) What is your favorite color?')
+    expect(page).to have_link('https://purple.invalid')
+    expect(page).to have_text("Last Updated on #{faq.created_at.to_fs(:decom_standard)} by james")
+  end
+
   scenario 'when faq created by now deleted users should show faq with unknown updater' do
     stub_eventbrite_event
     stub_request(:get, 'https://us21.api.mailchimp.com/3.0/lists').to_return(body: '{"lists":[{"id":"1234"}]}')

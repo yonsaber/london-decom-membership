@@ -22,6 +22,7 @@ RSpec.feature 'Member signup' do
 
     fill_in 'Name', with: 'James Darling'
     fill_in 'Email address', with: 'james@abscond.org'
+    fill_in 'Address', with: '1234 Fake Street'
     fill_in 'Password', with: 'password'
     check 'I confirm that I am over 18 years of age'
     check 'I have read and am prepared to take into consideration'

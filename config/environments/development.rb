@@ -101,4 +101,6 @@ Rails.application.configure do
   logger = ActiveSupport::Logger.new($stdout)
   logger.formatter = config.log_formatter
   config.logger = ActiveSupport::TaggedLogging.new(logger)
+
+  config.hosts << 'members.lab.hidinginthevoid.com'
 end

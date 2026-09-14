@@ -64,6 +64,7 @@ FactoryBot.define do
     sequence :email do |n|
       "person#{n}@example.com"
     end
+    address { '1234 Fake Street' }
     password { 'password' }
     confirmed_at { Time.zone.now }
     ticket_bought { false }
