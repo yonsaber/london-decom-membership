@@ -27,7 +27,7 @@
     <% if current_user %>
       <% unless current_user.address.present? %>
         <div class="alert alert-danger dev_notice" role="alert">
-          We need you're account to have your address on it, please head to your <%= link_to 'profile page', edit_user_registration_path %> and add your address there. See <%= link_to 'FAQ\'s', frequently_asked_questions_path %> for why we need this
+          We need your account to have your address on it, please head to your <%= link_to 'profile page', edit_user_registration_path %> and add your address there. See <%= link_to 'FAQ\'s', frequently_asked_questions_path %> for why we need this
         </div>
       <% end %>
     <% end %>
