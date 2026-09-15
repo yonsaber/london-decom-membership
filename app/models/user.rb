@@ -7,7 +7,9 @@ class User < ApplicationRecord
   attr_accessor :last_sign_in_ip, :current_sign_in_ip
 
   validates :name, presence: true
-  validates :address, presence: true
+  # TODO: Improve this so it's not required during password changes
+  validates :address, presence: true, on: :create
+  validates :address, presence: true, on: :update, allow_blank: true
   validates :over_eighteen, acceptance: true
   validates :accept_principles, acceptance: true
   validates :accept_emails, acceptance: true
