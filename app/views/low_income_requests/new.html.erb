@@ -1,6 +1,12 @@
 <h1>Low Income Ticket Request</h1>
 
-<%= bootstrap_form_for @low_income_request do |form| %>
-  <%= form.text_area :request_reason, label: 'Please let us know why you believe you need a low income ticket' %>
-  <%= form.submit 'Submit request' %>
-<% end %>
+<% if @existing_request.present? %>
+  <h2>You already have an open low income ticket application</h2>
+  <p>You submitted a low income request on <%= @existing_request.created_at.strftime("%A %d %B %Y") %> with the following message:</p>
+  <p><%= @existing_request.request_reason %></p>
+<%  else  %>
+  <%= bootstrap_form_for @low_income_request do |form| %>
+    <%= form.text_area :request_reason, label: 'Tell us a little about why a Low Income ticket would help you join us. No essays or bank statements needed. Just a few sentences to help us allocate our limited tickets as fairly as we can.' %>
+    <%= form.submit 'Submit request' %>
+  <% end %>
+<%  end %>
