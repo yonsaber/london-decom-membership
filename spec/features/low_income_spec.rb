@@ -56,7 +56,7 @@ RSpec.feature 'Low Income' do
     login
 
     click_link 'Apply for low income', match: :first
-    fill_in 'Please let us know why you believe you need a low income ticket', with: 'My reason'
+    fill_in 'low_income_request_request_reason', with: 'My reason'
     click_button 'Submit request'
 
     expect(page).to have_no_text('Apply for low income')
@@ -72,13 +72,30 @@ RSpec.feature 'Low Income' do
     expect(page.html).not_to include(User.last.membership_code.code)
   end
 
+  scenario 'user has open low income application, tries to create another' do
+    stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
+    create(:event, :prerelease)
+    login
+
+    click_link 'Apply for low income', match: :first
+    fill_in 'low_income_request_request_reason', with: 'My reason'
+    click_button 'Submit request'
+
+    expect(page).to have_no_text('Apply for low income')
+    expect(page).to have_text('You have applied for a Low Income Ticket.')
+
+    visit new_low_income_request_path
+
+    expect(page).to have_text('You already have an open low income ticket application')
+  end
+
   scenario 'user has 1 available tickets and bought none, gets low income rejected' do
     stub_eventbrite_event(available_tickets_for_code: 1, tickets_sold_for_code: 0)
     create(:event, :prerelease)
     login
 
     click_link 'Apply for low income', match: :first
-    fill_in 'Please let us know why you believe you need a low income ticket', with: 'My reason'
+    fill_in 'low_income_request_request_reason', with: 'My reason'
     click_button 'Submit request'
 
     expect(page).to have_no_text('Apply for low income')
