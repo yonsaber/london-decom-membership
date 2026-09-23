@@ -1,5 +1,5 @@
 class LowIncomeCode < ApplicationRecord
-  belongs_to :low_income_request, optional: true
+  belongs_to :low_income_request, optional: true, dependent: :destroy
   before_create :set_code
 
   scope :available, -> { where(low_income_request_id: nil) }
