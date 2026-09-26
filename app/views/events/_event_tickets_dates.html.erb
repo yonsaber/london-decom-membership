@@ -1,0 +1,8 @@
+<p>
+  Tickets for our next event will be available to buy here
+  <% if event.ticket_sale_start_date.nil? %>
+    soon, watch this space!
+  <% else %>
+    on <%= event.ticket_sale_start_date.to_fs(:decom_standard) %>.
+  <% end %>
+</p>
