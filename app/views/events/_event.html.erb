@@ -1,13 +1,7 @@
 <h1><%= @event.name %></h1>
 
 <% if @event.prerelease? && !current_user.early_access %>
-  <p>
-    <% if @event.ticket_sale_start_date.nil? %>
-      Tickets for our next event will be available to buy here soon, watch this space!
-    <% else %>
-      Tickets for our next event will be available to buy here on <%= @event.ticket_sale_start_date.to_fs(:decom_standard) %>.
-    <% end %>
-  </p>
+  <%= render partial: 'events/event_tickets_dates', locals: { event: @event } %>
 <% elsif @event.live? || current_user.early_access %>
   <% if @event.tickets_sold_for_code(current_user.membership_number) > 0 && @event.available_tickets_for_code(current_user.membership_number) == 0 %>
     <p>
@@ -16,7 +10,7 @@
       available to you. Look below to see how you can participate.
     </p>
   <% elsif @event.ticket_class_not_on_sale?(current_user.membership_number) %>
-    <p><b>Tickets are not currently on sale</b></p>
+    <%= render partial: 'events/event_tickets_dates', locals: { event: @event } %>
   <% elsif @event.ticket_class_sold_out?(current_user.membership_number) %>
     <p><b>Tickets are sold out</b></p>
   <% elsif @event.available_tickets_for_code(current_user.membership_number) == 0 %>

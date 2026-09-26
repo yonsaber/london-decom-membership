@@ -68,7 +68,7 @@ RSpec.feature 'Tickets' do
     login
 
     expect(page).to have_no_text('Buy Ticket')
-    expect(page).to have_text('Tickets are not currently on sale')
+    expect(page).to have_text('Tickets for our next event will be available to buy here')
   end
 
   scenario 'user has 1 available tickets but in a sold out ticket class' do

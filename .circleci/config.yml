@@ -91,10 +91,8 @@ jobs:
               "revision": "'"$CIRCLE_SHA1"'",
               "rollbar_username": "'"$ROLLBAR_USERNAME"'",
               "local_username": "'"$CIRCLE_USERNAME"'",
-              "comment": "'"$GIT_COMMIT_DESC"'"
+              "comment": "'"$(git log --format=oneline -n 1 $CIRCLE_SHA1)"'"
             }'
-          environment:
-            GIT_COMMIT_DESC: $(git log --format=oneline -n 1 $CIRCLE_SHA1)
 
 workflows:
   build-test-deploy:
