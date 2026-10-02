@@ -38,6 +38,7 @@ class Rack::Attack
   # Key: "rack::attack:#{Time.now.to_i/:period}:req/ip:#{req.remote_ip}"
   Rack::Attack.throttle('req/ip', limit: 50, period: 2.minutes, &:remote_ip)
 
+  ## These come from the test server, to protect the live server lets use these anyhow
   Rack::Attack.blocklist_ip('4.204.200.13')
   Rack::Attack.blocklist_ip('4.223.73.90')
   Rack::Attack.blocklist_ip('4.204.224.164')
@@ -52,7 +53,9 @@ class Rack::Attack
   Rack::Attack.blocklist_ip('20.218.119.12')
   Rack::Attack.blocklist_ip('20.220.10.235')
   Rack::Attack.blocklist_ip('20.251.112.224')
-  Rack::Attack.blocklist_ip('72.146.20.230')
+  Rack::Attack.blocklist_ip('20.251.112.224')
+  Rack::Attack.blocklist_ip('20.251.112.224')
+  Rack::Attack.blocklist_ip('34.52.133.111')
   Rack::Attack.blocklist_ip('104.28.222.16')
   Rack::Attack.blocklist_ip('104.248.45.83')
   Rack::Attack.blocklist_ip('109.107.189.44')
@@ -96,7 +99,9 @@ class Rack::Attack
   Rack::Attack.blocklist('fail2ban pentesters') do |req|
     # `filter` returns truthy value if request fails, or if it's from a previously banned IP
     # so the request is blocked
-    Rack::Attack::Fail2Ban.filter("pentesters-#{req.ip}", maxretry: 3, findtime: 10.minutes, bantime: 10.minutes) do
+    Rack::Attack::Fail2Ban.filter(
+      "pentesters-#{req.remote_ip}", maxretry: 3, findtime: 10.minutes, bantime: 10.minutes
+    ) do
       # The count for the IP is incremented if the return value is truthy
       CGI.unescape(req.query_string) =~ %r{/etc/passwd} ||
         req.path.include?('/etc/passwd') ||
