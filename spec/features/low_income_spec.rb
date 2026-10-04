@@ -60,14 +60,14 @@ RSpec.feature 'Low Income' do
     click_button 'Submit request'
 
     expect(page).to have_no_text('Apply for low income')
-    expect(page).to have_text('You have applied for a Low Income Ticket.')
+    expect(page).to have_text('You have applied for a low income ticket.')
     expect(page.html).to include(User.last.membership_code.code)
 
     LowIncomeRequest.last.approve!
 
     visit root_path
 
-    expect(page).to have_text('Your request for Low Income has been approved.')
+    expect(page).to have_text('Your request for a low income ticket has been approved.')
     expect(page.html).to include(LowIncomeRequest.last.low_income_code.code)
     expect(page.html).not_to include(User.last.membership_code.code)
   end
@@ -82,7 +82,7 @@ RSpec.feature 'Low Income' do
     click_button 'Submit request'
 
     expect(page).to have_no_text('Apply for low income')
-    expect(page).to have_text('You have applied for a Low Income Ticket.')
+    expect(page).to have_text('You have applied for a low income ticket.')
 
     visit new_low_income_request_path
 
@@ -99,14 +99,14 @@ RSpec.feature 'Low Income' do
     click_button 'Submit request'
 
     expect(page).to have_no_text('Apply for low income')
-    expect(page).to have_text('You have applied for a Low Income Ticket.')
+    expect(page).to have_text('You have applied for a low income ticket.')
     expect(page.html).to include(User.last.membership_code.code)
 
     LowIncomeRequest.last.reject!
 
     visit root_path
 
-    expect(page).to have_text('Your request for Low Income has been rejected.')
+    expect(page).to have_text('Your request for a low income ticket has, unfortunately, been rejected.')
     expect(page.html).to include(User.last.membership_code.code)
   end
 
