@@ -9,13 +9,11 @@ class LowIncomeRequestsController < ApplicationController
   def create
     if current_user.low_income_request.present?
       active_request_time = current_user.low_income_request.created_at.strftime('%A %d %B %Y')
-      flash[:alert] =
-        "You already have a low income request submitted on #{active_request_time} please check back
+      flash[:alert] = "You already have a low income request submitted on #{active_request_time} please check back
          later to see if it's been approved!"
     else
-      @low_income_request = LowIncomeRequest.new(low_income_request_params.merge(user: current_user))
-      LowIncomeMailer.application_received(@low_income_request).deliver_now
-      @low_income_request.save!
+      send_low_income_email
+      flash[:notice] = 'Your low income ticket application has been sent to our ticketing team!'
     end
     redirect_to root_path
   end
@@ -24,5 +22,11 @@ class LowIncomeRequestsController < ApplicationController
 
   def low_income_request_params
     params.expect(low_income_request: [:request_reason])
+  end
+
+  def send_low_income_email
+    @low_income_request = LowIncomeRequest.new(low_income_request_params.merge(user: current_user))
+    LowIncomeMailer.application_received(@low_income_request).deliver_now
+    @low_income_request.save!
   end
 end
