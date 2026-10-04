@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         post :admin_send_password_reset
       end
     end
-    resources :tickets
+    resources :tickets, only: %i[index]
     resources :codes
     resources :low_income_requests, only: %i[index] do
       member do
