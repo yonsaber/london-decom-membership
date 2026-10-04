@@ -1,13 +1,21 @@
 class Admin::TicketsController < AdminController
   def index
-    low_income_users = LowIncomeRequest.where(status: 'approved').select(:user_id)
-    direct_sale_users = DirectSaleCode.where.not(user_id: nil).select(:user_id)
-    @users = User.confirmed
-                 .where(ticket_bought: true)
-                 .where.not(id: low_income_users)
-                 .where.not(id: direct_sale_users)
-                 .order(:created_at)
-    paginate(params[:q], params[:page])
+    redirect_to admin_events_path
+
+    # NOTE: This is being disabled as the functionality is fundamentally flawed, it will be re-enabled after there have
+    # been more fixes to it and a better way to detect if the user has a ticket to the event, as whilst this worked in
+    # a pinch for the ticket transfer last year, without a reset mechanism for ticket_bought and a better reflection
+    # on when it gets changed (to come in a later change set) there is no point allowing this functionality to continue
+    # to exist for the time being
+
+    # low_income_users = LowIncomeRequest.where(status: 'approved').select(:user_id)
+    # direct_sale_users = DirectSaleCode.where.not(user_id: nil).select(:user_id)
+    # @users = User.confirmed
+    #              .where(ticket_bought: true)
+    #              .where.not(id: low_income_users)
+    #              .where.not(id: direct_sale_users)
+    #              .order(:created_at)
+    # paginate(params[:q], params[:page])
   end
 
   def edit
@@ -42,8 +50,8 @@ class Admin::TicketsController < AdminController
     end
   end
 
-  # This is fucky, basically we get the membership code we are looking at e.g ABC, we then grab the membership code
-  # of the second user e.g. XZY, the we change the user IDs against the membership codes so that, as far as the system
+  # This is fucky, basically we get the membership code we are looking at e.g. ABC, we then grab the membership code
+  # of the second user e.g. XZY, then we change the user IDs against the membership codes so that, as far as the system
   # thinks, the ticket was transferred between the two users. I don't think this is the BEST solution in the world
   # but does allow us to transfer tickets on the site and have limited issues with it
   def switch_users_memberships(transfer_from_user, transfer_to_user, membership_code)

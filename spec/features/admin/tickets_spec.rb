@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.feature 'Tickets transfer' do
+RSpec.feature 'Tickets transfer', skip: 'Functionality disabled' do
   before do
     stub_eventbrite_event
   end
