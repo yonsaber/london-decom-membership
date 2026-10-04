@@ -15,7 +15,7 @@ RSpec.feature 'Low Income Requests Admin' do
 
     open_email(low_income_request.user.email)
     expect(current_email).to have_text("Hi #{low_income_request.user.name}")
-    expect(current_email).to have_text('Your request for low income tickets has been approved')
+    expect(current_email).to have_text('Your request for a low income ticket has been approved')
   end
 
   scenario 'can be rejected' do
@@ -32,7 +32,7 @@ RSpec.feature 'Low Income Requests Admin' do
 
     open_email(low_income_request.user.email)
     expect(current_email).to have_text("Hi #{low_income_request.user.name}")
-    expect(current_email).to have_text('Your request for low income tickets has been rejected')
+    expect(current_email).to have_text('Your request for a low income ticket has been rejected')
   end
 
   scenario 'as not an admin' do
