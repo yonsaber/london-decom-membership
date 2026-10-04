@@ -26,7 +26,7 @@ class EventsController < ApplicationController
 
     cleared_ticket_classes = Rails.cache.delete(ticket_classes_key) if Rails.cache.exist?(ticket_classes_key)
 
-    return unless cleared_discount && cleared_ticket_classes
+    return if cleared_discount && cleared_ticket_classes
 
     Rollbar.warn(
       'Tried to clear discounts and ticket classes, had an issue doing so',
