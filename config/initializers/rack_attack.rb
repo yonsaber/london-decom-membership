@@ -53,8 +53,6 @@ class Rack::Attack
   Rack::Attack.blocklist_ip('20.218.119.12')
   Rack::Attack.blocklist_ip('20.220.10.235')
   Rack::Attack.blocklist_ip('20.251.112.224')
-  Rack::Attack.blocklist_ip('20.251.112.224')
-  Rack::Attack.blocklist_ip('20.251.112.224')
   Rack::Attack.blocklist_ip('34.52.133.111')
   Rack::Attack.blocklist_ip('104.28.222.16')
   Rack::Attack.blocklist_ip('104.248.45.83')
@@ -63,13 +61,6 @@ class Rack::Attack
   Rack::Attack.blocklist_ip('185.177.72.58')
 
   ### Prevent Brute-Force Login Attacks ###
-
-  # The most common brute-force login attack is a brute-force password
-  # attack where an attacker simply tries a large number of emails and
-  # passwords to see if any credentials match.
-  #
-  # Another common method of attack is to use a swarm of computers with
-  # different IPs to try brute-forcing a password for a specific account.
 
   # Throttle POST requests to /login by IP address
   #
@@ -94,19 +85,24 @@ class Rack::Attack
     end
   end
 
-  # Block suspicious requests for '/etc/password' or wordpress specific paths.
+  # Block suspicious requests for '/etc/password' or wordpress or php specific paths.
   # After 3 blocked requests in 10 minutes, block all requests from that IP for 10 minutes.
   Rack::Attack.blocklist('fail2ban pentesters') do |req|
     # `filter` returns truthy value if request fails, or if it's from a previously banned IP
     # so the request is blocked
     Rack::Attack::Fail2Ban.filter(
-      "pentesters-#{req.remote_ip}", maxretry: 3, findtime: 10.minutes, bantime: 10.minutes
+      "pentesters-#{req.remote_ip}", maxretry: 3, findtime: 10.minutes, bantime: 1.day
     ) do
       # The count for the IP is incremented if the return value is truthy
       CGI.unescape(req.query_string) =~ %r{/etc/passwd} ||
         req.path.include?('/etc/passwd') ||
         req.path.include?('wp-admin') ||
-        req.path.include?('wp-login')
+        req.path.include?('wp-login') ||
+        req.path.include?('wp-content') ||
+        req.path.include?('wordpress') ||
+        req.path.include?('plugins') ||
+        req.path.include?('.php') ||
+        req.path.include?('.git')
     end
   end
 
